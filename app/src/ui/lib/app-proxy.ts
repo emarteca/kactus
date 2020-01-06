@@ -61,10 +61,17 @@ export function getAppPath(): string {
  * This is preferrable to using `remote` directly because we cache the result.
  */
 export function getUserDataPath(): string {
-  if (!userDataPath) {
-    userDataPath = getApp().getPath('userData')
+if (!userDataPath) {
+var temp = getApp();
+	console.log("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+	console.log(temp);
+	console.log( typeof(temp));
+	//userDataPath = getApp().getPath('userData')
+	return "WOWWWWWWWWWWW";
   }
-
+  console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
+  console.log(getApp());
+  console.log(typeof(getApp()));
   return userDataPath
 }
 

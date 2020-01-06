@@ -27,12 +27,12 @@ describe('git/rev-parse', () => {
   describe('isGitRepository', () => {
     it('should return true for a repository', async () => {
       const result = await isGitRepository(repository.path)
-      expect(result).toBe(true)
+      expect(result.isRepository).toBe(true)
     })
 
     it('should return false for a directory', async () => {
       const result = await isGitRepository(path.dirname(repository.path))
-      expect(result).toBe(false)
+      expect(result.isRepository).toBe(false)
     })
   })
 
