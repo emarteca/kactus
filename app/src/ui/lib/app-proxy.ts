@@ -63,15 +63,15 @@ export function getAppPath(): string {
 export function getUserDataPath(): string {
 if (!userDataPath) {
 var temp = getApp();
-	console.log("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-	console.log(temp);
-	console.log( typeof(temp));
+//console.log("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+//	console.log(temp);
+//	console.log( typeof(temp));
 	//userDataPath = getApp().getPath('userData')
 	return "WOWWWWWWWWWWW";
   }
-  console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
-  console.log(getApp());
-  console.log(typeof(getApp()));
+  //console.log("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
+  //console.log(getApp());
+  //console.log(typeof(getApp()));
   return userDataPath
 }
 
