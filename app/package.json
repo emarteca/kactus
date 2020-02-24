@@ -33,6 +33,7 @@
     "file-url": "^2.0.2",
     "fs-admin": "^0.3.1",
     "fs": "*",
+    "path": "*",
     "fs-extra": "^6.0.0",
     "fuzzaldrin-plus": "^0.6.0",
     "kactus-cli": "^0.5.7",
