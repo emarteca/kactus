@@ -1,0 +1,134 @@
+can select a repository
+commits tracked files
+leaves untracked files untracked
+doesn't commit unrelated changes
+prunes for GitHub repository
+does nothing on non GitHub repositories
+does not prune if the last prune date is less than 24 hours ago
+does not prune if there is no default branch
+does not prune reserved branches
+never prunes a branch that lacks an upstream
+returns non-origin remote
+returns detached for arbitrary checkout
+returns current branch when on a valid HEAD
+returns the upstream name without the remote prefix
+throws when invalid characters are used for branch name
+can checkout a valid branch name in an existing repository
+can checkout a branch when it exists on multiple remotes
+will fail when an existing branch matches the remote branch
+cleans up an submodule that no longer exists
+updates a changed submodule reference
+commits the given files
+can commit renames
+creates a merge commit
+throws an error
+file is deleted in index
+commit does not strip commentary by default
+can commit for empty repository
+can commit some lines from new file
+can commit second hunk from modified file
+can commit single delete from modified file
+can commit multiple hunks from modified file
+can commit some lines from deleted file
+can commit renames with modifications
+can commit renames with partially selected modifications
+keeps files chosen to be added and commits
+deletes files chosen to be removed and commits
+chooses `their` version of a file and commits
+chooses `our` version of a file and commits
+can commit when staged new file is then deleted
+can commit when a delete is staged and the untracked file exists
+reads the custom text
+returns empty for an initialized repository
+returns empty when path is missing
+changes for images are set
+changes for text are not set
+counts lines for new file
+counts lines for modified file
+counts lines for staged file
+is empty for a renamed file
+displays unicode characters
+retrieves valid image for new file
+retrieves valid images for modified file
+displays a binary diff for a docx file
+only shows modifications after move for a renamed and modified file
+handles unborn repository with mixed state
+displays line endings change from LF to CRLF
+initializes a .gitattributes file
+reads contents from disk
+appends one rule
+appends multiple rules
+returns null when .gitignore does not exist on disk
+"when autocrlf=true and safecrlf=true, appends CRLF to file"
+"when autocrlf=input, appends LF to file"
+creates gitignore file when it doesn't exist
+deletes gitignore file when no entries provided
+applies rule correctly to repository
+returns false for repository not using LFS
+returns true if LFS is tracking a path
+returns true after tracking file in Git LFS
+returns true after tracking file with character issues in Git LFS
+detects renames
+detect copies
+handles repository with HEAD file on disk
+handles repository with signed commit and log.showSignature set
+returns the common ancestor of two branches
+can report on merge conflicts
+can process a successful merge result
+throws an error as the user blocks merge commits on pull
+returns null for rebase progress
+works after renaming a branch
+returns the recently checked out branches
+returns a limited number of branches
+returns does not return the branches that were checked out before a specific date
+returns all branches checked out after a specific date
+should return both remotes
+returns origin when multiple remotes found
+returns something when origin removed
+can hard reset a repository
+should return true for a repository
+should return false for a directory
+should return an absolute path when run inside a working directory
+returns all stash entries created by Desktop
+creates a stash entry when repo is not unborn or in any kind of conflict or rebase state
+stashes untracked files and removes them from the working directory
+returns null when no stash entries exist for branch
+returns last entry made for branch
+removes the entry identified by `stashSha`
+does not fail when attempting to delete stash entry that doesn't exist
+restores changes back to the working directory
+restores changes and drops stash
+parses changed files
+parses resolved files
+reflects renames
+reflects copies
+parses conflicted files with markers
+parses conflicted files without markers
+parses conflicted files resulting from popping a stash
+parses conflicted image file on merge
+parses conflicted image file on merge after removing
+returns an empty array when there are no changes
+returns null for directory without a .git directory
+returns the submodule entry
+returns the expected tag
+update submodule to original commit
+creates worktree at temporary path
+subsequent calls return the same result
+internal worktree no longer exists on disk
+worktree created outside Desktop remains
+can discard a renamed file
+includes HEAD when loading commits
+can discard changes from a repository
+reports the repository is unborn
+can discard modified change cleanly
+includes empty context lines
+creates right patch when first hunk is selected
+creates right patch when second hunk is selected
+creates right patch when first and third hunk is selected
+creates the right patch when an addition is selected but preceding deletions aren't
+doesn't include unselected added lines as context
+rewrites hunk header when necessary
+creates the right patch when a `No newline` marker is involved
+returns the path to the repository
+writes a default README without a description
+writes a README with description when provided
