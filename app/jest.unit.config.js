@@ -5,7 +5,7 @@ module.exports = {
   },
   testMatch: ['**/unit/**/*-test.ts{,x}'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  setupFiles: ['<rootDir>/test/globals.ts', '<rootDir>/test/unit-test-env.ts'],
+  setupFiles: ['<rootDir>/test/globals.ts', '<rootDir>/test/unit-test-env.ts', '<rootDir>/test/unit-error-hack.js'],
   setupTestFrameworkScriptFile: '<rootDir>/test/setup-test-framework.ts',
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
