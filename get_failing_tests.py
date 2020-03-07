@@ -28,7 +28,7 @@ def print_DF_to_file( df, filename):
 	f.close()
 
 def main():
-	new_root = "/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app"
+	new_root = "/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/"
 	failing_suites = process_fails_file( "fails.csv")
 	print_DF_to_file( failing_suites.apply(lambda row: new_root + row.suite, axis=1), "test_list.txt")
 	failing_tests = get_failing_tests("junit-unit-tests.xml")
