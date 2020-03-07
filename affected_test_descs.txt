@@ -1,134 +1,173 @@
-can select a repository
-commits tracked files
-leaves untracked files untracked
-doesn't commit unrelated changes
-prunes for GitHub repository
-does nothing on non GitHub repositories
-does not prune if the last prune date is less than 24 hours ago
-does not prune if there is no default branch
-does not prune reserved branches
-never prunes a branch that lacks an upstream
-returns non-origin remote
-returns detached for arbitrary checkout
-returns current branch when on a valid HEAD
-returns the upstream name without the remote prefix
-throws when invalid characters are used for branch name
-can checkout a valid branch name in an existing repository
-can checkout a branch when it exists on multiple remotes
-will fail when an existing branch matches the remote branch
-cleans up an submodule that no longer exists
-updates a changed submodule reference
-commits the given files
-can commit renames
-creates a merge commit
-throws an error
-file is deleted in index
-commit does not strip commentary by default
-can commit for empty repository
-can commit some lines from new file
-can commit second hunk from modified file
-can commit single delete from modified file
-can commit multiple hunks from modified file
-can commit some lines from deleted file
-can commit renames with modifications
-can commit renames with partially selected modifications
-keeps files chosen to be added and commits
-deletes files chosen to be removed and commits
-chooses `their` version of a file and commits
-chooses `our` version of a file and commits
-can commit when staged new file is then deleted
-can commit when a delete is staged and the untracked file exists
-reads the custom text
-returns empty for an initialized repository
-returns empty when path is missing
-changes for images are set
-changes for text are not set
-counts lines for new file
-counts lines for modified file
-counts lines for staged file
-is empty for a renamed file
-displays unicode characters
-retrieves valid image for new file
-retrieves valid images for modified file
-displays a binary diff for a docx file
-only shows modifications after move for a renamed and modified file
-handles unborn repository with mixed state
-displays line endings change from LF to CRLF
-initializes a .gitattributes file
-reads contents from disk
-appends one rule
-appends multiple rules
-returns null when .gitignore does not exist on disk
-"when autocrlf=true and safecrlf=true, appends CRLF to file"
-"when autocrlf=input, appends LF to file"
-creates gitignore file when it doesn't exist
-deletes gitignore file when no entries provided
-applies rule correctly to repository
-returns false for repository not using LFS
-returns true if LFS is tracking a path
-returns true after tracking file in Git LFS
-returns true after tracking file with character issues in Git LFS
-detects renames
-detect copies
-handles repository with HEAD file on disk
-handles repository with signed commit and log.showSignature set
-returns the common ancestor of two branches
-can report on merge conflicts
-can process a successful merge result
-throws an error as the user blocks merge commits on pull
-returns null for rebase progress
-works after renaming a branch
-returns the recently checked out branches
-returns a limited number of branches
-returns does not return the branches that were checked out before a specific date
-returns all branches checked out after a specific date
-should return both remotes
-returns origin when multiple remotes found
-returns something when origin removed
-can hard reset a repository
-should return true for a repository
-should return false for a directory
-should return an absolute path when run inside a working directory
-returns all stash entries created by Desktop
-creates a stash entry when repo is not unborn or in any kind of conflict or rebase state
-stashes untracked files and removes them from the working directory
-returns null when no stash entries exist for branch
-returns last entry made for branch
-removes the entry identified by `stashSha`
-does not fail when attempting to delete stash entry that doesn't exist
-restores changes back to the working directory
-restores changes and drops stash
-parses changed files
-parses resolved files
-reflects renames
-reflects copies
-parses conflicted files with markers
-parses conflicted files without markers
-parses conflicted files resulting from popping a stash
-parses conflicted image file on merge
-parses conflicted image file on merge after removing
-returns an empty array when there are no changes
-returns null for directory without a .git directory
-returns the submodule entry
-returns the expected tag
-update submodule to original commit
-creates worktree at temporary path
-subsequent calls return the same result
-internal worktree no longer exists on disk
-worktree created outside Desktop remains
-can discard a renamed file
-includes HEAD when loading commits
-can discard changes from a repository
-reports the repository is unborn
-can discard modified change cleanly
-includes empty context lines
-creates right patch when first hunk is selected
-creates right patch when second hunk is selected
-creates right patch when first and third hunk is selected
-creates the right patch when an addition is selected but preceding deletions aren't
-doesn't include unselected added lines as context
-rewrites hunk header when necessary
-creates the right patch when a `No newline` marker is involved
-returns the path to the repository
-writes a default README without a description
-writes a README with description when provided
+git/status getStatus with unconflicted repo returns null for directory without a .git directory
+git/rev-parse isBareRepository returns false for default initialized repository
+git/config global config getGlobalConfigPath gets the config path
+patch formatting formatPatchesForModifiedFile creates right patch when second hunk is selected
+git/remote findDefaultRemote returns something when origin removed
+git/reset reset can hard reset a repository
+git/log getChangedFiles handles commit when HEAD exists on disk
+git/log getChangedFiles detect copies
+git/commit createCommit partials can commit some lines from new file
+git/diff getWorkingDirectoryDiff counts lines for new file
+git/rebase abort after conflicts found returns to the feature branch
+git/diff getWorkingDirectoryImage retrieves valid images for modified file
+git/checkout can checkout a valid branch name in an existing repository
+git/reflog getRecentBranches returns a limited number of branches
+git/for-each-ref getBranches fetches branches using for-each-ref
+git/rebase attempt to continue without resolving conflicts REBASE_HEAD is still found
+BranchPruner does not prune if the last prune date is less than 24 hours ago
+git/branch getBranchesPointedAt in a local repo returns null on a malformed committish
+patch formatting formatPatchesForModifiedFile includes empty context lines
+git/log getCommits handles repository with HEAD file on disk
+git/rebase continue with additional changes unrelated to conflicted files branch is now a different ref
+git/branch upstreamWithoutRemote returns the upstream name without the remote prefix
+git/commit createCommit normal can commit for empty repository
+git/status getStatus with conflicted repo parses resolved files
+BranchPruner does not prune if there is no default branch
+git/branch tip returns non-origin remote
+git/rebase can parse progress for long rebase is a detached HEAD state
+git/core error handling throws for errors that were not expected
+git/status getStatus with conflicted repo parses conflicted files resulting from popping a stash
+git/core exit code handling does not throw for exit codes that were expected
+git/diff getBlobImage retrieves valid image for modified file
+git/rebase detect conflicts status detects REBASE_HEAD
+git/submodule resetSubmodulePaths update submodule to original commit
+GitStore undo first commit pre-fills the commit message
+patch formatting formatPatchesForModifiedFile creates the right patch when a `No newline` marker is involved
+git/rebase continue with additional changes unrelated to conflicted files returns success
+git/rebase detect conflicts is a detached HEAD state
+gitignore appendIgnoreRule appends one rule
+git/status getStatus with conflicted images repo parses conflicted image file on merge after removing
+git/diff getBinaryPaths in repo with image changes returns all changed image files
+git/rev-parse isGitRepository should return true for a repository
+git/remote findDefaultRemote returns origin when multiple remotes found
+git/stash createDesktopStashEntry stashes untracked files and removes them from the working directory
+"gitignore readGitIgnoreAtRoot when autocrlf=input, appends LF to file"
+git/commit createMergeCommit with a simple merge conflict with a merge conflict creates a merge commit
+GitStore repository with HEAD file can discard modified change cleanly
+git/for-each-ref getBranches should return empty list for directory without a .git directory
+GitStore undo first commit reports the repository is unborn
+git/diff getWorkingDirectoryDiff is empty for a renamed file
+git/rebase continue with tracked change omitted from list returns error code indicating that required files were missing
+git/commit index corner cases can commit when a delete is staged and the untracked file exists
+git/git-attributes writeGitAttributes initializes a .gitattributes file
+git/rebase continue after resolving conflicts no longer has working directory changes
+git/checkout with submodules cleans up an submodule that no longer exists
+git/rebase continue after resolving conflicts returns success
+patch formatting formatPatchesForModifiedFile creates right patch when first and third hunk is selected
+BranchPruner prunes for GitHub repository
+git/core error handling does not throw for errors that were expected
+git/rebase abort after conflicts found REBASE_HEAD is no longer found
+git/merge merge and is successful returns true
+git/rebase continue after resolving conflicts returns to the feature branch
+git/rebase continue with additional changes unrelated to conflicted files returns to the feature branch
+git/branch getBranchesPointedAt in a local repo finds one branch name
+git/commit createCommit partials can commit renames with partially selected modifications
+git/diff imageDiff changes for images are set
+git/remote getRemotes should return both remotes
+git/rev-parse isBareRepository throws error for missing directory
+git/commit createCommit with a merge conflict creates a merge commit
+git/config global config setGlobalConfigValue will replace all entries for a global value
+git/log getChangedFiles loads the files changed in the commit
+git/diff getWorkingDirectoryImage retrieves valid image for new file
+git/commit createCommit normal commit does not strip commentary by default
+git/config config looks up config values
+patch formatting formatPatchesForModifiedFile creates right patch when first hunk is selected
+git/rebase detect conflicts returns a value indicating conflicts were encountered
+git/rev-parse isBareRepository returns false for empty directory
+git/diff getWorkingDirectoryDiff only shows modifications after move for a renamed and modified file
+git/reflog getRecentBranches works after renaming a branch
+formatPatch in a repo with 105 commits can create a series of commits from start to HEAD
+git/reflog getRecentBranches returns the recently checked out branches
+git/rev-parse getTopLevelWorkingDirectory should return correct path for submodules
+gitignore saveGitIgnore applies rule correctly to repository
+git/commit createMergeCommit with a merge conflict and manual resolutions keeps files chosen to be added and commits
+git/submodule listSubmodules returns the submodule entry
+patch formatting formatPatchesForModifiedFile creates the right patch when an addition is selected but preceding deletions aren't
+git/diff getBinaryPaths in repo with merge conflicts on image files returns all conflicted image files
+git/commit index corner cases file is deleted in index
+git/rev-parse getTopLevelWorkingDirectory should resolve top level directory run inside the .git folder
+GitStore undo first commit has no staged files
+git/diff getWorkingDirectoryDiff counts lines for staged file
+git/status getStatus with conflicted repo parses conflicted files without markers
+git/log getChangedFiles detects renames
+git/stash popStashEntry without any conflicts restores changes back to the working directory
+git/rebase detect conflicts has conflicted files in working directory
+git/checkout will fail when an existing branch matches the remote branch
+git/branch tip returns current branch when on a valid HEAD
+git/rebase can parse progress status detects REBASE_HEAD
+git-lfs isUsingLFS returns false for repository not using LFS
+git/commit createMergeCommit with a merge conflict and manual resolutions binary file conflicts chooses `our` version of a file and commits
+git/commit createCommit partials can commit second hunk from modified file
+git/status getStatus with unconflicted repo returns an empty array when there are no changes
+git/branch tip returns correct ref if checkout occurs
+git/reflog getBranchCheckouts returns all branches checked out after a specific date
+git/stash popStashEntry when there are (resolvable) conflicts restores changes and drops stash
+git/commit createCommit partials can commit renames with modifications
+git/merge merge and is a noop returns false
+git/commit createCommit partials can commit some lines from deleted file
+AppStore can select a repository
+git/diff getWorkingDirectoryDiff displays a binary diff for a docx file
+git/rebase can parse progress returns a value indicating conflicts were encountered
+git/rev-parse isGitRepository should return false for a directory
+GitStore loadCommitBatch includes HEAD when loading commits
+git/diff getBinaryPaths in repo with text only files returns an empty array
+git/for-each-ref getBranches should return empty list for empty repo
+GitStore undo first commit clears the undo commit dialog
+git/checkout can checkout a branch when it exists on multiple remotes
+git/commit index corner cases can commit when staged new file is then deleted
+git/rebase continue with additional changes unrelated to conflicted files keeps untracked working directory file out of rebase
+git/diff imageDiff changes for text are not set
+git/branch tip returns unborn for new repository
+git/submodule listSubmodules returns the expected tag
+validatedRepositoryPath returns the path to the repository
+git/diff getWorkingDirectoryDiff/unicode displays unicode characters
+git/config config returns null for undefined values
+git/diff getWorkingDirectoryDiff counts lines for modified file
+git/rebase can parse progress for long rebase status detects REBASE_HEAD
+git/rebase attempt to continue without resolving conflicts indicates that the rebase was not complete
+git/core exit code handling throws for exit codes that were not expected
+git/commit createCommit partials can commit multiple hunks from modified file
+git/rebase continue after resolving conflicts branch is now a different ref
+git/commit createCommit normal can commit renames
+git/status getStatus with unconflicted repo parses changed files
+git/rev-parse isBareRepository returns true for initialized bare repository
+git/stash popStashEntry when there are unresolvable conflicts throws an error
+git/status getStatus with conflicted repo parses conflicted files with markers
+git/status getStatus with conflicted images repo parses conflicted image file on merge
+BranchPruner does not prune reserved branches
+gitignore appendIgnoreRule appends multiple rules
+git/reflog getBranchCheckouts returns empty when current branch is orphaned
+git/checkout with submodules updates a changed submodule reference
+git/commit createMergeCommit with a merge conflict and manual resolutions binary file conflicts chooses `their` version of a file and commits
+git/diff getBinaryPaths in empty repo throws since HEAD doesnt exist
+git/diff getBlobImage retrieves valid images for deleted file
+BranchPruner does nothing on non GitHub repositories
+git/rev-parse getTopLevelWorkingDirectory should return null when not run inside a working directory
+git/reflog getBranchCheckouts returns does not return the branches that were checked out before a specific date
+git/branch getBranchesPointedAt in a local repo finds no branch names
+git/status getStatus with unconflicted repo reflects renames
+git/status getStatus with unconflicted repo reflects copies
+git/diff getWorkingDirectoryDiff/line-endings displays line endings change from LF to CRLF
+git/commit createMergeCommit with no changes throws an error
+GitStore can discard changes from a repository
+git/branch getBranchesPointedAt in a repo with identical branches finds multiple branch names
+git/commit createCommit normal commits the given files
+git/branch tip returns detached for arbitrary checkout
+git/rebase attempt to continue without resolving conflicts still has conflicted files in working directory
+git/rebase can parse progress for long rebase returns a value indicating conflicts were encountered
+git-lfs isUsingLFS returns true if LFS is tracking a path
+git/merge getMergeBase returns the common ancestor of two branches
+git/rev-parse getTopLevelWorkingDirectory should return an absolute path when run inside a working directory
+git/diff getWorkingDirectoryDiff handles unborn repository with mixed state
+git/log getCommits loads history
+GitStore can discard a renamed file
+patch formatting formatPatchesForModifiedFile doesn't include unselected added lines as context
+git/rebase abort after conflicts found no longer has working directory changes
+git/commit createMergeCommit with a merge conflict and manual resolutions deletes files chosen to be removed and commits
+"gitignore readGitIgnoreAtRoot when autocrlf=true and safecrlf=true, appends CRLF to file"
+git/rebase can parse progress is a detached HEAD state
+git/rebase continue with additional changes unrelated to conflicted files has modified but unconflicted file in commit contents
+patch formatting formatPatchesForModifiedFile rewrites hunk header when necessary
+git/commit createCommit partials can commit single delete from modified file
+git/rebase continue after resolving conflicts REBASE_HEAD is no longer found
+git/log getCommits handles repository with signed commit and log.showSignature set
