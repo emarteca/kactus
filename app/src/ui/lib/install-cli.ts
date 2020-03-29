@@ -1,102 +1,193 @@
+
+
 import * as FSE from 'fs-extra'
+
 import * as Path from 'path'
+
 
 import * as fsAdmin from 'fs-admin'
 
 /** The path for the installed command line tool. */
-export const InstalledCLIPath = '/usr/local/bin/kactus'
+
+export 
+const InstalledCLIPath = '/usr/local/bin/kactus'
 
 /** The path to the packaged CLI. */
+
 const PackagedPath = Path.resolve(__dirname, 'static', 'kactus.sh')
 
 /** Install the command line tool on macOS. */
-export async function installCLI(): Promise<void> {
-  const installedPath = await getResolvedInstallPath()
-  if (installedPath === PackagedPath) {
-    return
+
+export 
+async function installCLI(): Promise<void> 
+{
+  
+const installedPath = await getResolvedInstallPath()
+  
+if (installedPath === PackagedPath) 
+{
+    
+return
   }
 
-  try {
-    await symlinkCLI(false)
-  } catch (e) {
+  
+try 
+{
+    
+await symlinkCLI(false)
+  } 
+
+catch (e) 
+{
     // If we error without running as an admin, try again as an admin.
-    await symlinkCLI(true)
+    
+await symlinkCLI(true)
   }
 }
 
-async function getResolvedInstallPath(): Promise<string | null> {
-  try {
-    return await FSE.readlink(InstalledCLIPath)
-  } catch {
-    return null
+
+async function getResolvedInstallPath(): Promise<string | null> 
+{
+  
+try 
+{
+    
+return await FSE.readlink(InstalledCLIPath)
+  } 
+
+catch 
+{
+    
+return null
   }
 }
 
-function removeExistingSymlink(asAdmin: boolean) {
-  if (!asAdmin) {
-    return FSE.unlink(InstalledCLIPath)
+
+function removeExistingSymlink(asAdmin: boolean) 
+{
+  
+if (!asAdmin) 
+{
+    
+return FSE.unlink(InstalledCLIPath)
   }
 
-  return new Promise<void>((resolve, reject) => {
-    fsAdmin.unlink(InstalledCLIPath, error => {
-      if (error !== null) {
-        reject(
+  
+return new Promise<void>((resolve, reject) => 
+{
+    
+fsAdmin.unlink(InstalledCLIPath, error => 
+{
+      
+if (error !== null) 
+{
+        
+reject(
           new Error(
             `Failed to remove file at ${InstalledCLIPath}. Authorization of GitHub Desktop Helper is required.`
           )
         )
-        return
+        
+return
       }
 
-      resolve()
+      
+resolve()
     })
+
   })
+
 }
 
-function createDirectories(asAdmin: boolean) {
-  const path = Path.dirname(InstalledCLIPath)
 
-  if (!asAdmin) {
-    return FSE.mkdirp(path)
+function createDirectories(asAdmin: boolean) 
+{
+  
+const path = Path.dirname(InstalledCLIPath)
+
+  
+if (!asAdmin) 
+{
+    
+return FSE.mkdirp(path)
   }
 
-  return new Promise<void>((resolve, reject) => {
-    fsAdmin.makeTree(path, error => {
-      if (error !== null) {
-        reject(
+  
+return new Promise<void>((resolve, reject) => 
+{
+    
+fsAdmin.makeTree(path, error => 
+{
+      
+if (error !== null) 
+{
+        
+reject(
           new Error(
             `Failed to create intermediate directories to ${InstalledCLIPath}`
           )
         )
-        return
+        
+return
       }
 
-      resolve()
+      
+resolve()
     })
+
   })
+
 }
 
-function createNewSymlink(asAdmin: boolean) {
-  if (!asAdmin) {
-    return FSE.symlink(PackagedPath, InstalledCLIPath)
+
+function createNewSymlink(asAdmin: boolean) 
+{
+  
+if (!asAdmin) 
+{
+    
+return FSE.symlink(PackagedPath, InstalledCLIPath)
   }
 
-  return new Promise<void>((resolve, reject) => {
-    fsAdmin.symlink(PackagedPath, InstalledCLIPath, error => {
-      if (error !== null) {
-        reject(
+  
+return new Promise<void>((resolve, reject) => 
+{
+    
+fsAdmin.symlink(PackagedPath, InstalledCLIPath, error => 
+{
+      
+if (error !== null) 
+{
+        
+reject(
           new Error(`Failed to symlink ${PackagedPath} to ${InstalledCLIPath}`)
         )
-        return
+        
+return
       }
 
-      resolve()
+      
+resolve()
     })
+
   })
+
 }
 
-async function symlinkCLI(asAdmin: boolean): Promise<void> {
-  await removeExistingSymlink(asAdmin)
-  await createDirectories(asAdmin)
-  await createNewSymlink(asAdmin)
+
+async function symlinkCLI(asAdmin: boolean): Promise<void> 
+{
+  
+await removeExistingSymlink(asAdmin)
+  
+var TEMP_VAR_AUTOGEN259__RANDOM =  createNewSymlink(asAdmin)
+
+
+var TEMP_VAR_AUTOGEN257__RANDOM_LATER =  createDirectories(asAdmin)
+
+  
+
+ await TEMP_VAR_AUTOGEN259__RANDOM
+await TEMP_VAR_AUTOGEN257__RANDOM_LATER
+
 }

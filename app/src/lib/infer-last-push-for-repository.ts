@@ -1,8 +1,15 @@
+
+
 import { GitStore } from './stores'
+
 import { Repository } from '../models/repository'
+
 import { Account } from '../models/account'
+
 import { getAccountForRepository } from './get-account-for-repository'
+
 import { API } from './api'
+
 import { matchGitHubRepository } from './repository-matching'
 
 /**
@@ -16,46 +23,78 @@ import { matchGitHubRepository } from './repository-matching'
  * @param gitStore Git information about the repository
  * @param repository the local repository tracked by Desktop
  */
-export async function inferLastPushForRepository(
+
+export 
+async function inferLastPushForRepository(
   accounts: ReadonlyArray<Account>,
   gitStore: GitStore,
   repository: Repository
-): Promise<Date | null> {
-  const account = getAccountForRepository(accounts, repository)
-  if (account == null) {
-    return null
+): Promise<Date | null> 
+{
+  
+const account = getAccountForRepository(accounts, repository)
+  
+if (account == null) 
+{
+    
+return null
   }
 
-  await gitStore.loadRemotes()
+  
+await gitStore.loadRemotes()
 
-  const api = API.fromAccount(account)
-  let lastPushDate: Date | null = null
-  if (gitStore.currentRemote !== null) {
-    const matchedRepository = matchGitHubRepository(
+  
+const api = API.fromAccount(account)
+  
+let lastPushDate: Date | null = null
+  
+if (gitStore.currentRemote !== null) 
+{
+    
+const matchedRepository = matchGitHubRepository(
       accounts,
       gitStore.currentRemote.url
     )
 
-    if (matchedRepository !== null) {
-      const { owner, name } = matchedRepository
-      const repo = await api.fetchRepository(owner, name)
+    
+if (matchedRepository !== null) 
+{
+      
+const { owner, name } = matchedRepository
+      
+const repo = await api.fetchRepository(owner, name)
 
-      if (repo !== null) {
-        lastPushDate = new Date(repo.pushed_at)
+      
+if (repo !== null) 
+{
+        
+lastPushDate = new Date(repo.pushed_at)
       }
     }
   }
 
-  if (repository.gitHubRepository !== null) {
-    const { owner, name } = repository.gitHubRepository
-    const repo = await api.fetchRepository(owner.login, name)
+  
+var TEMP_VAR_AUTOGEN161__RANDOM =  gitStore.updateLastFetched()
 
-    if (repo !== null) {
-      lastPushDate = new Date(repo.pushed_at)
+if (repository.gitHubRepository !== null) 
+{
+    
+const { owner, name } = repository.gitHubRepository
+    
+const repo = await api.fetchRepository(owner.login, name)
+
+    
+if (repo !== null) 
+{
+      
+lastPushDate = new Date(repo.pushed_at)
     }
   }
 
-  await gitStore.updateLastFetched()
+  
 
-  return lastPushDate
+ await TEMP_VAR_AUTOGEN161__RANDOM
+
+  
+return lastPushDate
 }
