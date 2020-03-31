@@ -1,29 +1,54 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import * as React from 'react'
+
 import { Account } from '../../models/account'
+
 import { PreferencesTab } from '../../models/preferences'
+
 import { ExternalEditor } from '../../lib/editors'
+
 import { Dispatcher } from '../dispatcher'
+
 import { TabBar } from '../tab-bar'
+
 import { Accounts } from './accounts'
+
 import { Advanced } from './advanced'
+
 import { Git } from './git'
+
 import { assertNever } from '../../lib/fatal-error'
+
 import { Button } from '../lib/button'
+
 import { ButtonGroup } from '../lib/button-group'
+
 import { Dialog, DialogFooter, DialogError } from '../dialog'
+
 import {
   getGlobalConfigValue,
   setGlobalConfigValue,
   getMergeTool,
   IMergeTool,
 } from '../../lib/git/config'
+
 import { lookupPreferredEmail } from '../../lib/email'
+
 import { PopupType } from '../../models/popup'
+
 import { Shell, getAvailableShells } from '../../lib/shells'
+
 import { getCachedAvailableEditors } from '../../lib/editors/lookup'
+
 import { disallowedCharacters } from './identifier-rules'
+
 import { Appearance } from './appearance'
+
 import { ApplicationTheme } from '../lib/application-theme'
+
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -40,6 +65,7 @@ interface IPreferencesProps {
   readonly kactusClearCacheInterval: number
   readonly automaticallySwitchTheme: boolean
 }
+
 
 interface IPreferencesState {
   readonly selectedIndex: PreferencesTab
@@ -60,14 +86,19 @@ interface IPreferencesState {
 }
 
 /** The app-level preferences component. */
-export class Preferences extends React.Component<
+
+export 
+class Preferences extends React.Component<
   IPreferencesProps,
   IPreferencesState
 > {
-  public constructor(props: IPreferencesProps) {
-    super(props)
+  public constructor(props: IPreferencesProps) 
+{
+    
+super(props)
 
-    this.state = {
+    
+this.state = {
       selectedIndex: this.props.initialSelectedTab || PreferencesTab.Accounts,
       committerName: '',
       committerEmail: '',
@@ -86,40 +117,67 @@ export class Preferences extends React.Component<
     }
   }
 
-  public async componentWillMount() {
-    let committerName = await getGlobalConfigValue('user.name')
-    let committerEmail = await getGlobalConfigValue('user.email')
+  public async componentWillMount() 
+{
+    
+let committerName = await getGlobalConfigValue('user.name')
+    
+let committerEmail = await getGlobalConfigValue('user.email')
 
-    if (!committerName || !committerEmail) {
-      const account = this.props.dotComAccount || this.props.enterpriseAccount
+    
+if (!committerName || !committerEmail) 
+{
+      
+const account = this.props.dotComAccount || this.props.enterpriseAccount
 
-      if (account) {
-        if (!committerName) {
-          committerName = account.login
+      
+if (account) 
+{
+        
+if (!committerName) 
+{
+          
+committerName = account.login
         }
 
-        if (!committerEmail) {
-          const found = lookupPreferredEmail(account.emails)
-          if (found) {
-            committerEmail = found.email
+        
+if (!committerEmail) 
+{
+          
+const found = lookupPreferredEmail(account.emails)
+          
+if (found) 
+{
+            
+committerEmail = found.email
           }
         }
       }
     }
 
-    committerName = committerName || ''
-    committerEmail = committerEmail || ''
+    
+committerName = committerName || ''
+    
+committerEmail = committerEmail || ''
 
-    const [editors, shells, mergeTool] = await Promise.all([
+    
+
+var TIMING_TEMP_VAR_AUTOGEN278__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN278__RANDOM = await  Promise.all([
       getCachedAvailableEditors(),
       getAvailableShells(),
       getMergeTool(),
     ])
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/preferences/preferences.tsx& [112, 4; 116, 6]& TEMP_VAR_AUTOGEN278__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN278__RANDOM));
+ const [editors, shells, mergeTool] =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN278__RANDOM
 
-    const availableEditors = editors.map(e => e.editor)
-    const availableShells = shells.map(e => e.shell)
+    
+const availableEditors = editors.map(e => e.editor)
+    
+const availableShells = shells.map(e => e.shell)
 
-    this.setState({
+    
+this.setState({
       committerName,
       committerEmail,
       confirmRepositoryRemoval: this.props.confirmRepositoryRemoval,
@@ -131,8 +189,10 @@ export class Preferences extends React.Component<
     })
   }
 
-  public render() {
-    return (
+  public render() 
+{
+    
+return (
       <Dialog
         id="preferences"
         title="Preferences"
@@ -156,63 +216,98 @@ export class Preferences extends React.Component<
     )
   }
 
-  private onDotComSignIn = () => {
-    this.props.onDismissed()
-    this.props.dispatcher.showDotComSignInDialog()
+  private onDotComSignIn = () => 
+{
+    
+this.props.onDismissed()
+    
+this.props.dispatcher.showDotComSignInDialog()
   }
 
-  private onEnterpriseSignIn = () => {
-    this.props.onDismissed()
-    this.props.dispatcher.showEnterpriseSignInDialog()
+  private onEnterpriseSignIn = () => 
+{
+    
+this.props.onDismissed()
+    
+this.props.dispatcher.showEnterpriseSignInDialog()
   }
 
-  private onLogout = (account: Account) => {
-    this.props.dispatcher.removeAccount(account)
+  private onLogout = (account: Account) => 
+{
+    
+this.props.dispatcher.removeAccount(account)
   }
 
-  private onShowUnlockKactusPopup = (account: Account) => {
-    this.props.dispatcher.showPopup({
+  private onShowUnlockKactusPopup = (account: Account) => 
+{
+    
+this.props.dispatcher.showPopup({
       type: PopupType.PremiumUpsell,
       kind: 'choice',
       user: account,
     })
   }
 
-  private onShowCancelKactusPopup = (account: Account) => {
-    this.props.dispatcher.showPopup({
+  private onShowCancelKactusPopup = (account: Account) => 
+{
+    
+this.props.dispatcher.showPopup({
       type: PopupType.CancelPremium,
       user: account,
     })
   }
 
-  private disallowedCharacterErrorMessage(name: string, email: string) {
-    const disallowedNameCharacters = disallowedCharacters(name)
-    if (disallowedNameCharacters != null) {
-      return `Git name field cannot be a disallowed character "${disallowedNameCharacters}"`
+  private disallowedCharacterErrorMessage(name: string, email: string) 
+{
+    
+const disallowedNameCharacters = disallowedCharacters(name)
+    
+if (disallowedNameCharacters != null) 
+{
+      
+return `Git name field cannot be a disallowed character "${disallowedNameCharacters}"`
     }
 
-    const disallowedEmailCharacters = disallowedCharacters(email)
-    if (disallowedEmailCharacters != null) {
-      return `Git email field cannot be a disallowed character "${disallowedEmailCharacters}"`
+    
+const disallowedEmailCharacters = disallowedCharacters(email)
+    
+if (disallowedEmailCharacters != null) 
+{
+      
+return `Git email field cannot be a disallowed character "${disallowedEmailCharacters}"`
     }
 
-    return null
+    
+return null
   }
 
-  private renderDisallowedCharactersError() {
-    const message = this.state.disallowedCharactersMessage
-    if (message != null) {
-      return <DialogError>{message}</DialogError>
-    } else {
-      return null
+  private renderDisallowedCharactersError() 
+{
+    
+const message = this.state.disallowedCharactersMessage
+    
+if (message != null) 
+{
+      
+return <DialogError>{message}</DialogError>
+    } 
+else
+{
+      
+return null
     }
   }
 
-  private renderActiveTab() {
-    const index = this.state.selectedIndex
-    switch (index) {
-      case PreferencesTab.Accounts:
-        return (
+  private renderActiveTab() 
+{
+    
+const index = this.state.selectedIndex
+    
+switch (index) {
+      
+case PreferencesTab.Accounts:
+        
+return (
           <Accounts
             dotComAccount={this.props.dotComAccount}
             enterpriseAccount={this.props.enterpriseAccount}
@@ -223,8 +318,11 @@ export class Preferences extends React.Component<
             onShowCancelKactusPopup={this.onShowCancelKactusPopup}
           />
         )
-      case PreferencesTab.Git: {
-        return (
+      
+case PreferencesTab.Git: 
+{
+        
+return (
           <Git
             name={this.state.committerName}
             email={this.state.committerEmail}
@@ -233,8 +331,10 @@ export class Preferences extends React.Component<
           />
         )
       }
-      case PreferencesTab.Appearance:
-        return (
+      
+case PreferencesTab.Appearance:
+        
+return (
           <Appearance
             selectedTheme={this.props.selectedTheme}
             onSelectedThemeChanged={this.onSelectedThemeChanged}
@@ -244,8 +344,11 @@ export class Preferences extends React.Component<
             }
           />
         )
-      case PreferencesTab.Advanced: {
-        return (
+      
+case PreferencesTab.Advanced: 
+{
+        
+return (
           <Advanced
             confirmRepositoryRemoval={this.state.confirmRepositoryRemoval}
             confirmDiscardChanges={this.state.confirmDiscardChanges}
@@ -269,76 +372,111 @@ export class Preferences extends React.Component<
           />
         )
       }
-      default:
-        return assertNever(index, `Unknown tab index: ${index}`)
+      
+default:
+        
+return assertNever(index, `Unknown tab index: ${index}`)
     }
   }
 
-  private onConfirmRepositoryRemovalChanged = (value: boolean) => {
-    this.setState({ confirmRepositoryRemoval: value })
+  private onConfirmRepositoryRemovalChanged = (value: boolean) => 
+{
+    
+this.setState({ confirmRepositoryRemoval: value })
   }
 
-  private onConfirmDiscardChangesChanged = (value: boolean) => {
-    this.setState({ confirmDiscardChanges: value })
+  private onConfirmDiscardChangesChanged = (value: boolean) => 
+{
+    
+this.setState({ confirmDiscardChanges: value })
   }
 
-  private onConfirmForcePushChanged = (value: boolean) => {
-    this.setState({ confirmForcePush: value })
+  private onConfirmForcePushChanged = (value: boolean) => 
+{
+    
+this.setState({ confirmForcePush: value })
   }
 
-  private onCommitterNameChanged = (committerName: string) => {
-    const disallowedCharactersMessage = this.disallowedCharacterErrorMessage(
+  private onCommitterNameChanged = (committerName: string) => 
+{
+    
+const disallowedCharactersMessage = this.disallowedCharacterErrorMessage(
       committerName,
       this.state.committerEmail
     )
 
-    this.setState({ committerName, disallowedCharactersMessage })
+    
+this.setState({ committerName, disallowedCharactersMessage })
   }
 
-  private onCommitterEmailChanged = (committerEmail: string) => {
-    const disallowedCharactersMessage = this.disallowedCharacterErrorMessage(
+  private onCommitterEmailChanged = (committerEmail: string) => 
+{
+    
+const disallowedCharactersMessage = this.disallowedCharacterErrorMessage(
       this.state.committerName,
       committerEmail
     )
 
-    this.setState({ committerEmail, disallowedCharactersMessage })
+    
+this.setState({ committerEmail, disallowedCharactersMessage })
   }
 
-  private onSelectedEditorChanged = (editor: ExternalEditor) => {
-    this.setState({ selectedExternalEditor: editor })
+  private onSelectedEditorChanged = (editor: ExternalEditor) => 
+{
+    
+this.setState({ selectedExternalEditor: editor })
   }
 
-  private onSelectedShellChanged = (shell: Shell) => {
-    this.setState({ selectedShell: shell })
+  private onSelectedShellChanged = (shell: Shell) => 
+{
+    
+this.setState({ selectedShell: shell })
   }
 
-  private onKactusClearCacheInterval = (seconds: number) => {
-    this.setState({ kactusClearCacheInterval: seconds })
+  private onKactusClearCacheInterval = (seconds: number) => 
+{
+    
+this.setState({ kactusClearCacheInterval: seconds })
   }
 
-  private onSelectedThemeChanged = (theme: ApplicationTheme) => {
-    this.props.dispatcher.setSelectedTheme(theme)
+  private onSelectedThemeChanged = (theme: ApplicationTheme) => 
+{
+    
+this.props.dispatcher.setSelectedTheme(theme)
   }
 
   private onAutomaticallySwitchThemeChanged = (
     automaticallySwitchTheme: boolean
-  ) => {
-    this.props.dispatcher.onAutomaticallySwitchThemeChanged(
+  ) => 
+{
+    
+this.props.dispatcher.onAutomaticallySwitchThemeChanged(
       automaticallySwitchTheme
     )
   }
 
-  private renderFooter() {
-    const hasDisabledError = this.state.disallowedCharactersMessage != null
+  private renderFooter() 
+{
+    
+const hasDisabledError = this.state.disallowedCharactersMessage != null
 
-    const index = this.state.selectedIndex
-    switch (index) {
-      case PreferencesTab.Accounts:
-      case PreferencesTab.Appearance:
-        return null
-      case PreferencesTab.Advanced:
-      case PreferencesTab.Git: {
-        return (
+    
+const index = this.state.selectedIndex
+    
+switch (index) {
+      
+case PreferencesTab.Accounts:
+      
+case PreferencesTab.Appearance:
+        
+return null
+      
+case PreferencesTab.Advanced:
+      
+case PreferencesTab.Git: 
+{
+        
+return (
           <DialogFooter>
             <ButtonGroup>
               <Button type="submit" disabled={hasDisabledError}>
@@ -349,68 +487,97 @@ export class Preferences extends React.Component<
           </DialogFooter>
         )
       }
-      default:
-        return assertNever(index, `Unknown tab index: ${index}`)
+      
+default:
+        
+return assertNever(index, `Unknown tab index: ${index}`)
     }
   }
 
-  private onSave = async () => {
-    await setGlobalConfigValue('user.name', this.state.committerName)
-    await setGlobalConfigValue('user.email', this.state.committerEmail)
-    await this.props.dispatcher.setConfirmRepoRemovalSetting(
+  private onSave = async () => 
+{
+    
+await setGlobalConfigValue('user.name', this.state.committerName)
+    
+await setGlobalConfigValue('user.email', this.state.committerEmail)
+    
+await this.props.dispatcher.setConfirmRepoRemovalSetting(
       this.state.confirmRepositoryRemoval
     )
 
-    await this.props.dispatcher.setConfirmForcePushSetting(
+    
+await this.props.dispatcher.setConfirmForcePushSetting(
       this.state.confirmForcePush
     )
 
-    if (this.state.selectedExternalEditor) {
-      await this.props.dispatcher.setExternalEditor(
+    
+if (this.state.selectedExternalEditor) 
+{
+      
+await this.props.dispatcher.setExternalEditor(
         this.state.selectedExternalEditor
       )
     }
-    await this.props.dispatcher.setShell(this.state.selectedShell)
-    await this.props.dispatcher.setConfirmDiscardChangesSetting(
+    
+await this.props.dispatcher.setShell(this.state.selectedShell)
+    
+await this.props.dispatcher.setConfirmDiscardChangesSetting(
       this.state.confirmDiscardChanges
     )
 
-    await this.props.dispatcher.setKactusClearCacheInterval(
+    
+await this.props.dispatcher.setKactusClearCacheInterval(
       this.state.kactusClearCacheInterval
     )
 
-    const mergeTool = this.state.mergeTool
-    if (mergeTool && mergeTool.name) {
-      await setGlobalConfigValue('merge.tool', mergeTool.name)
+    
+const mergeTool = this.state.mergeTool
+    
+if (mergeTool && mergeTool.name) 
+{
+      
+await setGlobalConfigValue('merge.tool', mergeTool.name)
 
-      if (mergeTool.command) {
-        await setGlobalConfigValue(
+      
+if (mergeTool.command) 
+{
+        
+await setGlobalConfigValue(
           `mergetool.${mergeTool.name}.cmd`,
           mergeTool.command
         )
       }
     }
 
-    this.props.onDismissed()
+    
+this.props.onDismissed()
   }
 
-  private onTabClicked = (index: number) => {
-    this.setState({ selectedIndex: index })
+  private onTabClicked = (index: number) => 
+{
+    
+this.setState({ selectedIndex: index })
   }
 
-  private onMergeToolNameChanged = (name: string) => {
-    const mergeTool = {
+  private onMergeToolNameChanged = (name: string) => 
+{
+    
+const mergeTool = {
       name,
       command: this.state.mergeTool && this.state.mergeTool.command,
     }
-    this.setState({ mergeTool })
+    
+this.setState({ mergeTool })
   }
 
-  private onMergeToolCommandChanged = (command: string) => {
-    const mergeTool = {
+  private onMergeToolCommandChanged = (command: string) => 
+{
+    
+const mergeTool = {
       name: this.state.mergeTool ? this.state.mergeTool.name : '',
       command,
     }
-    this.setState({ mergeTool })
+    
+this.setState({ mergeTool })
   }
 }

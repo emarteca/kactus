@@ -1,9 +1,18 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import { remote } from 'electron'
+
 import { Disposable, IDisposable } from 'event-kit'
+
 import * as Path from 'path'
 
+
 import { IAPIOrganization, IAPIRefStatus } from '../../lib/api'
+
 import { shell } from '../../lib/app-shell'
+
 import {
   CompareAction,
   Foldout,
@@ -14,17 +23,22 @@ import {
   isMergeConflictState,
   RebaseConflictState,
 } from '../../lib/app-state'
+
 import { ExternalEditor } from '../../lib/editors'
+
 import { assertNever, fatalError } from '../../lib/fatal-error'
+
 import {
   setGenericPassword,
   setGenericUsername,
 } from '../../lib/generic-git-auth'
+
 import {
   saveKactusConfig,
   IFullKactusConfig,
   IKactusFile,
 } from '../../lib/kactus'
+
 import {
   isGitRepository,
   RebaseResult,
@@ -32,64 +46,102 @@ import {
   getCommitsInRange,
   getBranches,
 } from '../../lib/git'
+
 import {
   rejectOAuthRequest,
   requestAuthenticatedUser,
   resolveOAuthRequest,
 } from '../../lib/oauth'
+
 import {
   IOpenRepositoryFromURLAction,
   IUnknownAction,
   URLActionType,
 } from '../../lib/parse-app-url'
+
 import {
   matchExistingRepository,
   urlMatchesCloneURL,
 } from '../../lib/repository-matching'
+
 import { Shell } from '../../lib/shells'
+
 import { openSketch } from '../../lib/sketch'
+
 import { AppStore } from '../../lib/stores/app-store'
+
 import { validatedRepositoryPath } from '../../lib/stores/helpers/validated-repository-path'
+
 import { RepositoryStateCache } from '../../lib/stores/repository-state-cache'
+
 import { getTipSha } from '../../lib/tip'
+
 import { initializeRebaseFlowForConflictedRepository } from '../../lib/rebase'
 
+
 import { Account, Provider } from '../../models/account'
+
 import { AppMenu, ExecutableMenuItem } from '../../models/app-menu'
+
 import { IAuthor } from '../../models/author'
+
 import { Branch } from '../../models/branch'
+
 import { BranchesTab } from '../../models/branches-tab'
+
 import { CloneRepositoryTab } from '../../models/clone-repository-tab'
+
 import { CloningRepository } from '../../models/cloning-repository'
+
 import { Commit, ICommitContext, CommitOneLine } from '../../models/commit'
+
 import { ICommitMessage } from '../../models/commit-message'
+
 import { DiffSelection, ImageDiffType } from '../../models/diff'
+
 import { FetchType } from '../../models/fetch'
+
 import { GitHubRepository } from '../../models/github-repository'
+
 import { ManualConflictResolution } from '../../models/manual-conflict-resolution'
+
 import { Popup, PopupType } from '../../models/popup'
+
 import { PullRequest } from '../../models/pull-request'
+
 import { Repository } from '../../models/repository'
+
 import { RetryAction, RetryActionType } from '../../models/retry-actions'
+
 import {
   CommittedFileChange,
   WorkingDirectoryFileChange,
   WorkingDirectoryStatus,
   TSketchPartChange,
 } from '../../models/status'
+
 import { TipState, IValidBranch } from '../../models/tip'
+
 import { Banner, BannerType } from '../../models/banner'
 
+
 import { ApplicationTheme } from '../lib/application-theme'
+
 import { installCLI } from '../lib/install-cli'
+
 import { executeMenuItem } from '../main-process-proxy'
+
 import {
   CommitStatusStore,
   StatusCallBack,
 } from '../../lib/stores/commit-status-store'
+
 import { MergeResult } from '../../models/merge'
+
 import { UncommittedChangesStrategy } from '../../models/uncommitted-changes-strategy'
+
 import { RebaseFlowStep, RebaseStep } from '../../models/rebase-flow-step'
+
 import { IStashEntry } from '../../models/stash-entry'
 
 /**
@@ -98,7 +150,9 @@ import { IStashEntry } from '../../models/stash-entry'
  * If the returned {Promise} returns an error, it will be passed to the next
  * error handler. If it returns null, error propagation is halted.
  */
-export type ErrorHandler = (
+
+export 
+type ErrorHandler = (
   error: Error,
   dispatcher: Dispatcher
 ) => Promise<Error | null>
@@ -107,22 +161,32 @@ export type ErrorHandler = (
  * The Dispatcher acts as the hub for state. The StateHub if you will. It
  * decouples the consumer of state from where/how it is stored.
  */
-export class Dispatcher {
+
+export 
+class Dispatcher {
   private readonly errorHandlers = new Array<ErrorHandler>()
 
   public constructor(
     private readonly appStore: AppStore,
     private readonly repositoryStateManager: RepositoryStateCache,
     private readonly commitStatusStore: CommitStatusStore
-  ) {
-    this.appStore.onWantRetryAction((retryAction: RetryAction) =>
+  ) 
+{
+    
+this.appStore.onWantRetryAction((retryAction: RetryAction) =>
       this.performRetry(retryAction)
     )
   }
 
   /** Load the initial state for the app. */
-  public loadInitialState(): Promise<void> {
-    return this.appStore.loadInitialState()
+  public loadInitialState(): Promise<void> 
+{
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1046_loadInitialState__RANDOM = perf_hooks.performance.now();
+ 
+return this.appStore.loadInitialState()
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [124, 4; 124, 43]& TEMP_VAR_AUTOGEN_CALLING_1046_loadInitialState__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1046_loadInitialState__RANDOM));
+ 
   }
 
   /**
@@ -132,45 +196,73 @@ export class Dispatcher {
   public addRepositories(
     paths: ReadonlyArray<string>,
     modifyGitignoreToIgnoreSketchFiles: boolean
-  ): Promise<ReadonlyArray<Repository>> {
-    return this.appStore._addRepositories(
+  ): Promise<ReadonlyArray<Repository>> 
+{
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1216__addRepositories__RANDOM = perf_hooks.performance.now();
+ 
+return this.appStore._addRepositories(
       paths,
       modifyGitignoreToIgnoreSketchFiles
     )
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [135, 4; 138, 5]& TEMP_VAR_AUTOGEN_CALLING_1216__addRepositories__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1216__addRepositories__RANDOM));
+ 
   }
 
   /** Remove the repositories represented by the given IDs from local storage. */
   public removeRepositories(
     repositories: ReadonlyArray<Repository | CloningRepository>,
     moveToTrash: boolean
-  ): Promise<void> {
-    if (moveToTrash) {
-      repositories.forEach(repository => {
-        shell.moveItemToTrash(repository.path)
+  ): Promise<void> 
+{
+    
+if (moveToTrash) 
+{
+      
+repositories.forEach(repository => 
+{
+        
+shell.moveItemToTrash(repository.path)
       })
+
     }
 
-    return this.appStore._removeRepositories(repositories)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1231__removeRepositories__RANDOM = perf_hooks.performance.now();
+ 
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1230__removeRepositories__RANDOM = perf_hooks.performance.now();
+ 
+return this.appStore._removeRepositories(repositories)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [152, 4; 152, 58]& TEMP_VAR_AUTOGEN_CALLING_1230__removeRepositories__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1230__removeRepositories__RANDOM));
+ 
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [152, 4; 152, 58]& TEMP_VAR_AUTOGEN_CALLING_1231__removeRepositories__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1231__removeRepositories__RANDOM));
+ 
   }
 
   /** Update the repository's `missing` flag. */
   public async updateRepositoryMissing(
     repository: Repository,
     missing: boolean
-  ): Promise<Repository> {
-    return this.appStore._updateRepositoryMissing(repository, missing)
+  ): Promise<Repository> 
+{
+    
+return this.appStore._updateRepositoryMissing(repository, missing)
   }
 
   /** Load the next batch of history for the repository. */
-  public loadNextCommitBatch(repository: Repository): Promise<void> {
-    return this.appStore._loadNextCommitBatch(repository)
+  public loadNextCommitBatch(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._loadNextCommitBatch(repository)
   }
 
   /** Load the changed files for the current history selection. */
   public loadChangedFilesForCurrentSelection(
     repository: Repository
-  ): Promise<void> {
-    return this.appStore._loadChangedFilesForCurrentSelection(repository)
+  ): Promise<void> 
+{
+    
+return this.appStore._loadChangedFilesForCurrentSelection(repository)
   }
 
   /**
@@ -185,8 +277,10 @@ export class Dispatcher {
   public changeCommitSelection(
     repository: Repository,
     sha: string
-  ): Promise<void> {
-    return this.appStore._changeCommitSelection(repository, sha)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeCommitSelection(repository, sha)
   }
 
   /**
@@ -200,60 +294,76 @@ export class Dispatcher {
   public changeFileSelection(
     repository: Repository,
     file: CommittedFileChange
-  ): Promise<void> {
-    return this.appStore._changeFileSelection(repository, file)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeFileSelection(repository, file)
   }
 
   /** Set the repository filter text. */
-  public setRepositoryFilterText(text: string): Promise<void> {
-    return this.appStore._setRepositoryFilterText(text)
+  public setRepositoryFilterText(text: string): Promise<void> 
+{
+    
+return this.appStore._setRepositoryFilterText(text)
   }
 
   /** Select the repository. */
   public selectRepository(
     repository: Repository | CloningRepository
-  ): Promise<Repository | null> {
-    return this.appStore._selectRepository(repository)
+  ): Promise<Repository | null> 
+{
+    
+return this.appStore._selectRepository(repository)
   }
 
   /** Change the selected section in the repository. */
   public changeRepositorySection(
     repository: Repository,
     section: RepositorySectionTab
-  ): Promise<void> {
-    return this.appStore._changeRepositorySection(repository, section)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeRepositorySection(repository, section)
   }
 
   /** Parse a Sketch File. */
   public parseSketchFile(
     repository: Repository,
     file: IKactusFile
-  ): Promise<void> {
-    return this.appStore._parseSketchFile(repository, file)
+  ): Promise<void> 
+{
+    
+return this.appStore._parseSketchFile(repository, file)
   }
 
   /** Import a Sketch File. */
   public importSketchFile(
     repository: Repository,
     file: IKactusFile
-  ): Promise<void> {
-    return this.appStore._importSketchFile(repository, file)
+  ): Promise<void> 
+{
+    
+return this.appStore._importSketchFile(repository, file)
   }
 
   /** Ignore a Sketch File. */
   public ignoreSketchFile(
     repository: Repository,
     file: IKactusFile
-  ): Promise<void> {
-    return this.appStore._ignoreSketchFile(repository, file)
+  ): Promise<void> 
+{
+    
+return this.appStore._ignoreSketchFile(repository, file)
   }
 
   /** Change the currently selected file in SketchFiles. */
   public changeSketchFileSelection(
     repository: Repository,
     selectedFile: IKactusFile
-  ): Promise<void> {
-    return this.appStore._changeSketchFileSelection(repository, selectedFile)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeSketchFileSelection(repository, selectedFile)
   }
 
   /**
@@ -267,8 +377,10 @@ export class Dispatcher {
   public selectWorkingDirectoryFiles(
     repository: Repository,
     selectedFiles?: WorkingDirectoryFileChange[]
-  ): Promise<void> {
-    return this.appStore._selectWorkingDirectoryFiles(repository, selectedFiles)
+  ): Promise<void> 
+{
+    
+return this.appStore._selectWorkingDirectoryFiles(repository, selectedFiles)
   }
 
   /**
@@ -282,16 +394,20 @@ export class Dispatcher {
   public selectStashedFile(
     repository: Repository,
     file?: CommittedFileChange | null
-  ): Promise<void> {
-    return this.appStore._selectStashedFile(repository, file)
+  ): Promise<void> 
+{
+    
+return this.appStore._selectStashedFile(repository, file)
   }
 
   /** Change the currently selected sketch part in CHanges. */
   public changeSketchPartSelection(
     repository: Repository,
     selectedPart: TSketchPartChange
-  ): Promise<void> {
-    return this.appStore._changeSketchPartSelection(repository, selectedPart)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeSketchPartSelection(repository, selectedPart)
   }
 
   /**
@@ -302,8 +418,10 @@ export class Dispatcher {
   public async commitIncludedChanges(
     repository: Repository,
     context: ICommitContext
-  ): Promise<boolean> {
-    return this.appStore._commitIncludedChanges(repository, context)
+  ): Promise<boolean> 
+{
+    
+return this.appStore._commitIncludedChanges(repository, context)
   }
 
   /** Change the file's includedness. */
@@ -311,8 +429,10 @@ export class Dispatcher {
     repository: Repository,
     file: WorkingDirectoryFileChange,
     include: boolean
-  ): Promise<void> {
-    return this.appStore._changeFileIncluded(repository, file, include)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeFileIncluded(repository, file, include)
   }
 
   /** Change the file's line selection state. */
@@ -320,8 +440,10 @@ export class Dispatcher {
     repository: Repository,
     file: WorkingDirectoryFileChange,
     diffSelection: DiffSelection
-  ): Promise<void> {
-    return this.appStore._changeFileLineSelection(
+  ): Promise<void> 
+{
+    
+return this.appStore._changeFileLineSelection(
       repository,
       file,
       diffSelection
@@ -332,20 +454,26 @@ export class Dispatcher {
   public changeIncludeAllFiles(
     repository: Repository,
     includeAll: boolean
-  ): Promise<void> {
-    return this.appStore._changeIncludeAllFiles(repository, includeAll)
+  ): Promise<void> 
+{
+    
+return this.appStore._changeIncludeAllFiles(repository, includeAll)
   }
 
   /**
    * Refresh the repository. This would be used, e.g., when the app gains focus.
    */
-  public refreshRepository(repository: Repository): Promise<void> {
-    return this.appStore._refreshOrRecoverRepository(repository)
+  public refreshRepository(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._refreshOrRecoverRepository(repository)
   }
 
   /** Show the popup. This will close any current popup. */
-  public showPopup(popup: Popup): Promise<void> {
-    return this.appStore._showPopup(popup)
+  public showPopup(popup: Popup): Promise<void> 
+{
+    
+return this.appStore._showPopup(popup)
   }
 
   /**
@@ -353,23 +481,31 @@ export class Dispatcher {
    *
    * @param popupType only close the popup if it matches this `PopupType`
    */
-  public closePopup(popupType?: PopupType) {
-    return this.appStore._closePopup(popupType)
+  public closePopup(popupType?: PopupType) 
+{
+    
+return this.appStore._closePopup(popupType)
   }
 
   /** Show the foldout. This will close any current popup. */
-  public showFoldout(foldout: Foldout): Promise<void> {
-    return this.appStore._showFoldout(foldout)
+  public showFoldout(foldout: Foldout): Promise<void> 
+{
+    
+return this.appStore._showFoldout(foldout)
   }
 
   /** Close the current foldout. If opening a new foldout use closeFoldout instead. */
-  public closeCurrentFoldout(): Promise<void> {
-    return this.appStore._closeCurrentFoldout()
+  public closeCurrentFoldout(): Promise<void> 
+{
+    
+return this.appStore._closeCurrentFoldout()
   }
 
   /** Close the specified foldout */
-  public closeFoldout(foldout: FoldoutType): Promise<void> {
-    return this.appStore._closeFoldout(foldout)
+  public closeFoldout(foldout: FoldoutType): Promise<void> 
+{
+    
+return this.appStore._closeFoldout(foldout)
   }
 
   /** Check for remote commits that could affect the rebase operation */
@@ -377,29 +513,39 @@ export class Dispatcher {
     repository: Repository,
     baseBranch: Branch,
     targetBranch: Branch
-  ): Promise<boolean> {
-    if (targetBranch.upstream === null) {
-      return false
+  ): Promise<boolean> 
+{
+    
+if (targetBranch.upstream === null) 
+{
+      
+return false
     }
 
     // if the branch is tracking a remote branch
-    const upstreamBranchesMatching = await getBranches(
+    
+const upstreamBranchesMatching = await getBranches(
       repository,
       `refs/remotes/${targetBranch.upstream}`
     )
 
-    if (upstreamBranchesMatching.length === 0) {
-      return false
+    
+if (upstreamBranchesMatching.length === 0) 
+{
+      
+return false
     }
 
     // and the remote branch has commits that don't exist on the base branch
-    const remoteCommits = await getCommitsInRange(
+    
+const remoteCommits = await getCommitsInRange(
       repository,
       baseBranch.tip.sha,
       targetBranch.upstream
     )
 
-    return remoteCommits !== null && remoteCommits.length > 0
+    
+return remoteCommits !== null && remoteCommits.length > 0
   }
 
   /** Initialize and start the rebase operation */
@@ -409,37 +555,52 @@ export class Dispatcher {
     targetBranch: Branch,
     commits: ReadonlyArray<CommitOneLine>,
     options?: { continueWithForcePush: boolean }
-  ): Promise<void> {
-    const { askForConfirmationOnForcePush } = this.appStore.getState()
+  ): Promise<void> 
+{
+    
+const { askForConfirmationOnForcePush } = this.appStore.getState()
 
-    const hasOverridenForcePushCheck =
+    
+const hasOverridenForcePushCheck =
       options !== undefined && options.continueWithForcePush
 
-    if (askForConfirmationOnForcePush && !hasOverridenForcePushCheck) {
-      const showWarning = await this.warnAboutRemoteCommits(
+    
+if (askForConfirmationOnForcePush && !hasOverridenForcePushCheck) 
+{
+      
+const showWarning = await this.warnAboutRemoteCommits(
         repository,
         baseBranch,
         targetBranch
       )
 
-      if (showWarning) {
-        this.setRebaseFlowStep(repository, {
+      
+if (showWarning) 
+{
+        
+this.setRebaseFlowStep(repository, {
           kind: RebaseStep.WarnForcePush,
           baseBranch,
           targetBranch,
           commits,
         })
-        return
+        
+return
       }
     }
 
-    this.initializeRebaseProgress(repository, commits)
+    
+this.initializeRebaseProgress(repository, commits)
 
-    const startRebaseAction = () => {
-      return this.rebase(repository, baseBranch, targetBranch)
+    
+const startRebaseAction = () => 
+{
+      
+return this.rebase(repository, baseBranch, targetBranch)
     }
 
-    this.setRebaseFlowStep(repository, {
+    
+this.setRebaseFlowStep(repository, {
       kind: RebaseStep.ShowProgress,
       rebaseAction: startRebaseAction,
     })
@@ -448,34 +609,51 @@ export class Dispatcher {
   /**
    * Initialize and launch the rebase flow for a conflicted repository
    */
-  public async launchRebaseFlow(repository: Repository, targetBranch: string) {
-    await this.appStore._loadStatus(repository)
+  public async launchRebaseFlow(repository: Repository, targetBranch: string) 
+{
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1048__loadStatus__RANDOM = perf_hooks.performance.now();
+ 
+await this.appStore._loadStatus(repository)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [451, 4; 451, 47]& TEMP_VAR_AUTOGEN_CALLING_1048__loadStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1048__loadStatus__RANDOM));
+ 
 
-    const repositoryState = this.repositoryStateManager.get(repository)
-    const { conflictState } = repositoryState.changesState
+    
+const repositoryState = this.repositoryStateManager.get(repository)
+    
+const { conflictState } = repositoryState.changesState
 
-    if (conflictState === null || conflictState.kind === 'merge') {
-      return
+    
+if (conflictState === null || conflictState.kind === 'merge') 
+{
+      
+return
     }
 
-    const updatedConflictState = {
+    
+const updatedConflictState = {
       ...conflictState,
       targetBranch,
     }
 
-    this.repositoryStateManager.updateChangesState(repository, () => ({
+    
+this.repositoryStateManager.updateChangesState(repository, () => ({
       conflictState: updatedConflictState,
     }))
 
-    await this.setRebaseProgressFromState(repository)
+    
+await this.setRebaseProgressFromState(repository)
 
-    const initialStep = initializeRebaseFlowForConflictedRepository(
+    
+const initialStep = initializeRebaseFlowForConflictedRepository(
       updatedConflictState
     )
 
-    this.setRebaseFlowStep(repository, initialStep)
+    
+this.setRebaseFlowStep(repository, initialStep)
 
-    this.showPopup({
+    
+this.showPopup({
       type: PopupType.RebaseFlow,
       repository,
     })
@@ -492,8 +670,10 @@ export class Dispatcher {
     name: string,
     startPoint: string | null,
     uncommittedChangesStrategy?: UncommittedChangesStrategy
-  ): Promise<Repository> {
-    return this.appStore._createBranch(
+  ): Promise<Repository> 
+{
+    
+return this.appStore._createBranch(
       repository,
       name,
       startPoint,
@@ -506,43 +686,62 @@ export class Dispatcher {
     repository: Repository,
     branch: Branch | string,
     uncommittedChangesStrategy?: UncommittedChangesStrategy
-  ): Promise<Repository> {
-    return this.appStore._checkoutBranch(
+  ): Promise<Repository> 
+{
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1195__checkoutBranch__RANDOM = perf_hooks.performance.now();
+ 
+return this.appStore._checkoutBranch(
       repository,
       branch,
       uncommittedChangesStrategy
     )
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [509, 4; 513, 5]& TEMP_VAR_AUTOGEN_CALLING_1195__checkoutBranch__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1195__checkoutBranch__RANDOM));
+ 
   }
 
   /** Push the current branch. */
-  public push(repository: Repository): Promise<void> {
-    return this.appStore._push(repository)
+  public push(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._push(repository)
   }
 
-  private pushWithOptions(repository: Repository, options?: PushOptions) {
-    if (options !== undefined && options.forceWithLease) {
-      this.dropCurrentBranchFromForcePushList(repository)
+  private pushWithOptions(repository: Repository, options?: PushOptions) 
+{
+    
+if (options !== undefined && options.forceWithLease) 
+{
+      
+this.dropCurrentBranchFromForcePushList(repository)
     }
 
-    return this.appStore._push(repository, options)
+    
+return this.appStore._push(repository, options)
   }
 
   /** Pull the current branch. */
-  public pull(repository: Repository): Promise<void> {
-    return this.appStore._pull(repository)
+  public pull(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._pull(repository)
   }
 
   /** Fetch a specific refspec for the repository. */
   public fetchRefspec(
     repository: Repository,
     fetchspec: string
-  ): Promise<void> {
-    return this.appStore._fetchRefspec(repository, fetchspec)
+  ): Promise<void> 
+{
+    
+return this.appStore._fetchRefspec(repository, fetchspec)
   }
 
   /** Fetch all refs for the repository */
-  public fetch(repository: Repository, fetchType: FetchType): Promise<void> {
-    return this.appStore._fetch(repository, fetchType)
+  public fetch(repository: Repository, fetchType: FetchType): Promise<void> 
+{
+    
+return this.appStore._fetch(repository, fetchType)
   }
 
   /** Publish the repository to GitHub with the given properties. */
@@ -553,8 +752,10 @@ export class Dispatcher {
     private_: boolean,
     account: Account,
     org: IAPIOrganization | null
-  ): Promise<Repository> {
-    return this.appStore._publishRepository(
+  ): Promise<Repository> 
+{
+    
+return this.appStore._publishRepository(
       repository,
       name,
       description,
@@ -568,19 +769,33 @@ export class Dispatcher {
    * Post the given error. This will send the error through the standard error
    * handler machinery.
    */
-  public async postError(error: Error): Promise<void> {
-    let currentError: Error | null = error
-    for (let i = this.errorHandlers.length - 1; i >= 0; i--) {
-      const handler = this.errorHandlers[i]
-      currentError = await handler(currentError, this)
+  public async postError(error: Error): Promise<void> 
+{
+    
+let currentError: Error | null = error
+    
+for (
+let i = this.errorHandlers.length - 1;
+ i >= 0; i--)
+{
+      
+const handler = this.errorHandlers[i]
+      
+currentError = await handler(currentError, this)
 
-      if (!currentError) {
-        break
+      
+if (!currentError) 
+{
+        
+break
       }
     }
 
-    if (currentError) {
-      fatalError(
+    
+if (currentError) 
+{
+      
+fatalError(
         `Unhandled error ${currentError}. This shouldn't happen! All errors should be handled, even if it's just by the default handler.`
       )
     }
@@ -591,21 +806,27 @@ export class Dispatcher {
    * machinery. You probably don't want that. See `Dispatcher.postError`
    * instead.
    */
-  public presentError(error: Error): Promise<void> {
-    return this.appStore._pushError(error)
+  public presentError(error: Error): Promise<void> 
+{
+    
+return this.appStore._pushError(error)
   }
 
   /** Clear the given error. */
-  public clearError(error: Error): Promise<void> {
-    return this.appStore._clearError(error)
+  public clearError(error: Error): Promise<void> 
+{
+    
+return this.appStore._clearError(error)
   }
 
   /**
    * Clone a missing repository to the previous path, and update it's
    * state in the repository list if the clone completes without error.
    */
-  public cloneAgain(url: string, path: string): Promise<void> {
-    return this.appStore._cloneAgain(url, path)
+  public cloneAgain(url: string, path: string): Promise<void> 
+{
+    
+return this.appStore._cloneAgain(url, path)
   }
 
   /** Clone the repository to the path. */
@@ -613,22 +834,40 @@ export class Dispatcher {
     url: string,
     path: string,
     options?: { branch?: string }
-  ): Promise<Repository | null> {
-    return this.appStore._completeOpenInKactus(async () => {
-      const { promise, repository } = this.appStore._clone(url, path, options)
-      await this.selectRepository(repository)
-      const success = await promise
+  ): Promise<Repository | null> 
+{
+    
+return this.appStore._completeOpenInKactus(async () => 
+{
+      
+const { promise, repository } = this.appStore._clone(url, path, options)
+      
+await this.selectRepository(repository)
+      
+const success = await promise
       // TODO: this exit condition is not great, bob
-      if (!success) {
-        return null
+      
+if (!success) 
+{
+        
+return null
       }
 
-      const addedRepositories = await this.addRepositories([path], false)
-      const addedRepository = addedRepositories[0]
-      await this.selectRepository(addedRepository)
+      
 
-      return addedRepository
+var TIMING_TEMP_VAR_AUTOGEN611__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN611__RANDOM = await  this.addRepositories([path], false)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [625, 6; 625, 73]& TEMP_VAR_AUTOGEN611__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN611__RANDOM));
+ const addedRepositories =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN611__RANDOM
+      
+const addedRepository = addedRepositories[0]
+      
+await this.selectRepository(addedRepository)
+
+      
+return addedRepository
     })
+
   }
 
   /** Rename the branch to a new name. */
@@ -636,8 +875,10 @@ export class Dispatcher {
     repository: Repository,
     branch: Branch,
     newName: string
-  ): Promise<void> {
-    return this.appStore._renameBranch(repository, branch, newName)
+  ): Promise<void> 
+{
+    
+return this.appStore._renameBranch(repository, branch, newName)
   }
 
   /**
@@ -648,26 +889,38 @@ export class Dispatcher {
     repository: Repository,
     branch: Branch,
     includeRemote: boolean
-  ): Promise<void> {
-    return this.appStore._deleteBranch(repository, branch, includeRemote)
+  ): Promise<void> 
+{
+    
+return this.appStore._deleteBranch(repository, branch, includeRemote)
   }
 
   /** Discard the changes to the given files. */
   public discardChanges(
     repository: Repository,
     files: ReadonlyArray<WorkingDirectoryFileChange>
-  ): Promise<void> {
-    return this.appStore._discardChanges(repository, files)
+  ): Promise<void> 
+{
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1202__discardChanges__RANDOM = perf_hooks.performance.now();
+ 
+return this.appStore._discardChanges(repository, files)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [659, 4; 659, 59]& TEMP_VAR_AUTOGEN_CALLING_1202__discardChanges__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1202__discardChanges__RANDOM));
+ 
   }
 
   /** Undo the given commit. */
-  public undoCommit(repository: Repository, commit: Commit): Promise<void> {
-    return this.appStore._undoCommit(repository, commit)
+  public undoCommit(repository: Repository, commit: Commit): Promise<void> 
+{
+    
+return this.appStore._undoCommit(repository, commit)
   }
 
   /** Revert the commit with the given SHA */
-  public revertCommit(repository: Repository, commit: Commit): Promise<void> {
-    return this.appStore._revertCommit(repository, commit)
+  public revertCommit(repository: Repository, commit: Commit): Promise<void> 
+{
+    
+return this.appStore._revertCommit(repository, commit)
   }
 
   /**
@@ -677,22 +930,28 @@ export class Dispatcher {
    * repo selection on all platforms and repo selection and
    * app menu on Windows.
    */
-  public setSidebarWidth(width: number): Promise<void> {
-    return this.appStore._setSidebarWidth(width)
+  public setSidebarWidth(width: number): Promise<void> 
+{
+    
+return this.appStore._setSidebarWidth(width)
   }
 
   /**
    * Set the update banner's visibility
    */
-  public setUpdateBannerVisibility(isVisible: boolean) {
-    return this.appStore._setUpdateBannerVisibility(isVisible)
+  public setUpdateBannerVisibility(isVisible: boolean) 
+{
+    
+return this.appStore._setUpdateBannerVisibility(isVisible)
   }
 
   /**
    * Set the banner state for the application
    */
-  public setBanner(state: Banner) {
-    return this.appStore._setBanner(state)
+  public setBanner(state: Banner) 
+{
+    
+return this.appStore._setBanner(state)
   }
 
   /**
@@ -700,8 +959,10 @@ export class Dispatcher {
    *
    * @param bannerType only close the banner if it matches this `BannerType`
    */
-  public clearBanner(bannerType?: BannerType) {
-    return this.appStore._clearBanner(bannerType)
+  public clearBanner(bannerType?: BannerType) 
+{
+    
+return this.appStore._clearBanner(bannerType)
   }
 
   /**
@@ -710,8 +971,10 @@ export class Dispatcher {
   public setDivergingBranchBannerVisibility(
     repository: Repository,
     isVisible: boolean
-  ) {
-    return this.appStore._setDivergingBranchBannerVisibility(
+  ) 
+{
+    
+return this.appStore._setDivergingBranchBannerVisibility(
       repository,
       isVisible
     )
@@ -724,39 +987,51 @@ export class Dispatcher {
    * repo selection on all platforms and repo selection and
    * app menu on Windows.
    */
-  public resetSidebarWidth(): Promise<void> {
-    return this.appStore._resetSidebarWidth()
+  public resetSidebarWidth(): Promise<void> 
+{
+    
+return this.appStore._resetSidebarWidth()
   }
 
   /**
    * Set the width of the commit summary column in the
    * history view to the given value.
    */
-  public setCommitSummaryWidth(width: number): Promise<void> {
-    return this.appStore._setCommitSummaryWidth(width)
+  public setCommitSummaryWidth(width: number): Promise<void> 
+{
+    
+return this.appStore._setCommitSummaryWidth(width)
   }
 
   /**
    * Reset the width of the commit summary column in the
    * history view to its default value.
    */
-  public resetCommitSummaryWidth(): Promise<void> {
-    return this.appStore._resetCommitSummaryWidth()
+  public resetCommitSummaryWidth(): Promise<void> 
+{
+    
+return this.appStore._resetCommitSummaryWidth()
   }
 
   /** Update the repository's issues from GitHub. */
-  public refreshIssues(repository: GitHubRepository): Promise<void> {
-    return this.appStore._refreshIssues(repository)
+  public refreshIssues(repository: GitHubRepository): Promise<void> 
+{
+    
+return this.appStore._refreshIssues(repository)
   }
 
   /** End the Welcome flow. */
-  public endWelcomeFlow(): Promise<void> {
-    return this.appStore._endWelcomeFlow()
+  public endWelcomeFlow(): Promise<void> 
+{
+    
+return this.appStore._endWelcomeFlow()
   }
 
   /** Set the commit message input's focus. */
-  public setCommitMessageFocus(focus: boolean) {
-    this.appStore._setCommitMessageFocus(focus)
+  public setCommitMessageFocus(focus: boolean) 
+{
+    
+this.appStore._setCommitMessageFocus(focus)
   }
 
   /**
@@ -766,18 +1041,24 @@ export class Dispatcher {
   public setCommitMessage(
     repository: Repository,
     message: ICommitMessage
-  ): Promise<void> {
-    return this.appStore._setCommitMessage(repository, message)
+  ): Promise<void> 
+{
+    
+return this.appStore._setCommitMessage(repository, message)
   }
 
   /** Add the account to the app. */
-  public addAccount(account: Account): Promise<void> {
-    return this.appStore._addAccount(account)
+  public addAccount(account: Account): Promise<void> 
+{
+    
+return this.appStore._addAccount(account)
   }
 
   /** Remove the given account from the app. */
-  public removeAccount(account: Account): Promise<void> {
-    return this.appStore._removeAccount(account)
+  public removeAccount(account: Account): Promise<void> 
+{
+    
+return this.appStore._removeAccount(account)
   }
 
   /**
@@ -796,16 +1077,21 @@ export class Dispatcher {
    * order for the state to be properly updated the delegate _must_ return
    * the latest transformed instance of the AppMenu.
    */
-  public setAppMenuState(update: (appMenu: AppMenu) => AppMenu): Promise<void> {
-    return this.appStore._setAppMenuState(update)
+  public setAppMenuState(update: (appMenu: AppMenu) => AppMenu): Promise<void> 
+{
+    
+return this.appStore._setAppMenuState(update)
   }
 
   /**
    * Tell the main process to execute (i.e. simulate a click of) the given menu item.
    */
-  public executeMenuItem(item: ExecutableMenuItem): Promise<void> {
-    executeMenuItem(item)
-    return Promise.resolve()
+  public executeMenuItem(item: ExecutableMenuItem): Promise<void> 
+{
+    
+executeMenuItem(item)
+    
+return Promise.resolve()
   }
 
   /**
@@ -814,8 +1100,10 @@ export class Dispatcher {
    *
    * Only applicable on non-macOS platforms.
    */
-  public setAccessKeyHighlightState(highlight: boolean): Promise<void> {
-    return this.appStore._setAccessKeyHighlightState(highlight)
+  public setAccessKeyHighlightState(highlight: boolean): Promise<void> 
+{
+    
+return this.appStore._setAccessKeyHighlightState(highlight)
   }
 
   /** Merge the named branch into the current branch. */
@@ -823,8 +1111,10 @@ export class Dispatcher {
     repository: Repository,
     branch: string,
     mergeStatus: MergeResult | null
-  ): Promise<void> {
-    return this.appStore._mergeBranch(repository, branch, mergeStatus)
+  ): Promise<void> 
+{
+    
+return this.appStore._mergeBranch(repository, branch, mergeStatus)
   }
 
   /**
@@ -835,39 +1125,57 @@ export class Dispatcher {
     repository: Repository,
     tipWithBranch: IValidBranch,
     beforeRebaseSha: string
-  ) => {
+  ) => 
+{
     // if the commit id of the branch is unchanged, it can be excluded from
     // this list
-    if (tipWithBranch.branch.tip.sha === beforeRebaseSha) {
-      return
+    
+if (tipWithBranch.branch.tip.sha === beforeRebaseSha) 
+{
+      
+return
     }
 
-    const currentState = this.repositoryStateManager.get(repository)
-    const { rebasedBranches } = currentState.branchesState
+    
+const currentState = this.repositoryStateManager.get(repository)
+    
+const { rebasedBranches } = currentState.branchesState
 
-    const updatedMap = new Map<string, string>(rebasedBranches)
-    updatedMap.set(
+    
+const updatedMap = new Map<string, string>(rebasedBranches)
+    
+updatedMap.set(
       tipWithBranch.branch.nameWithoutRemote,
       tipWithBranch.branch.tip.sha
     )
 
-    this.repositoryStateManager.updateBranchesState(repository, () => ({
+    
+this.repositoryStateManager.updateBranchesState(repository, () => ({
       rebasedBranches: updatedMap,
     }))
   }
 
-  private dropCurrentBranchFromForcePushList = (repository: Repository) => {
-    const currentState = this.repositoryStateManager.get(repository)
-    const { rebasedBranches, tip } = currentState.branchesState
+  private dropCurrentBranchFromForcePushList = (repository: Repository) => 
+{
+    
+const currentState = this.repositoryStateManager.get(repository)
+    
+const { rebasedBranches, tip } = currentState.branchesState
 
-    if (tip.kind !== TipState.Valid) {
-      return
+    
+if (tip.kind !== TipState.Valid) 
+{
+      
+return
     }
 
-    const updatedMap = new Map<string, string>(rebasedBranches)
-    updatedMap.delete(tip.branch.nameWithoutRemote)
+    
+const updatedMap = new Map<string, string>(rebasedBranches)
+    
+updatedMap.delete(tip.branch.nameWithoutRemote)
 
-    this.repositoryStateManager.updateBranchesState(repository, () => ({
+    
+this.repositoryStateManager.updateBranchesState(repository, () => ({
       rebasedBranches: updatedMap,
     }))
   }
@@ -876,8 +1184,10 @@ export class Dispatcher {
    * Update the rebase state to indicate the user has resolved conflicts in the
    * current repository.
    */
-  public setConflictsResolved(repository: Repository) {
-    return this.appStore._setConflictsResolved(repository)
+  public setConflictsResolved(repository: Repository) 
+{
+    
+return this.appStore._setConflictsResolved(repository)
   }
 
   /**
@@ -890,16 +1200,20 @@ export class Dispatcher {
   public initializeRebaseProgress(
     repository: Repository,
     commits: ReadonlyArray<CommitOneLine>
-  ) {
-    return this.appStore._initializeRebaseProgress(repository, commits)
+  ) 
+{
+    
+return this.appStore._initializeRebaseProgress(repository, commits)
   }
 
   /**
    * Update the rebase progress in application state by querying the Git
    * repository state.
    */
-  public setRebaseProgressFromState(repository: Repository) {
-    return this.appStore._setRebaseProgressFromState(repository)
+  public setRebaseProgressFromState(repository: Repository) 
+{
+    
+return this.appStore._setRebaseProgressFromState(repository)
   }
 
   /**
@@ -908,13 +1222,17 @@ export class Dispatcher {
   public setRebaseFlowStep(
     repository: Repository,
     step: RebaseFlowStep
-  ): Promise<void> {
-    return this.appStore._setRebaseFlowStep(repository, step)
+  ): Promise<void> 
+{
+    
+return this.appStore._setRebaseFlowStep(repository, step)
   }
 
   /** End the rebase flow and cleanup any related app state */
-  public endRebaseFlow(repository: Repository) {
-    return this.appStore._endRebaseFlow(repository)
+  public endRebaseFlow(repository: Repository) 
+{
+    
+return this.appStore._endRebaseFlow(repository)
   }
 
   /** Starts a rebase for the given base and target branch */
@@ -922,72 +1240,110 @@ export class Dispatcher {
     repository: Repository,
     baseBranch: Branch,
     targetBranch: Branch
-  ): Promise<void> {
-    const stateBefore = this.repositoryStateManager.get(repository)
+  ): Promise<void> 
+{
+    
+const stateBefore = this.repositoryStateManager.get(repository)
 
-    const beforeSha = getTipSha(stateBefore.branchesState.tip)
+    
+const beforeSha = getTipSha(stateBefore.branchesState.tip)
 
-    log.info(
+    
+log.info(
       `[rebase] starting rebase for ${targetBranch.name} at ${beforeSha}`
     )
-    log.info(
+    
+log.info(
       `[rebase] to restore the previous state if this completed rebase is unsatisfactory:`
     )
-    log.info(`[rebase] - git checkout ${targetBranch.name}`)
-    log.info(`[rebase] - git reset ${beforeSha} --hard`)
+    
+log.info(`[rebase] - git checkout ${targetBranch.name}`)
+    
+log.info(`[rebase] - git reset ${beforeSha} --hard`)
 
-    const result = await this.appStore._rebase(
+    
+const result = await this.appStore._rebase(
       repository,
       baseBranch,
       targetBranch
     )
 
-    await this.appStore._loadStatus(repository)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1049__loadStatus__RANDOM = perf_hooks.performance.now();
+ 
+await this.appStore._loadStatus(repository)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [944, 4; 944, 47]& TEMP_VAR_AUTOGEN_CALLING_1049__loadStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1049__loadStatus__RANDOM));
+ 
 
-    const stateAfter = this.repositoryStateManager.get(repository)
-    const { tip } = stateAfter.branchesState
-    const afterSha = getTipSha(tip)
+    
+const stateAfter = this.repositoryStateManager.get(repository)
+    
+const { tip } = stateAfter.branchesState
+    
+const afterSha = getTipSha(tip)
 
-    log.info(
+    
+log.info(
       `[rebase] completed rebase - got ${result} and on tip ${afterSha} - kind ${
         tip.kind
       }`
     )
 
-    if (result === RebaseResult.ConflictsEncountered) {
-      const { conflictState } = stateAfter.changesState
-      if (conflictState === null) {
-        log.warn(
+    
+if (result === RebaseResult.ConflictsEncountered) 
+{
+      
+const { conflictState } = stateAfter.changesState
+      
+if (conflictState === null) 
+{
+        
+log.warn(
           `[rebase] conflict state after rebase is null - unable to continue`
         )
-        return
+        
+return
       }
 
-      if (isMergeConflictState(conflictState)) {
-        log.warn(
+      
+if (isMergeConflictState(conflictState)) 
+{
+        
+log.warn(
           `[rebase] conflict state after rebase is merge conflicts - unable to continue`
         )
-        return
+        
+return
       }
 
-      const conflictsWithBranches: RebaseConflictState = {
+      
+const conflictsWithBranches: RebaseConflictState = {
         ...conflictState,
         baseBranch: baseBranch.name,
         targetBranch: targetBranch.name,
       }
 
-      this.switchToConflicts(repository, conflictsWithBranches)
-    } else if (result === RebaseResult.CompletedWithoutError) {
-      if (tip.kind !== TipState.Valid) {
-        log.warn(
+      
+this.switchToConflicts(repository, conflictsWithBranches)
+    } 
+else
+if (result === RebaseResult.CompletedWithoutError) 
+{
+      
+if (tip.kind !== TipState.Valid) 
+{
+        
+log.warn(
           `[rebase] tip after completing rebase is ${
             tip.kind
           } but this should be a valid tip if the rebase completed without error`
         )
-        return
+        
+return
       }
 
-      await this.completeRebase(
+      
+await this.completeRebase(
         repository,
         {
           type: BannerType.SuccessfulRebase,
@@ -997,18 +1353,29 @@ export class Dispatcher {
         tip,
         beforeSha
       )
-    } else if (result === RebaseResult.Error) {
+    } 
+else
+if (result === RebaseResult.Error) 
+{
       // we were unable to successfully start the rebase, and an error should
       // be shown through the default error handling infrastructure, so we can
       // just abandon the rebase for now
-      this.endRebaseFlow(repository)
+      
+this.endRebaseFlow(repository)
     }
   }
 
   /** Abort the current rebase and refreshes the repository status */
-  public async abortRebase(repository: Repository) {
-    await this.appStore._abortRebase(repository)
-    await this.appStore._loadStatus(repository)
+  public async abortRebase(repository: Repository) 
+{
+    
+await this.appStore._abortRebase(repository)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1050__loadStatus__RANDOM = perf_hooks.performance.now();
+ 
+await this.appStore._loadStatus(repository)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [1010, 4; 1010, 47]& TEMP_VAR_AUTOGEN_CALLING_1050__loadStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1050__loadStatus__RANDOM));
+ 
   }
 
   /**
@@ -1019,71 +1386,107 @@ export class Dispatcher {
     repository: Repository,
     workingDirectory: WorkingDirectoryStatus,
     conflictsState: RebaseConflictState
-  ): Promise<void> {
-    const stateBefore = this.repositoryStateManager.get(repository)
-    const {
+  ): Promise<void> 
+{
+    
+const stateBefore = this.repositoryStateManager.get(repository)
+    
+const {
       targetBranch,
       baseBranch,
       originalBranchTip,
       manualResolutions,
     } = conflictsState
 
-    const beforeSha = getTipSha(stateBefore.branchesState.tip)
+    
+const beforeSha = getTipSha(stateBefore.branchesState.tip)
 
-    log.info(`[continueRebase] continuing rebase for ${beforeSha}`)
+    
+log.info(`[continueRebase] continuing rebase for ${beforeSha}`)
 
-    const result = await this.appStore._continueRebase(
+    
+const result = await this.appStore._continueRebase(
       repository,
       workingDirectory,
       manualResolutions
     )
-    await this.appStore._loadStatus(repository)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1051__loadStatus__RANDOM = perf_hooks.performance.now();
+ 
+await this.appStore._loadStatus(repository)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [1039, 4; 1039, 47]& TEMP_VAR_AUTOGEN_CALLING_1051__loadStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1051__loadStatus__RANDOM));
+ 
 
-    const stateAfter = this.repositoryStateManager.get(repository)
-    const { tip } = stateAfter.branchesState
-    const afterSha = getTipSha(tip)
+    
+const stateAfter = this.repositoryStateManager.get(repository)
+    
+const { tip } = stateAfter.branchesState
+    
+const afterSha = getTipSha(tip)
 
-    log.info(
+    
+log.info(
       `[continueRebase] completed rebase - got ${result} and on tip ${afterSha} - kind ${
         tip.kind
       }`
     )
 
-    if (result === RebaseResult.ConflictsEncountered) {
-      const { conflictState } = stateAfter.changesState
-      if (conflictState === null) {
-        log.warn(
+    
+if (result === RebaseResult.ConflictsEncountered) 
+{
+      
+const { conflictState } = stateAfter.changesState
+      
+if (conflictState === null) 
+{
+        
+log.warn(
           `[continueRebase] conflict state after rebase is null - unable to continue`
         )
-        return
+        
+return
       }
 
-      if (isMergeConflictState(conflictState)) {
-        log.warn(
+      
+if (isMergeConflictState(conflictState)) 
+{
+        
+log.warn(
           `[continueRebase] conflict state after rebase is merge conflicts - unable to continue`
         )
-        return
+        
+return
       }
 
       // ensure branches are persisted when transitioning back to conflicts
-      const conflictsWithBranches: RebaseConflictState = {
+      
+const conflictsWithBranches: RebaseConflictState = {
         ...conflictState,
         baseBranch,
         targetBranch,
       }
 
-      this.switchToConflicts(repository, conflictsWithBranches)
-    } else if (result === RebaseResult.CompletedWithoutError) {
-      if (tip.kind !== TipState.Valid) {
-        log.warn(
+      
+this.switchToConflicts(repository, conflictsWithBranches)
+    } 
+else
+if (result === RebaseResult.CompletedWithoutError) 
+{
+      
+if (tip.kind !== TipState.Valid) 
+{
+        
+log.warn(
           `[continueRebase] tip after completing rebase is ${
             tip.kind
           } but this should be a valid tip if the rebase completed without error`
         )
-        return
+        
+return
       }
 
-      await this.completeRebase(
+      
+await this.completeRebase(
         repository,
         {
           type: BannerType.SuccessfulRebase,
@@ -1100,8 +1503,10 @@ export class Dispatcher {
   private switchToConflicts = (
     repository: Repository,
     conflictState: RebaseConflictState
-  ) => {
-    this.setRebaseFlowStep(repository, {
+  ) => 
+{
+    
+this.setRebaseFlowStep(repository, {
       kind: RebaseStep.ShowConflicts,
       conflictState,
     })
@@ -1113,24 +1518,39 @@ export class Dispatcher {
     banner: Banner,
     tip: IValidBranch,
     originalBranchTip: string
-  ): Promise<void> {
-    this.closePopup()
+  ): Promise<void> 
+{
+    
+this.closePopup()
 
-    this.setBanner(banner)
+    
+this.setBanner(banner)
 
-    if (tip.kind === TipState.Valid) {
-      this.addRebasedBranchToForcePushList(repository, tip, originalBranchTip)
+    
+if (tip.kind === TipState.Valid) 
+{
+      
+this.addRebasedBranchToForcePushList(repository, tip, originalBranchTip)
     }
 
-    this.endRebaseFlow(repository)
+    
+this.endRebaseFlow(repository)
 
-    await this.refreshRepository(repository)
+    
+await this.refreshRepository(repository)
   }
 
   /** aborts an in-flight merge and refreshes the repository's status */
-  public async abortMerge(repository: Repository) {
-    await this.appStore._abortMerge(repository)
-    await this.appStore._loadStatus(repository)
+  public async abortMerge(repository: Repository) 
+{
+    
+await this.appStore._abortMerge(repository)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1052__loadStatus__RANDOM = perf_hooks.performance.now();
+ 
+await this.appStore._loadStatus(repository)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [1132, 4; 1132, 47]& TEMP_VAR_AUTOGEN_CALLING_1052__loadStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1052__loadStatus__RANDOM));
+ 
   }
 
   /**
@@ -1144,24 +1564,35 @@ export class Dispatcher {
     repository: Repository,
     workingDirectory: WorkingDirectoryStatus,
     successfulMergeBanner: Banner
-  ) {
+  ) 
+{
     // get manual resolutions in case there are manual conflicts
-    const repositoryState = this.repositoryStateManager.get(repository)
-    const { conflictState } = repositoryState.changesState
-    if (conflictState === null) {
+    
+const repositoryState = this.repositoryStateManager.get(repository)
+    
+const { conflictState } = repositoryState.changesState
+    
+if (conflictState === null) 
+{
       // if this doesn't exist, something is very wrong and we shouldn't proceed 😢
-      log.error(
+      
+log.error(
         'Conflict state missing during finishConflictedMerge. No merge will be committed.'
       )
-      return
+      
+return
     }
-    const result = await this.appStore._finishConflictedMerge(
+    
+const result = await this.appStore._finishConflictedMerge(
       repository,
       workingDirectory,
       conflictState.manualResolutions
     )
-    if (result !== undefined) {
-      this.setBanner(successfulMergeBanner)
+    
+if (result !== undefined) 
+{
+      
+this.setBanner(successfulMergeBanner)
     }
   }
 
@@ -1170,42 +1601,56 @@ export class Dispatcher {
     repository: Repository,
     name: string,
     url: string
-  ): Promise<void> {
-    return this.appStore._setRemoteURL(repository, name, url)
+  ): Promise<void> 
+{
+    
+return this.appStore._setRemoteURL(repository, name, url)
   }
 
   /** Open the URL in a browser */
-  public openInBrowser(url: string): Promise<boolean> {
-    return this.appStore._openInBrowser(url)
+  public openInBrowser(url: string): Promise<boolean> 
+{
+    
+return this.appStore._openInBrowser(url)
   }
 
   /** Open the path in Sketch */
-  public openSketchFile(file: IKactusFile) {
-    return this.appStore._openSketchFile(file)
+  public openSketchFile(file: IKactusFile) 
+{
+    
+return this.appStore._openSketchFile(file)
   }
 
-  public deleteSketchFile(repository: Repository, file: IKactusFile) {
-    return this.appStore._deleteSketchFile(repository, file)
+  public deleteSketchFile(repository: Repository, file: IKactusFile) 
+{
+    
+return this.appStore._deleteSketchFile(repository, file)
   }
 
   /** Add the pattern to the repository's gitignore. */
   public appendIgnoreRule(
     repository: Repository,
     pattern: string | string[]
-  ): Promise<void> {
-    return this.appStore._appendIgnoreRule(repository, pattern)
+  ): Promise<void> 
+{
+    
+return this.appStore._appendIgnoreRule(repository, pattern)
   }
 
   /** Opens a Git-enabled terminal setting the working directory to the repository path */
-  public async openShell(path: string): Promise<void> {
-    this.appStore._openShell(path)
+  public async openShell(path: string): Promise<void> 
+{
+    
+this.appStore._openShell(path)
   }
 
   /**
    * Opens a path in the external editor selected by the user.
    */
-  public async openInExternalEditor(fullPath: string): Promise<void> {
-    return this.appStore._openInExternalEditor(fullPath)
+  public async openInExternalEditor(fullPath: string): Promise<void> 
+{
+    
+return this.appStore._openInExternalEditor(fullPath)
   }
 
   /**
@@ -1217,8 +1662,10 @@ export class Dispatcher {
   public async saveGitIgnore(
     repository: Repository,
     text: string
-  ): Promise<void> {
-    return this.appStore._saveGitIgnore(repository, text)
+  ): Promise<void> 
+{
+    
+return this.appStore._saveGitIgnore(repository, text)
   }
 
   /**
@@ -1230,25 +1677,32 @@ export class Dispatcher {
   public async saveKactusConfig(
     repository: Repository,
     config: IFullKactusConfig
-  ): Promise<void> {
-    await saveKactusConfig(repository, config)
-    await this.appStore._refreshRepository(repository)
+  ): Promise<void> 
+{
+    
+await saveKactusConfig(repository, config)
+    
+await this.appStore._refreshRepository(repository)
   }
 
   /**
    * Clear any in-flight sign in state and return to the
    * initial (no sign-in) state.
    */
-  public resetSignInState(): Promise<void> {
-    return this.appStore._resetSignInState()
+  public resetSignInState(): Promise<void> 
+{
+    
+return this.appStore._resetSignInState()
   }
 
   /**
    * Initiate a sign in flow for github.com. This will put the store
    * in the Authentication step ready to receive user credentials.
    */
-  public beginDotComSignIn(retryAction?: RetryAction): Promise<void> {
-    return this.appStore._beginDotComSignIn(retryAction)
+  public beginDotComSignIn(retryAction?: RetryAction): Promise<void> 
+{
+    
+return this.appStore._beginDotComSignIn(retryAction)
   }
 
   /**
@@ -1256,8 +1710,10 @@ export class Dispatcher {
    * put the store in the EndpointEntry step ready to receive the url
    * to the enterprise instance.
    */
-  public beginEnterpriseSignIn(retryAction?: RetryAction): Promise<void> {
-    return this.appStore._beginEnterpriseSignIn(retryAction)
+  public beginEnterpriseSignIn(retryAction?: RetryAction): Promise<void> 
+{
+    
+return this.appStore._beginEnterpriseSignIn(retryAction)
   }
 
   /**
@@ -1278,8 +1734,10 @@ export class Dispatcher {
     url: string,
     clientId: string,
     clientSecret: string
-  ): Promise<void> {
-    return this.appStore._setSignInEndpoint(
+  ): Promise<void> 
+{
+    
+return this.appStore._setSignInEndpoint(
       provider,
       url,
       clientId,
@@ -1302,8 +1760,10 @@ export class Dispatcher {
   public setSignInCredentials(
     username: string,
     password: string
-  ): Promise<void> {
-    return this.appStore._setSignInCredentials(username, password)
+  ): Promise<void> 
+{
+    
+return this.appStore._setSignInCredentials(username, password)
   }
 
   /**
@@ -1317,8 +1777,10 @@ export class Dispatcher {
    * protocol handler to execute or by providing the wrong credentials
    * this promise will never complete.
    */
-  public requestBrowserAuthentication(): Promise<void> {
-    return this.appStore._requestBrowserAuthentication()
+  public requestBrowserAuthentication(): Promise<void> 
+{
+    
+return this.appStore._requestBrowserAuthentication()
   }
 
   /**
@@ -1333,8 +1795,10 @@ export class Dispatcher {
    * the authentication state will be updated with that error so that
    * the responsible component can present it to the user.
    */
-  public setSignInOTP(otp: string): Promise<void> {
-    return this.appStore._setSignInOTP(otp)
+  public setSignInOTP(otp: string): Promise<void> 
+{
+    
+return this.appStore._setSignInOTP(otp)
   }
 
   /**
@@ -1343,9 +1807,12 @@ export class Dispatcher {
    */
   public async showDotComSignInDialog(
     retryAction?: RetryAction
-  ): Promise<void> {
-    await this.appStore._beginDotComSignIn(retryAction)
-    await this.appStore._showPopup({ type: PopupType.SignIn })
+  ): Promise<void> 
+{
+    
+await this.appStore._beginDotComSignIn(retryAction)
+    
+await this.appStore._showPopup({ type: PopupType.SignIn })
   }
 
   /**
@@ -1354,9 +1821,12 @@ export class Dispatcher {
    */
   public async showEnterpriseSignInDialog(
     retryAction?: RetryAction
-  ): Promise<void> {
-    await this.appStore._beginEnterpriseSignIn(retryAction)
-    await this.appStore._showPopup({ type: PopupType.SignIn })
+  ): Promise<void> 
+{
+    
+await this.appStore._beginEnterpriseSignIn(retryAction)
+    
+await this.appStore._showPopup({ type: PopupType.SignIn })
   }
 
   /**
@@ -1367,29 +1837,45 @@ export class Dispatcher {
    * passed to the next handler, etc. If the handler's {Promise} resolves to
    * null, error propagation is halted.
    */
-  public registerErrorHandler(handler: ErrorHandler): Disposable {
-    this.errorHandlers.push(handler)
+  public registerErrorHandler(handler: ErrorHandler): Disposable 
+{
+    
+this.errorHandlers.push(handler)
 
-    return new Disposable(() => {
-      const i = this.errorHandlers.indexOf(handler)
-      if (i >= 0) {
-        this.errorHandlers.splice(i, 1)
+    
+return new Disposable(() => 
+{
+      
+const i = this.errorHandlers.indexOf(handler)
+      
+if (i >= 0) 
+{
+        
+this.errorHandlers.splice(i, 1)
       }
     })
+
   }
 
   /**
    * Update the location of an existing repository and clear the missing flag.
    */
-  public async relocateRepository(repository: Repository): Promise<void> {
-    const window = remote.getCurrentWindow()
-    const directories = remote.dialog.showOpenDialog(window, {
+  public async relocateRepository(repository: Repository): Promise<void> 
+{
+    
+const window = remote.getCurrentWindow()
+    
+const directories = remote.dialog.showOpenDialog(window, {
       properties: ['openDirectory'],
     })
 
-    if (directories && directories.length > 0) {
-      const newPath = directories[0]
-      await this.updateRepositoryPath(repository, newPath)
+    
+if (directories && directories.length > 0) 
+{
+      
+const newPath = directories[0]
+      
+await this.updateRepositoryPath(repository, newPath)
     }
   }
 
@@ -1397,209 +1883,346 @@ export class Dispatcher {
   private async updateRepositoryPath(
     repository: Repository,
     path: string
-  ): Promise<void> {
-    await this.appStore._updateRepositoryPath(repository, path)
+  ): Promise<void> 
+{
+    
+await this.appStore._updateRepositoryPath(repository, path)
   }
 
-  public async setAppFocusState(isFocused: boolean): Promise<void> {
-    await this.appStore._setAppFocusState(isFocused)
+  public async setAppFocusState(isFocused: boolean): Promise<void> 
+{
+    
+await this.appStore._setAppFocusState(isFocused)
 
-    if (isFocused) {
-      this.commitStatusStore.startBackgroundRefresh()
-    } else {
-      this.commitStatusStore.stopBackgroundRefresh()
+    
+if (isFocused) 
+{
+      
+this.commitStatusStore.startBackgroundRefresh()
+    } 
+else
+{
+      
+this.commitStatusStore.stopBackgroundRefresh()
     }
   }
 
-  private findExistingRepoForFile(state: IAppState, path: string) {
-    const repositories = state.repositories
-    return repositories.find(r => {
-      return Path.normalize(path).indexOf(Path.normalize(r.path)) === 0
+  private findExistingRepoForFile(state: IAppState, path: string) 
+{
+    
+const repositories = state.repositories
+    
+return repositories.find(r => 
+{
+      
+return Path.normalize(path).indexOf(Path.normalize(r.path)) === 0
     })
+
   }
 
-  public async dispatchURLAction(action: URLActionType): Promise<void> {
-    switch (action.name) {
-      case 'oauth':
-        try {
-          log.info(`[Dispatcher] requesting authenticated user`)
-          const user = await requestAuthenticatedUser(action.code, action.state)
-          if (user) {
-            resolveOAuthRequest(user)
-          } else if (user === null) {
-            rejectOAuthRequest(new Error('Unable to fetch authenticated user.'))
+  public async dispatchURLAction(action: URLActionType): Promise<void> 
+{
+    
+switch (action.name) {
+      
+case 'oauth':
+        
+try 
+{
+          
+log.info(`[Dispatcher] requesting authenticated user`)
+          
+const user = await requestAuthenticatedUser(action.code, action.state)
+          
+if (user) 
+{
+            
+resolveOAuthRequest(user)
+          } 
+else
+if (user === null) 
+{
+            
+rejectOAuthRequest(new Error('Unable to fetch authenticated user.'))
           }
-        } catch (e) {
-          rejectOAuthRequest(e)
+        } 
+
+catch (e) 
+{
+          
+rejectOAuthRequest(e)
         }
 
         // workaround for user reports that the application doesn't receive focus
         // after completing the OAuth signin in the browser
-        const window = remote.getCurrentWindow()
-        if (!window.isFocused()) {
-          log.info(
+        
+const window = remote.getCurrentWindow()
+        
+if (!window.isFocused()) 
+{
+          
+log.info(
             `refocusing the main window after the OAuth flow is completed`
           )
-          window.focus()
+          
+window.focus()
         }
-        break
+        
+break
 
-      case 'open-repository-from-url':
-        const { url } = action
-        const repository = await this.openOrCloneRepository(url)
-        if (repository) {
-          await this.handleCloneInKactusOptions(repository, action)
-        } else {
-          log.warn(
+      
+case 'open-repository-from-url':
+        
+const { url } = action
+        
+const repository = await this.openOrCloneRepository(url)
+        
+if (repository) 
+{
+          
+await this.handleCloneInKactusOptions(repository, action)
+        } 
+else
+{
+          
+log.warn(
             `Open Repository from URL failed, did not find or clone repository: ${url} - payload: ${JSON.stringify(
               action
             )}`
           )
         }
-        break
+        
+break
 
-      case 'open-repository-from-path': {
+      
+case 'open-repository-from-path': 
+{
         // user may accidentally provide a folder within the repository
         // this ensures we use the repository root, if it is actually a repository
         // otherwise we consider it an untracked repository
-        const path = (await validatedRepositoryPath(action.path)) || action.path
-        const state = this.appStore.getState()
-        let existingRepository = matchExistingRepository(
+        
+const path = (await validatedRepositoryPath(action.path)) || action.path
+        
+const state = this.appStore.getState()
+        
+let existingRepository = matchExistingRepository(
           state.repositories,
           path
         )
 
         // in case this is valid git repository, there is no need to ask
         // user for confirmation and it can be added automatically
-        if (existingRepository == null) {
-          const isRepository = await isGitRepository(path)
-          if (isRepository) {
-            const addedRepositories = await this.addRepositories([path], false)
-            existingRepository = addedRepositories[0]
+        
+if (existingRepository == null) 
+{
+          
+const isRepository = await isGitRepository(path)
+          
+if (isRepository) 
+{
+            
+const addedRepositories = await this.addRepositories([path], false)
+            
+existingRepository = addedRepositories[0]
           }
         }
 
-        if (existingRepository) {
-          await this.selectRepository(existingRepository)
-        } else {
-          await this.showPopup({
+        
+if (existingRepository) 
+{
+          
+await this.selectRepository(existingRepository)
+        } 
+else
+{
+          
+await this.showPopup({
             type: PopupType.AddRepository,
             path,
           })
         }
-        break
+        
+break
       }
 
-      case 'open-sketch-file': {
-        const state = this.appStore.getState()
-        const existingRepository = this.findExistingRepoForFile(
+      
+case 'open-sketch-file': 
+{
+        
+const state = this.appStore.getState()
+        
+const existingRepository = this.findExistingRepoForFile(
           state,
           action.path
         )
 
-        if (existingRepository) {
-          await this.selectRepository(existingRepository)
-          if (existingRepository instanceof Repository) {
-            const repositoryState = this.repositoryStateManager.get(
+        
+if (existingRepository) 
+{
+          
+await this.selectRepository(existingRepository)
+          
+if (existingRepository instanceof Repository) 
+{
+            
+const repositoryState = this.repositoryStateManager.get(
               existingRepository
             )
-            const existingFile = repositoryState.kactus.files.find(f => {
-              return (
+            
+const existingFile = repositoryState.kactus.files.find(f => 
+{
+              
+return (
                 Path.normalize(f.path + '.sketch') ===
                 Path.normalize(action.path)
               )
             })
-            if (existingFile) {
-              return this.changeSketchFileSelection(
+
+            
+if (existingFile) 
+{
+              
+return this.changeSketchFileSelection(
                 existingRepository,
                 existingFile
               )
             }
           }
-        } else {
-          return this.showPopup({
+        } 
+else
+{
+          
+return this.showPopup({
             type: PopupType.AddRepository,
             path: Path.dirname(action.path),
           })
         }
-        break
+        
+break
       }
 
-      case 'parse-sketch-file': {
-        const state = this.appStore.getState()
-        const existingRepository = this.findExistingRepoForFile(
+      
+case 'parse-sketch-file': 
+{
+        
+const state = this.appStore.getState()
+        
+const existingRepository = this.findExistingRepoForFile(
           state,
           action.path
         )
 
-        if (existingRepository) {
-          await this.selectRepository(existingRepository)
-          if (existingRepository instanceof Repository) {
-            const repositoryState = this.repositoryStateManager.get(
+        
+if (existingRepository) 
+{
+          
+await this.selectRepository(existingRepository)
+          
+if (existingRepository instanceof Repository) 
+{
+            
+const repositoryState = this.repositoryStateManager.get(
               existingRepository
             )
-            const existingFile = repositoryState.kactus.files.find(f => {
-              return (
+            
+const existingFile = repositoryState.kactus.files.find(f => 
+{
+              
+return (
                 Path.normalize(f.path + '.sketch') ===
                 Path.normalize(action.path)
               )
             })
-            if (existingFile) {
-              await this.changeSketchFileSelection(
+
+            
+if (existingFile) 
+{
+              
+await this.changeSketchFileSelection(
                 existingRepository,
                 existingFile
               )
-              return this.parseSketchFile(existingRepository, existingFile)
+              
+return this.parseSketchFile(existingRepository, existingFile)
             }
           }
-        } else {
-          return this.showPopup({
+        } 
+else
+{
+          
+return this.showPopup({
             type: PopupType.AddRepository,
             path: Path.dirname(action.path),
           })
         }
-        break
+        
+break
       }
 
-      case 'import-sketch-file': {
-        const state = this.appStore.getState()
-        const existingRepository = this.findExistingRepoForFile(
+      
+case 'import-sketch-file': 
+{
+        
+const state = this.appStore.getState()
+        
+const existingRepository = this.findExistingRepoForFile(
           state,
           action.path
         )
 
-        if (existingRepository) {
-          await this.selectRepository(existingRepository)
-          if (existingRepository instanceof Repository) {
-            const repositoryState = this.repositoryStateManager.get(
+        
+if (existingRepository) 
+{
+          
+await this.selectRepository(existingRepository)
+          
+if (existingRepository instanceof Repository) 
+{
+            
+const repositoryState = this.repositoryStateManager.get(
               existingRepository
             )
-            const existingFile = repositoryState.kactus.files.find(f => {
-              return (
+            
+const existingFile = repositoryState.kactus.files.find(f => 
+{
+              
+return (
                 Path.normalize(f.path + '.sketch') ===
                 Path.normalize(action.path)
               )
             })
-            if (existingFile) {
-              await this.changeSketchFileSelection(
+
+            
+if (existingFile) 
+{
+              
+await this.changeSketchFileSelection(
                 existingRepository,
                 existingFile
               )
-              return this.importSketchFile(existingRepository, existingFile)
+              
+return this.importSketchFile(existingRepository, existingFile)
             }
           }
-        } else {
-          return this.showPopup({
+        } 
+else
+{
+          
+return this.showPopup({
             type: PopupType.AddRepository,
             path: Path.dirname(action.path),
           })
         }
-        break
+        
+break
       }
 
-      default:
-        const unknownAction: IUnknownAction = action
-        log.warn(
+      
+default:
+        
+const unknownAction: IUnknownAction = action
+        
+log.warn(
           `Unknown URL action: ${
             unknownAction.name
           } - payload: ${JSON.stringify(unknownAction)}`
@@ -1610,132 +2233,201 @@ export class Dispatcher {
   /**
    * Sets the user's preference so that confirmation to remove repo is not asked
    */
-  public setConfirmRepoRemovalSetting(value: boolean): Promise<void> {
-    return this.appStore._setConfirmRepositoryRemovalSetting(value)
+  public setConfirmRepoRemovalSetting(value: boolean): Promise<void> 
+{
+    
+return this.appStore._setConfirmRepositoryRemovalSetting(value)
   }
 
   /**
    * Sets the user's preference so that confirmation to discard changes is not asked
    */
-  public setConfirmDiscardChangesSetting(value: boolean): Promise<void> {
-    return this.appStore._setConfirmDiscardChangesSetting(value)
+  public setConfirmDiscardChangesSetting(value: boolean): Promise<void> 
+{
+    
+return this.appStore._setConfirmDiscardChangesSetting(value)
   }
 
   /**
    * Sets the user's preference for an external program to open repositories in.
    */
-  public setExternalEditor(editor: ExternalEditor): Promise<void> {
-    return this.appStore._setExternalEditor(editor)
+  public setExternalEditor(editor: ExternalEditor): Promise<void> 
+{
+    
+return this.appStore._setExternalEditor(editor)
   }
 
   /**
    * Sets the user's preferred shell.
    */
-  public setShell(shell: Shell): Promise<void> {
-    return this.appStore._setShell(shell)
+  public setShell(shell: Shell): Promise<void> 
+{
+    
+return this.appStore._setShell(shell)
   }
 
-  public setKactusClearCacheInterval(seconds: number): Promise<void> {
-    return this.appStore._setKactusClearCacheInterval(seconds)
+  public setKactusClearCacheInterval(seconds: number): Promise<void> 
+{
+    
+return this.appStore._setKactusClearCacheInterval(seconds)
   }
 
   private async handleCloneInKactusOptions(
     repository: Repository,
     action: IOpenRepositoryFromURLAction
-  ): Promise<void> {
-    const { filepath, pr, branch } = action
+  ): Promise<void> 
+{
+    
+const { filepath, pr, branch } = action
 
-    if (pr != null && branch != null) {
+    
+if (pr != null && branch != null) 
+{
       // we need to refetch for a forked PR and check that out
-      await this.fetchRefspec(repository, `pull/${pr}/head:${branch}`)
+      
+await this.fetchRefspec(repository, `pull/${pr}/head:${branch}`)
     }
 
     // ensure a fresh clone repository has it's in-memory state
     // up-to-date before performing the "Clone in Desktop" steps
-    await this.appStore._refreshRepository(repository)
+    
+await this.appStore._refreshRepository(repository)
 
-    const state = this.repositoryStateManager.get(repository)
+    
+const state = this.repositoryStateManager.get(repository)
 
-    if (pr == null && branch != null) {
-      const branches = state.branchesState.allBranches
+    
+if (pr == null && branch != null) 
+{
+      
+const branches = state.branchesState.allBranches
 
       // I don't want to invoke Git functionality from the dispatcher, which
       // would help by using getDefaultRemote here to get the definitive ref,
       // so this falls back to finding any remote branch matching the name
       // received from the "Clone in Desktop" action
-      const localBranch =
+      
+const localBranch =
         branches.find(b => b.upstreamWithoutRemote === branch) || null
 
-      if (localBranch == null) {
-        await this.fetch(repository, FetchType.BackgroundTask)
+      
+if (localBranch == null) 
+{
+        
+await this.fetch(repository, FetchType.BackgroundTask)
       }
     }
 
-    if (branch != null) {
-      let shouldCheckoutBranch = true
+    
+if (branch != null) 
+{
+      
+let shouldCheckoutBranch = true
 
-      const { tip } = state.branchesState
+      
+const { tip } = state.branchesState
 
-      if (tip.kind === TipState.Valid) {
-        shouldCheckoutBranch = tip.branch.nameWithoutRemote !== branch
+      
+if (tip.kind === TipState.Valid) 
+{
+        
+shouldCheckoutBranch = tip.branch.nameWithoutRemote !== branch
       }
 
-      if (shouldCheckoutBranch) {
-        await this.checkoutBranch(repository, branch)
+      
+if (shouldCheckoutBranch) 
+{
+        
+await this.checkoutBranch(repository, branch)
       }
     }
 
-    if (filepath != null) {
-      const fullPath = Path.join(repository.path, filepath)
+    
+if (filepath != null) 
+{
+      
+const fullPath = Path.join(repository.path, filepath)
       // because Windows uses different path separators here
-      const normalized = Path.normalize(fullPath)
-      shell.showItemInFolder(normalized)
+      
+const normalized = Path.normalize(fullPath)
+      
+shell.showItemInFolder(normalized)
     }
   }
 
-  private async openOrCloneRepository(url: string): Promise<Repository | null> {
-    const state = this.appStore.getState()
-    const repositories = state.repositories
-    const existingRepository = repositories.find(r => {
-      if (r instanceof Repository) {
-        const gitHubRepository = r.gitHubRepository
-        if (!gitHubRepository) {
-          return false
+  private async openOrCloneRepository(url: string): Promise<Repository | null> 
+{
+    
+const state = this.appStore.getState()
+    
+const repositories = state.repositories
+    
+const existingRepository = repositories.find(r => 
+{
+      
+if (r instanceof Repository) 
+{
+        
+const gitHubRepository = r.gitHubRepository
+        
+if (!gitHubRepository) 
+{
+          
+return false
         }
-        return urlMatchesCloneURL(url, gitHubRepository)
-      } else {
-        return false
+        
+return urlMatchesCloneURL(url, gitHubRepository)
+      } 
+else
+{
+        
+return false
       }
     })
 
-    if (existingRepository) {
-      return await this.selectRepository(existingRepository)
+
+    
+if (existingRepository) 
+{
+      
+return await this.selectRepository(existingRepository)
     }
 
-    return this.appStore._startOpenInKactus(() => {
-      this.changeCloneRepositoriesTab(CloneRepositoryTab.Generic)
-      this.showPopup({
+    
+return this.appStore._startOpenInKactus(() => 
+{
+      
+this.changeCloneRepositoriesTab(CloneRepositoryTab.Generic)
+      
+this.showPopup({
         type: PopupType.CloneRepository,
         initialURL: url,
       })
     })
+
   }
 
   /** create a new Sketch File. */
   public createNewSketchFile(
     repository: Repository,
     path: string
-  ): Promise<void> {
-    return this.appStore._createNewSketchFile(repository, path)
+  ): Promise<void> 
+{
+    
+return this.appStore._createNewSketchFile(repository, path)
   }
 
   /** Check the unlocked kactus status */
-  public async checkKactusUnlockStatus(): Promise<void> {
-    return this.appStore._refreshAccounts()
+  public async checkKactusUnlockStatus(): Promise<void> 
+{
+    
+return this.appStore._refreshAccounts()
   }
 
-  public async clearKactusCache(): Promise<void> {
-    return this.appStore._clearKactusCache()
+  public async clearKactusCache(): Promise<void> 
+{
+    
+return this.appStore._clearKactusCache()
   }
 
   public async unlockKactus(
@@ -1747,27 +2439,45 @@ export class Dispatcher {
       coupon?: string
       metadata?: any
     }
-  ): Promise<void> {
-    try {
-      await this.appStore._unlockKactus(user, token, options)
-    } catch (e) {
-      this.postError(e)
+  ): Promise<void> 
+{
+    
+try 
+{
+      
+await this.appStore._unlockKactus(user, token, options)
+    } 
+
+catch (e) 
+{
+      
+this.postError(e)
     }
   }
 
   public async cancelKactusSubscription(
     user: Account,
     options: { refund: boolean }
-  ): Promise<void> {
-    try {
-      await this.appStore._cancelKactusSubscription(user, options)
-    } catch (e) {
-      this.postError(e)
+  ): Promise<void> 
+{
+    
+try 
+{
+      
+await this.appStore._cancelKactusSubscription(user, options)
+    } 
+
+catch (e) 
+{
+      
+this.postError(e)
     }
   }
 
-  public async openSketch(): Promise<void> {
-    return openSketch()
+  public async openSketch(): Promise<void> 
+{
+    
+return openSketch()
   }
 
   /**
@@ -1775,15 +2485,29 @@ export class Dispatcher {
    *
    * This is used only on macOS.
    */
-  public async installCLI() {
-    try {
-      await installCLI()
+  public async installCLI() 
+{
+    
+try 
+{
+      
 
-      this.showPopup({ type: PopupType.CLIInstalled })
-    } catch (e) {
-      log.error('Error installing CLI', e)
+var TIMING_TEMP_VAR_AUTOGEN698__RANDOM = perf_hooks.performance.now();
+ await  installCLI()
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [1779, 6; 1779, 24]& TEMP_VAR_AUTOGEN698__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN698__RANDOM));
+ 
 
-      this.postError(e)
+      
+this.showPopup({ type: PopupType.CLIInstalled })
+    } 
+
+catch (e) 
+{
+      
+log.error('Error installing CLI', e)
+
+      
+this.postError(e)
     }
   }
 
@@ -1791,20 +2515,26 @@ export class Dispatcher {
     sha: string,
     repository: Repository,
     file: IKactusFile
-  ) {
-    return this.appStore._openSketchFile(file, repository, sha)
+  ) 
+{
+    
+return this.appStore._openSketchFile(file, repository, sha)
   }
 
-  public async changeSketchLocation(sketchPath: string) {
-    return this.appStore._changeSketchLocation(sketchPath)
+  public async changeSketchLocation(sketchPath: string) 
+{
+    
+return this.appStore._changeSketchLocation(sketchPath)
   }
 
   /** Prompt the user to authenticate for a generic git server. */
   public promptForGenericGitAuthentication(
     repository: Repository | CloningRepository,
     retry: RetryAction
-  ): Promise<void> {
-    return this.appStore.promptForGenericGitAuthentication(repository, retry)
+  ): Promise<void> 
+{
+    
+return this.appStore.promptForGenericGitAuthentication(repository, retry)
   }
 
   /** Save the generic git credentials. */
@@ -1812,57 +2542,89 @@ export class Dispatcher {
     hostname: string,
     username: string,
     password: string
-  ): Promise<void> {
-    log.info(`storing generic credentials for '${hostname}' and '${username}'`)
-    setGenericUsername(hostname, username)
+  ): Promise<void> 
+{
+    
+log.info(`storing generic credentials for '${hostname}' and '${username}'`)
+    
+setGenericUsername(hostname, username)
 
-    try {
-      await setGenericPassword(hostname, username, password)
-    } catch (e) {
-      log.error(
+    
+try 
+{
+      
+await setGenericPassword(hostname, username, password)
+    } 
+
+catch (e) 
+{
+      
+log.error(
         `Error saving generic git credentials: ${username}@${hostname}`,
         e
       )
 
-      this.postError(e)
+      
+this.postError(e)
     }
   }
 
   /** Perform the given retry action. */
-  public async performRetry(retryAction: RetryAction): Promise<void> {
-    switch (retryAction.type) {
-      case RetryActionType.Push:
-        return this.push(retryAction.repository)
+  public async performRetry(retryAction: RetryAction): Promise<void> 
+{
+    
+switch (retryAction.type) {
+      
+case RetryActionType.Push:
+        
+return this.push(retryAction.repository)
 
-      case RetryActionType.Pull:
-        return this.pull(retryAction.repository)
+      
+case RetryActionType.Pull:
+        
+return this.pull(retryAction.repository)
 
-      case RetryActionType.Fetch:
-        return this.fetch(retryAction.repository, FetchType.UserInitiatedTask)
+      
+case RetryActionType.Fetch:
+        
+return this.fetch(retryAction.repository, FetchType.UserInitiatedTask)
 
-      case RetryActionType.Clone:
-        await this.clone(retryAction.url, retryAction.path, retryAction.options)
-        break
+      
+case RetryActionType.Clone:
+        
+await this.clone(retryAction.url, retryAction.path, retryAction.options)
+        
+break
 
-      case RetryActionType.Publish:
-        await this.showPopup({
+      
+case RetryActionType.Publish:
+        
+await this.showPopup({
           type: PopupType.PublishRepository,
           repository: retryAction.repository,
         })
-        break
+        
+break
 
-      case RetryActionType.Checkout:
-        await this.checkoutBranch(retryAction.repository, retryAction.branch)
-        break
+      
+case RetryActionType.Checkout:
+        
+await this.checkoutBranch(retryAction.repository, retryAction.branch)
+        
+break
 
-      default:
-        return assertNever(retryAction, `Unknown retry action: ${retryAction}`)
+      
+default:
+        
+return assertNever(retryAction, `Unknown retry action: ${retryAction}`)
     }
   }
 
   /** Change the selected image diff type. */
-  public changeImageDiffType(type: ImageDiffType): Promise<void> {
-    return this.appStore._changeImageDiffType(type)
+  public changeImageDiffType(type: ImageDiffType): Promise<void> 
+{
+    
+return this.appStore._changeImageDiffType(type)
   }
 
   /** Change the hide whitespace in diff setting */
@@ -1870,8 +2632,10 @@ export class Dispatcher {
     hideWhitespaceInDiff: boolean,
     repository: Repository,
     file: CommittedFileChange | null = null
-  ): Promise<void> {
-    return this.appStore._setHideWhitespaceInDiff(
+  ): Promise<void> 
+{
+    
+return this.appStore._setHideWhitespaceInDiff(
       hideWhitespaceInDiff,
       repository,
       file
@@ -1879,20 +2643,26 @@ export class Dispatcher {
   }
 
   /** Install the global Git LFS filters. */
-  public installGlobalLFSFilters(force: boolean): Promise<void> {
-    return this.appStore._installGlobalLFSFilters(force)
+  public installGlobalLFSFilters(force: boolean): Promise<void> 
+{
+    
+return this.appStore._installGlobalLFSFilters(force)
   }
 
   /** Install the LFS filters */
   public installLFSHooks(
     repositories: ReadonlyArray<Repository>
-  ): Promise<void> {
-    return this.appStore._installLFSHooks(repositories)
+  ): Promise<void> 
+{
+    
+return this.appStore._installLFSHooks(repositories)
   }
 
   /** Change the selected Clone Repository tab. */
-  public changeCloneRepositoriesTab(tab: CloneRepositoryTab): Promise<void> {
-    return this.appStore._changeCloneRepositoriesTab(tab)
+  public changeCloneRepositoriesTab(tab: CloneRepositoryTab): Promise<void> 
+{
+    
+return this.appStore._changeCloneRepositoriesTab(tab)
   }
 
   /**
@@ -1900,18 +2670,24 @@ export class Dispatcher {
    * the provided account has explicit permissions to access.
    * See ApiRepositoriesStore for more details.
    */
-  public refreshApiRepositories(account: Account) {
-    return this.appStore._refreshApiRepositories(account)
+  public refreshApiRepositories(account: Account) 
+{
+    
+return this.appStore._refreshApiRepositories(account)
   }
 
   /** Open the merge tool for the given file. */
-  public openMergeTool(repository: Repository, path: string): Promise<void> {
-    return this.appStore._openMergeTool(repository, path)
+  public openMergeTool(repository: Repository, path: string): Promise<void> 
+{
+    
+return this.appStore._openMergeTool(repository, path)
   }
 
   /** Change the selected Branches foldout tab. */
-  public changeBranchesTab(tab: BranchesTab): Promise<void> {
-    return this.appStore._changeBranchesTab(tab)
+  public changeBranchesTab(tab: BranchesTab): Promise<void> 
+{
+    
+return this.appStore._changeBranchesTab(tab)
   }
 
   /**
@@ -1924,15 +2700,19 @@ export class Dispatcher {
    * openCreatePullRequestInBrowser method which immediately opens the
    * create pull request page without showing a dialog.
    */
-  public createPullRequest(repository: Repository): Promise<void> {
-    return this.appStore._createPullRequest(repository)
+  public createPullRequest(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._createPullRequest(repository)
   }
 
   /**
    * Show the current pull request on github.com
    */
-  public showPullRequest(repository: Repository): Promise<void> {
-    return this.appStore._showPullRequest(repository)
+  public showPullRequest(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._showPullRequest(repository)
   }
 
   /**
@@ -1943,43 +2723,55 @@ export class Dispatcher {
   public openCreatePullRequestInBrowser(
     repository: Repository,
     branch: Branch
-  ): Promise<void> {
-    return this.appStore._openCreatePullRequestInBrowser(repository, branch)
+  ): Promise<void> 
+{
+    
+return this.appStore._openCreatePullRequestInBrowser(repository, branch)
   }
 
   /**
    * Update the existing `upstream` remote to point to the repository's parent.
    */
-  public updateExistingUpstreamRemote(repository: Repository): Promise<void> {
-    return this.appStore._updateExistingUpstreamRemote(repository)
+  public updateExistingUpstreamRemote(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._updateExistingUpstreamRemote(repository)
   }
 
   /** Ignore the existing `upstream` remote. */
-  public ignoreExistingUpstreamRemote(repository: Repository): Promise<void> {
-    return this.appStore._ignoreExistingUpstreamRemote(repository)
+  public ignoreExistingUpstreamRemote(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._ignoreExistingUpstreamRemote(repository)
   }
 
   public getSketchFilePreview(
     repository: Repository,
     sketchFile: IKactusFile
-  ): Promise<void> {
-    return this.appStore._getSketchFilePreview(repository, sketchFile)
+  ): Promise<void> 
+{
+    
+return this.appStore._getSketchFilePreview(repository, sketchFile)
   }
 
   public resolveConflict(
     repository: Repository,
     path: string,
     option: 'ours' | 'theirs'
-  ): Promise<void> {
-    return this.appStore._resolveConflict(repository, path, option)
+  ): Promise<void> 
+{
+    
+return this.appStore._resolveConflict(repository, path, option)
   }
 
   /** Checks out a PR whose ref exists locally or in a forked repo. */
   public async checkoutPullRequest(
     repository: Repository,
     pullRequest: PullRequest
-  ): Promise<void> {
-    return this.appStore._checkoutPullRequest(repository, pullRequest)
+  ): Promise<void> 
+{
+    
+return this.appStore._checkoutPullRequest(repository, pullRequest)
   }
 
   /**
@@ -1991,8 +2783,10 @@ export class Dispatcher {
   public setShowCoAuthoredBy(
     repository: Repository,
     showCoAuthoredBy: boolean
-  ) {
-    return this.appStore._setShowCoAuthoredBy(repository, showCoAuthoredBy)
+  ) 
+{
+    
+return this.appStore._setShowCoAuthoredBy(repository, showCoAuthoredBy)
   }
 
   /**
@@ -2004,8 +2798,10 @@ export class Dispatcher {
   public setCoAuthors(
     repository: Repository,
     coAuthors: ReadonlyArray<IAuthor>
-  ) {
-    return this.appStore._setCoAuthors(repository, coAuthors)
+  ) 
+{
+    
+return this.appStore._setCoAuthors(repository, coAuthors)
   }
 
   /**
@@ -2014,27 +2810,35 @@ export class Dispatcher {
   public initializeCompare(
     repository: Repository,
     initialAction?: CompareAction
-  ) {
-    return this.appStore._initializeCompare(repository, initialAction)
+  ) 
+{
+    
+return this.appStore._initializeCompare(repository, initialAction)
   }
 
   /**
    * Update the compare state for the current repository
    */
-  public executeCompare(repository: Repository, action: CompareAction) {
-    return this.appStore._executeCompare(repository, action)
+  public executeCompare(repository: Repository, action: CompareAction) 
+{
+    
+return this.appStore._executeCompare(repository, action)
   }
 
   /** Update the compare form state for the current repository */
   public updateCompareForm<K extends keyof ICompareFormUpdate>(
     repository: Repository,
     newState: Pick<ICompareFormUpdate, K>
-  ) {
-    return this.appStore._updateCompareForm(repository, newState)
+  ) 
+{
+    
+return this.appStore._updateCompareForm(repository, newState)
   }
 
-  public resolveCurrentEditor() {
-    return this.appStore._resolveCurrentEditor()
+  public resolveCurrentEditor() 
+{
+    
+return this.appStore._resolveCurrentEditor()
   }
 
   /**
@@ -2044,74 +2848,110 @@ export class Dispatcher {
     repository: Repository,
     path: string,
     manualResolution: ManualConflictResolution | null
-  ) {
-    return this.appStore._updateManualConflictResolution(
+  ) 
+{
+    
+return this.appStore._updateManualConflictResolution(
       repository,
       path,
       manualResolution
     )
   }
 
-  public async confirmOrForcePush(repository: Repository) {
-    const { askForConfirmationOnForcePush } = this.appStore.getState()
+  public async confirmOrForcePush(repository: Repository) 
+{
+    
+const { askForConfirmationOnForcePush } = this.appStore.getState()
 
-    const { branchesState } = this.repositoryStateManager.get(repository)
-    const { tip } = branchesState
+    
+const { branchesState } = this.repositoryStateManager.get(repository)
+    
+const { tip } = branchesState
 
-    if (tip.kind !== TipState.Valid) {
-      log.warn(`Could not find a branch to perform force push`)
-      return
+    
+if (tip.kind !== TipState.Valid) 
+{
+      
+log.warn(`Could not find a branch to perform force push`)
+      
+return
     }
 
-    const { upstream } = tip.branch
+    
+const { upstream } = tip.branch
 
-    if (upstream === null) {
-      log.warn(`Could not find an upstream branch which will be pushed`)
-      return
+    
+if (upstream === null) 
+{
+      
+log.warn(`Could not find an upstream branch which will be pushed`)
+      
+return
     }
 
-    if (askForConfirmationOnForcePush) {
-      this.showPopup({
+    
+if (askForConfirmationOnForcePush) 
+{
+      
+this.showPopup({
         type: PopupType.ConfirmForcePush,
         repository,
         upstreamBranch: upstream,
       })
-    } else {
-      await this.performForcePush(repository)
+    } 
+else
+{
+      
+await this.performForcePush(repository)
     }
   }
 
-  public async performForcePush(repository: Repository) {
-    await this.pushWithOptions(repository, {
+  public async performForcePush(repository: Repository) 
+{
+    
+await this.pushWithOptions(repository, {
       forceWithLease: true,
     })
 
-    await this.appStore._loadStatus(repository)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_1053__loadStatus__RANDOM = perf_hooks.performance.now();
+ 
+await this.appStore._loadStatus(repository)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/dispatcher/dispatcher.ts& [2088, 4; 2088, 47]& TEMP_VAR_AUTOGEN_CALLING_1053__loadStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_1053__loadStatus__RANDOM));
+ 
   }
 
-  public setConfirmForcePushSetting(value: boolean) {
-    return this.appStore._setConfirmForcePushSetting(value)
+  public setConfirmForcePushSetting(value: boolean) 
+{
+    
+return this.appStore._setConfirmForcePushSetting(value)
   }
 
   /**
    * Set the application-wide theme
    */
-  public setSelectedTheme(theme: ApplicationTheme) {
-    return this.appStore._setSelectedTheme(theme)
+  public setSelectedTheme(theme: ApplicationTheme) 
+{
+    
+return this.appStore._setSelectedTheme(theme)
   }
 
   /**
    * Set the automatically switch application-wide theme
    */
-  public onAutomaticallySwitchThemeChanged(theme: boolean) {
-    return this.appStore._setAutomaticallySwitchTheme(theme)
+  public onAutomaticallySwitchThemeChanged(theme: boolean) 
+{
+    
+return this.appStore._setAutomaticallySwitchTheme(theme)
   }
 
   /**
    * Refresh the list of open pull requests for the given repository.
    */
-  public refreshPullRequests(repository: Repository): Promise<void> {
-    return this.appStore._refreshPullRequests(repository)
+  public refreshPullRequests(repository: Repository): Promise<void> 
+{
+    
+return this.appStore._refreshPullRequests(repository)
   }
 
   /**
@@ -2124,8 +2964,10 @@ export class Dispatcher {
   public tryGetCommitStatus(
     repository: GitHubRepository,
     ref: string
-  ): IAPIRefStatus | null {
-    return this.commitStatusStore.tryGetStatus(repository, ref)
+  ): IAPIRefStatus | null 
+{
+    
+return this.commitStatusStore.tryGetStatus(repository, ref)
   }
 
   /**
@@ -2141,39 +2983,51 @@ export class Dispatcher {
     repository: GitHubRepository,
     ref: string,
     callback: StatusCallBack
-  ): IDisposable {
-    return this.commitStatusStore.subscribe(repository, ref, callback)
+  ): IDisposable 
+{
+    
+return this.commitStatusStore.subscribe(repository, ref, callback)
   }
 
   /** Drops the given stash in the given repository */
-  public dropStash(repository: Repository, stashEntry: IStashEntry) {
-    return this.appStore._dropStashEntry(repository, stashEntry)
+  public dropStash(repository: Repository, stashEntry: IStashEntry) 
+{
+    
+return this.appStore._dropStashEntry(repository, stashEntry)
   }
 
   /** Pop the given stash in the given repository */
-  public popStash(repository: Repository, stashEntry: IStashEntry) {
-    return this.appStore._popStashEntry(repository, stashEntry)
+  public popStash(repository: Repository, stashEntry: IStashEntry) 
+{
+    
+return this.appStore._popStashEntry(repository, stashEntry)
   }
 
   /**
    * Set the width of the commit summary column in the
    * history view to the given value.
    */
-  public setStashedFilesWidth = (width: number): Promise<void> => {
-    return this.appStore._setStashedFilesWidth(width)
+  public setStashedFilesWidth = (width: number): Promise<void> => 
+{
+    
+return this.appStore._setStashedFilesWidth(width)
   }
 
   /**
    * Reset the width of the commit summary column in the
    * history view to its default value.
    */
-  public resetStashedFilesWidth = (): Promise<void> => {
-    return this.appStore._resetStashedFilesWidth()
+  public resetStashedFilesWidth = (): Promise<void> => 
+{
+    
+return this.appStore._resetStashedFilesWidth()
   }
 
   /** Hide the diff for stashed changes */
-  public hideStashedChanges(repository: Repository) {
-    return this.appStore._hideStashedChanges(repository)
+  public hideStashedChanges(repository: Repository) 
+{
+    
+return this.appStore._hideStashedChanges(repository)
   }
 
   /**
@@ -2182,8 +3036,10 @@ export class Dispatcher {
   public async moveChangesToBranchAndCheckout(
     repository: Repository,
     branchToCheckout: string
-  ) {
-    return this.appStore._moveChangesToBranchAndCheckout(
+  ) 
+{
+    
+return this.appStore._moveChangesToBranchAndCheckout(
       repository,
       branchToCheckout
     )

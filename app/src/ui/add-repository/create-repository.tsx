@@ -1,9 +1,18 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import { remote } from 'electron'
+
 import * as React from 'react'
+
 import * as Path from 'path'
+
 import * as FSE from 'fs-extra'
 
+
 import { Dispatcher } from '../dispatcher'
+
 import {
   initGitRepository,
   createCommit,
@@ -11,43 +20,66 @@ import {
   getAuthorIdentity,
   isGitRepository,
 } from '../../lib/git'
+
 import { sanitizedRepositoryName } from './sanitized-repository-name'
+
 import { TextBox } from '../lib/text-box'
+
 import { ButtonGroup } from '../lib/button-group'
+
 import { Button } from '../lib/button'
+
 import { Row } from '../lib/row'
+
 import { Checkbox, CheckboxValue } from '../lib/checkbox'
+
 import { writeDefaultReadme } from './write-default-readme'
+
 import { Select } from '../lib/select'
+
 import { writeGitDescription } from '../../lib/git/description'
+
 import {
   getGitIgnoreNames,
   writeGitIgnore,
   KactusGitIgnoreTextValue,
 } from './gitignores'
+
 import { ILicense, getLicenses, writeLicense } from './licenses'
+
 import { writeGitAttributes } from './git-attributes'
+
 import { getDefaultDir, setDefaultDir } from '../lib/default-dir'
+
 import { Dialog, DialogContent, DialogFooter, DialogError } from '../dialog'
+
 import { Octicon, OcticonSymbol } from '../octicons'
+
 import { LinkButton } from '../lib/link-button'
+
 import { PopupType } from '../../models/popup'
+
 import { Ref } from '../lib/ref'
+
 import { enableReadmeOverwriteWarning } from '../../lib/feature-flag'
 
 /** The sentinel value used to indicate no gitignore should be used. */
+
 const NoGitIgnoreValue = 'None'
 
 /** The sentinel value used to indicate the kactus gitignore should be used. */
+
 const KactusGitIgnoreValue = 'Kactus'
 
 /** The sentinel value used to indicate no license should be used. */
+
 const NoLicenseValue: ILicense = {
   name: 'None',
   featured: false,
   body: '',
   hidden: false,
 }
+
 
 interface ICreateRepositoryProps {
   readonly dispatcher: Dispatcher
@@ -56,6 +88,7 @@ interface ICreateRepositoryProps {
   /** Prefills path input so user doesn't have to. */
   readonly initialPath?: string
 }
+
 
 interface ICreateRepositoryState {
   readonly path: string
@@ -95,22 +128,29 @@ interface ICreateRepositoryState {
 }
 
 /** The Create New Repository component. */
-export class CreateRepository extends React.Component<
+
+export 
+class CreateRepository extends React.Component<
   ICreateRepositoryProps,
   ICreateRepositoryState
 > {
-  public constructor(props: ICreateRepositoryProps) {
-    super(props)
+  public constructor(props: ICreateRepositoryProps) 
+{
+    
+super(props)
 
-    const path = this.props.initialPath
+    
+const path = this.props.initialPath
       ? this.props.initialPath
       : getDefaultDir()
 
-    const name = this.props.initialPath
+    
+const name = this.props.initialPath
       ? sanitizedRepositoryName(Path.basename(this.props.initialPath))
       : ''
 
-    this.state = {
+    
+this.state = {
       path,
       name,
       description: '',
@@ -126,264 +166,477 @@ export class CreateRepository extends React.Component<
     }
   }
 
-  public async componentDidMount() {
-    window.addEventListener('focus', this.onWindowFocus)
+  public async componentDidMount() 
+{
+    
+window.addEventListener('focus', this.onWindowFocus)
 
-    const gitIgnoreNames = await getGitIgnoreNames()
-    this.setState({ gitIgnoreNames })
+    
 
-    const licenses = await getLicenses()
-    this.setState({ licenses })
+var TIMING_TEMP_VAR_AUTOGEN304__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN304__RANDOM = await  getGitIgnoreNames()
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [131, 4; 131, 52]& TEMP_VAR_AUTOGEN304__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN304__RANDOM));
+ const gitIgnoreNames =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN304__RANDOM
+    
+this.setState({ gitIgnoreNames })
 
-    const { isRepository } = await isGitRepository(this.state.path)
-    this.setState({ isRepository })
+    
 
-    this.updateReadMeExists(this.state.path, this.state.name)
+var TIMING_TEMP_VAR_AUTOGEN307__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN307__RANDOM = await  getLicenses()
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [134, 4; 134, 40]& TEMP_VAR_AUTOGEN307__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN307__RANDOM));
+ const licenses =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN307__RANDOM
+    
+this.setState({ licenses })
+
+    
+
+var TIMING_TEMP_VAR_AUTOGEN311__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN311__RANDOM = await  isGitRepository(this.state.path)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [137, 4; 137, 67]& TEMP_VAR_AUTOGEN311__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN311__RANDOM));
+ const { isRepository } =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN311__RANDOM
+    
+this.setState({ isRepository })
+
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_798_updateReadMeExists__RANDOM = perf_hooks.performance.now();
+ 
+this.updateReadMeExists(this.state.path, this.state.name)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [140, 4; 140, 61]& TEMP_VAR_AUTOGEN_CALLING_798_updateReadMeExists__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_798_updateReadMeExists__RANDOM));
+ 
   }
 
-  public componentWillUnmount() {
-    window.removeEventListener('focus', this.onWindowFocus)
+  public componentWillUnmount() 
+{
+    
+window.removeEventListener('focus', this.onWindowFocus)
   }
 
-  private onPathChanged = async (path: string) => {
-    this.setState({ path, isValidPath: null })
+  private onPathChanged = async (path: string) => 
+{
+    
+this.setState({ path, isValidPath: null })
 
-    const { isRepository } = await isGitRepository(path)
+    
+
+var TIMING_TEMP_VAR_AUTOGEN330__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN330__RANDOM = await  isGitRepository(path)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [150, 4; 150, 56]& TEMP_VAR_AUTOGEN330__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN330__RANDOM));
+ const { isRepository } =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN330__RANDOM
 
     // Only update isRepository if the path is still the
     // same one we were using to check whether it looked
     // like a repository.
-    this.setState(state => (state.path === path ? { isRepository } : null))
+    
+this.setState(state => (state.path === path ? { isRepository } : null))
 
-    this.updateReadMeExists(path, this.state.name)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_799_updateReadMeExists__RANDOM = perf_hooks.performance.now();
+ 
+this.updateReadMeExists(path, this.state.name)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [157, 4; 157, 50]& TEMP_VAR_AUTOGEN_CALLING_799_updateReadMeExists__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_799_updateReadMeExists__RANDOM));
+ 
   }
 
-  private onNameChanged = (name: string) => {
-    this.setState({ name })
-    this.updateReadMeExists(this.state.path, name)
+  private onNameChanged = (name: string) => 
+{
+    
+this.setState({ name })
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_800_updateReadMeExists__RANDOM = perf_hooks.performance.now();
+ 
+this.updateReadMeExists(this.state.path, name)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [162, 4; 162, 50]& TEMP_VAR_AUTOGEN_CALLING_800_updateReadMeExists__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_800_updateReadMeExists__RANDOM));
+ 
   }
 
-  private onDescriptionChanged = (description: string) => {
-    this.setState({ description })
+  private onDescriptionChanged = (description: string) => 
+{
+    
+this.setState({ description })
   }
 
-  private showFilePicker = async () => {
-    const window = remote.getCurrentWindow()
-    const directory = remote.dialog.showOpenDialog(window, {
+  private showFilePicker = async () => 
+{
+    
+const window = remote.getCurrentWindow()
+    
+const directory = remote.dialog.showOpenDialog(window, {
       properties: ['createDirectory', 'openDirectory'],
     })
 
-    if (directory === undefined) {
-      return
+    
+if (directory === undefined) 
+{
+      
+return
     }
 
-    const path = directory[0]
-    const { isRepository } = await isGitRepository(path)
+    
+const path = directory[0]
+    
+const { isRepository } = await isGitRepository(path)
 
-    this.setState({ isRepository, path })
+    
+this.setState({ isRepository, path })
   }
 
-  private async updateReadMeExists(path: string, name: string) {
-    if (!enableReadmeOverwriteWarning()) {
-      return
+  private async updateReadMeExists(path: string, name: string) 
+{
+    
+if (!enableReadmeOverwriteWarning()) 
+{
+      
+return
     }
 
-    const fullPath = Path.join(path, sanitizedRepositoryName(name), 'README.md')
-    const readMeExists = await FSE.pathExists(fullPath)
+    
+const fullPath = Path.join(path, sanitizedRepositoryName(name), 'README.md')
+    
+
+var TIMING_TEMP_VAR_AUTOGEN383__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN383__RANDOM = await  FSE.pathExists(fullPath)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [191, 4; 191, 55]& TEMP_VAR_AUTOGEN383__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN383__RANDOM));
+ const readMeExists =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN383__RANDOM
 
     // Only update readMeExists if the path is still the same
-    this.setState(state => (state.path === path ? { readMeExists } : null))
+    
+this.setState(state => (state.path === path ? { readMeExists } : null))
   }
 
-  private resolveRepositoryRoot = async (): Promise<string> => {
-    const currentPath = this.state.path
-    if (this.props.initialPath && this.props.initialPath === currentPath) {
+  private resolveRepositoryRoot = async (): Promise<string> => 
+{
+    
+const currentPath = this.state.path
+    
+if (this.props.initialPath && this.props.initialPath === currentPath) 
+{
       // if the user provided an initial path and didn't change it, we should
       // validate it is an existing path and use that for the repository
-      try {
-        await FSE.ensureDir(currentPath)
-        return currentPath
-      } catch {}
+      
+try 
+{
+        
+await FSE.ensureDir(currentPath)
+        
+return currentPath
+      } 
+
+catch 
+{}
     }
 
-    return Path.join(currentPath, sanitizedRepositoryName(this.state.name))
+    
+return Path.join(currentPath, sanitizedRepositoryName(this.state.name))
   }
 
-  private createRepository = async () => {
-    const fullPath = await this.resolveRepositoryRoot()
+  private createRepository = async () => 
+{
+    
+const fullPath = await this.resolveRepositoryRoot()
 
-    try {
-      await FSE.ensureDir(fullPath)
-      this.setState({ isValidPath: true })
-    } catch (e) {
-      if (e.code === 'EACCES' && e.errno === -13) {
-        return this.setState({ isValidPath: false })
+    
+try 
+{
+      
+await FSE.ensureDir(fullPath)
+      
+this.setState({ isValidPath: true })
+    } 
+
+catch (e) 
+{
+      
+if (e.code === 'EACCES' && e.errno === -13) 
+{
+        
+return this.setState({ isValidPath: false })
       }
 
-      log.error(
+      
+log.error(
         `createRepository: the directory at ${fullPath} is not valid`,
         e
       )
-      return this.props.dispatcher.postError(e)
+      
+return this.props.dispatcher.postError(e)
     }
 
-    this.setState({ creating: true })
+    
+this.setState({ creating: true })
 
-    try {
-      await initGitRepository(fullPath)
-    } catch (e) {
-      this.setState({ creating: false })
-      log.error(
+    
+try 
+{
+      
+await initGitRepository(fullPath)
+    } 
+
+catch (e) 
+{
+      
+this.setState({ creating: false })
+      
+log.error(
         `createRepository: unable to initialize a Git repository at ${fullPath}`,
         e
       )
-      return this.props.dispatcher.postError(e)
+      
+return this.props.dispatcher.postError(e)
     }
 
-    const repositories = await this.props.dispatcher.addRepositories(
+    
+const repositories = await this.props.dispatcher.addRepositories(
       [fullPath],
       false
     )
-    if (repositories.length < 1) {
-      return
+    
+if (repositories.length < 1) 
+{
+      
+return
     }
 
-    const repository = repositories[0]
+    
+const repository = repositories[0]
 
-    if (this.state.createWithReadme) {
-      try {
-        await writeDefaultReadme(
+    
+if (this.state.createWithReadme) 
+{
+      
+try 
+{
+        
+await writeDefaultReadme(
           fullPath,
           this.state.name,
           this.state.description
         )
-      } catch (e) {
-        log.error(`createRepository: unable to write README at ${fullPath}`, e)
-        this.props.dispatcher.postError(e)
+      } 
+
+catch (e) 
+{
+        
+log.error(`createRepository: unable to write README at ${fullPath}`, e)
+        
+this.props.dispatcher.postError(e)
       }
     }
 
-    const gitIgnore = this.state.gitIgnore
-    if (gitIgnore !== NoGitIgnoreValue) {
-      try {
-        if (gitIgnore === KactusGitIgnoreValue) {
-          await writeGitIgnore(fullPath, null, KactusGitIgnoreTextValue)
-        } else {
-          await writeGitIgnore(fullPath, gitIgnore)
+    
+const gitIgnore = this.state.gitIgnore
+    
+if (gitIgnore !== NoGitIgnoreValue) 
+{
+      
+try 
+{
+        
+if (gitIgnore === KactusGitIgnoreValue) 
+{
+          
+await writeGitIgnore(fullPath, null, KactusGitIgnoreTextValue)
+        } 
+else
+{
+          
+await writeGitIgnore(fullPath, gitIgnore)
         }
-      } catch (e) {
-        log.error(
+      } 
+
+catch (e) 
+{
+        
+log.error(
           `createRepository: unable to write .gitignore file at ${fullPath}`,
           e
         )
-        this.props.dispatcher.postError(e)
+        
+this.props.dispatcher.postError(e)
       }
     }
 
-    const description = this.state.description
-    if (description) {
-      try {
-        await writeGitDescription(fullPath, description)
-      } catch (e) {
-        log.error(
+    
+const description = this.state.description
+    
+if (description) 
+{
+      
+try 
+{
+        
+await writeGitDescription(fullPath, description)
+      } 
+
+catch (e) 
+{
+        
+log.error(
           `createRepository: unable to write .git/description file at ${fullPath}`,
           e
         )
-        this.props.dispatcher.postError(e)
+        
+this.props.dispatcher.postError(e)
       }
     }
 
-    const licenseName =
+    
+const licenseName =
       this.state.license === NoLicenseValue.name ? null : this.state.license
-    const license = (this.state.licenses || []).find(
+    
+const license = (this.state.licenses || []).find(
       l => l.name === licenseName
     )
 
-    if (license) {
-      try {
-        const author = await getAuthorIdentity(repository)
+    
+if (license) 
+{
+      
+try 
+{
+        
+const author = await getAuthorIdentity(repository)
 
-        await writeLicense(fullPath, license, {
+        
+await writeLicense(fullPath, license, {
           fullname: author ? author.name : '',
           email: author ? author.email : '',
           year: new Date().getFullYear().toString(),
           description: '',
           project: this.state.name,
         })
-      } catch (e) {
-        log.error(`createRepository: unable to write LICENSE at ${fullPath}`, e)
-        this.props.dispatcher.postError(e)
+      } 
+
+catch (e) 
+{
+        
+log.error(`createRepository: unable to write LICENSE at ${fullPath}`, e)
+        
+this.props.dispatcher.postError(e)
       }
     }
 
-    try {
-      const gitAttributes = Path.join(fullPath, '.gitattributes')
-      const gitAttributesExists = await FSE.pathExists(gitAttributes)
-      if (!gitAttributesExists) {
-        await writeGitAttributes(fullPath)
+    
+try 
+{
+      
+const gitAttributes = Path.join(fullPath, '.gitattributes')
+      
+const gitAttributesExists = await FSE.pathExists(gitAttributes)
+      
+if (!gitAttributesExists) 
+{
+        
+await writeGitAttributes(fullPath)
       }
-    } catch (e) {
-      log.error(
+    } 
+
+catch (e) 
+{
+      
+log.error(
         `createRepository: unable to write .gitattributes at ${fullPath}`,
         e
       )
-      this.props.dispatcher.postError(e)
+      
+this.props.dispatcher.postError(e)
     }
 
-    const status = await getStatus(repository, [])
-    if (status === null) {
-      this.props.dispatcher.postError(
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_829_getStatus__RANDOM = perf_hooks.performance.now();
+ 
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_818_getStatus__RANDOM = perf_hooks.performance.now();
+ 
+const status = await getStatus(repository, [])
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [332, 4; 332, 50]& TEMP_VAR_AUTOGEN_CALLING_818_getStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_818_getStatus__RANDOM));
+ 
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [332, 4; 332, 50]& TEMP_VAR_AUTOGEN_CALLING_829_getStatus__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_829_getStatus__RANDOM));
+ 
+    
+if (status === null) 
+{
+      
+this.props.dispatcher.postError(
         new Error(
           `Unable to create the new repository because there are too many new files in this directory`
         )
       )
 
-      return
+      
+return
     }
 
-    try {
-      const wd = status.workingDirectory
-      const files = wd.files
-      if (files.length > 0) {
-        await createCommit(repository, 'Initial commit', files)
+    
+try 
+{
+      
+const wd = status.workingDirectory
+      
+const files = wd.files
+      
+if (files.length > 0) 
+{
+        
+await createCommit(repository, 'Initial commit', files)
       }
-    } catch (e) {
-      log.error(`createRepository: initial commit failed at ${fullPath}`, e)
-      this.props.dispatcher.postError(e)
+    } 
+
+catch (e) 
+{
+      
+log.error(`createRepository: initial commit failed at ${fullPath}`, e)
+      
+this.props.dispatcher.postError(e)
     }
 
-    this.setState({ creating: false })
+    
+this.setState({ creating: false })
 
-    this.updateDefaultDirectory()
+    
+this.updateDefaultDirectory()
 
-    this.props.dispatcher.selectRepository(repository)
-    this.props.onDismissed()
+    
+this.props.dispatcher.selectRepository(repository)
+    
+this.props.onDismissed()
   }
 
-  private updateDefaultDirectory = () => {
+  private updateDefaultDirectory = () => 
+{
     // don't update the default directory as a result of creating the
     // repository from an empty folder, because this value will be the
     // repository path itself
-    if (!this.props.initialPath) {
-      setDefaultDir(this.state.path)
+    
+if (!this.props.initialPath) 
+{
+      
+setDefaultDir(this.state.path)
     }
   }
 
   private onCreateWithReadmeChange = (
     event: React.FormEvent<HTMLInputElement>
-  ) => {
-    this.setState({
+  ) => 
+{
+    
+this.setState({
       createWithReadme: event.currentTarget.checked,
     })
   }
 
-  private renderSanitizedName() {
-    const sanitizedName = sanitizedRepositoryName(this.state.name)
-    if (this.state.name === sanitizedName) {
-      return null
+  private renderSanitizedName() 
+{
+    
+const sanitizedName = sanitizedRepositoryName(this.state.name)
+    
+if (this.state.name === sanitizedName) 
+{
+      
+return null
     }
 
-    return (
+    
+return (
       <Row className="warning-helper-text">
         <Octicon symbol={OcticonSymbol.alert} />
         Will be created as {sanitizedName}
@@ -391,21 +644,31 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private onGitIgnoreChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const gitIgnore = event.currentTarget.value
-    this.setState({ gitIgnore })
+  private onGitIgnoreChange = (event: React.FormEvent<HTMLSelectElement>) => 
+{
+    
+const gitIgnore = event.currentTarget.value
+    
+this.setState({ gitIgnore })
   }
 
-  private onLicenseChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const license = event.currentTarget.value
-    this.setState({ license })
+  private onLicenseChange = (event: React.FormEvent<HTMLSelectElement>) => 
+{
+    
+const license = event.currentTarget.value
+    
+this.setState({ license })
   }
 
-  private renderGitIgnores() {
-    const gitIgnores = this.state.gitIgnoreNames || []
-    const options = [KactusGitIgnoreValue, NoGitIgnoreValue, ...gitIgnores]
+  private renderGitIgnores() 
+{
+    
+const gitIgnores = this.state.gitIgnoreNames || []
+    
+const options = [KactusGitIgnoreValue, NoGitIgnoreValue, ...gitIgnores]
 
-    return (
+    
+return (
       <Row>
         <Select
           label="Git Ignore"
@@ -422,15 +685,20 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private renderLicenses() {
-    const licenses = this.state.licenses || []
-    const featuredLicenses = [
+  private renderLicenses() 
+{
+    
+const licenses = this.state.licenses || []
+    
+const featuredLicenses = [
       NoLicenseValue,
       ...licenses.filter(l => l.featured),
     ]
-    const nonFeaturedLicenses = licenses.filter(l => !l.featured)
+    
+const nonFeaturedLicenses = licenses.filter(l => !l.featured)
 
-    return (
+    
+return (
       <Row>
         <Select
           label="License"
@@ -453,15 +721,22 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private renderInvalidPathError() {
-    const isValidPath = this.state.isValidPath
-    const pathSet = isValidPath !== null
+  private renderInvalidPathError() 
+{
+    
+const isValidPath = this.state.isValidPath
+    
+const pathSet = isValidPath !== null
 
-    if (!pathSet || isValidPath) {
-      return null
+    
+if (!pathSet || isValidPath) 
+{
+      
+return null
     }
 
-    return (
+    
+return (
       <DialogError>
         Directory could not be created at this path. You may not have
         permissions to create a directory here.
@@ -469,14 +744,20 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private renderGitRepositoryWarning() {
-    const isRepo = this.state.isRepository
+  private renderGitRepositoryWarning() 
+{
+    
+const isRepo = this.state.isRepository
 
-    if (!this.state.path || this.state.path.length === 0 || !isRepo) {
-      return null
+    
+if (!this.state.path || this.state.path.length === 0 || !isRepo) 
+{
+      
+return null
     }
 
-    return (
+    
+return (
       <Row className="warning-helper-text">
         <Octicon symbol={OcticonSymbol.alert} />
         <p>
@@ -490,19 +771,27 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private renderReadmeOverwriteWarning() {
-    if (!enableReadmeOverwriteWarning()) {
-      return null
+  private renderReadmeOverwriteWarning() 
+{
+    
+if (!enableReadmeOverwriteWarning()) 
+{
+      
+return null
     }
 
-    if (
+    
+if (
       this.state.createWithReadme === false ||
       this.state.readMeExists === false
-    ) {
-      return null
+    ) 
+{
+      
+return null
     }
 
-    return (
+    
+return (
       <Row className="warning-helper-text">
         <Octicon symbol={OcticonSymbol.alert} />
         <p>
@@ -513,23 +802,29 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private onAddRepositoryClicked = () => {
-    return this.props.dispatcher.showPopup({
+  private onAddRepositoryClicked = () => 
+{
+    
+return this.props.dispatcher.showPopup({
       type: PopupType.AddRepository,
       path: this.state.path,
     })
   }
 
-  public render() {
-    const disabled =
+  public render() 
+{
+    
+const disabled =
       this.state.path.length === 0 ||
       this.state.name.length === 0 ||
       this.state.creating ||
       this.state.isRepository
 
-    const readOnlyPath = !!this.props.initialPath
+    
+const readOnlyPath = !!this.props.initialPath
 
-    return (
+    
+return (
       <Dialog
         id="create-repository"
         title="Create a New Repository"
@@ -605,9 +900,15 @@ export class CreateRepository extends React.Component<
     )
   }
 
-  private onWindowFocus = () => {
+  private onWindowFocus = () => 
+{
     // Verify whether or not a README.md file exists at the chosen directory
     // in case one has been added or removed and the warning can be displayed.
-    this.updateReadMeExists(this.state.path, this.state.name)
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_801_updateReadMeExists__RANDOM = perf_hooks.performance.now();
+ 
+this.updateReadMeExists(this.state.path, this.state.name)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/add-repository/create-repository.tsx& [610, 4; 610, 61]& TEMP_VAR_AUTOGEN_CALLING_801_updateReadMeExists__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_801_updateReadMeExists__RANDOM));
+ 
   }
 }

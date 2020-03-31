@@ -1,22 +1,43 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import { Menu, ipcMain, shell, app } from 'electron'
+
 import { ensureItemIds } from './ensure-item-ids'
+
 import { MenuEvent } from './menu-event'
+
 import { truncateWithEllipsis } from '../../lib/truncate-with-ellipsis'
+
 import { getLogDirectoryPath } from '../../lib/logging/get-log-path'
+
 import { ensureDir } from 'fs-extra'
 
+
 import { log } from '../log'
+
 import { openDirectorySafe } from '../shell'
+
 import { enableRebaseDialog, enableStashing } from '../../lib/feature-flag'
+
 import { MenuLabelsEvent } from '../../models/menu-labels'
+
 import { DefaultEditorLabel } from '../../ui/lib/context-menu'
 
+
 const defaultShellLabel = 'Open in Terminal'
+
 const createPullRequestLabel = 'Create Pull Request'
+
 const showPullRequestLabel = 'Show Pull Request'
+
 const defaultBranchNameValue = 'Default Branch'
+
 const confirmRepositoryRemovalLabel = 'Remove…'
+
 const repositoryRemovalLabel = 'Remove'
+
 
 enum ZoomDirection {
   Reset,
@@ -24,7 +45,9 @@ enum ZoomDirection {
   Out,
 }
 
-export function buildDefaultMenu({
+
+export 
+function buildDefaultMenu({
   selectedExternalEditor,
   selectedShell,
   askForConfirmationOnForcePush,
@@ -33,29 +56,38 @@ export function buildDefaultMenu({
   defaultBranchName = defaultBranchNameValue,
   isForcePushForCurrentRepository = false,
   isStashedChangesVisible = false,
-}: MenuLabelsEvent): Electron.Menu {
-  defaultBranchName = truncateWithEllipsis(defaultBranchName, 25)
+}: MenuLabelsEvent): Electron.Menu 
+{
+  
+defaultBranchName = truncateWithEllipsis(defaultBranchName, 25)
 
-  const removeRepoLabel = askForConfirmationOnRepositoryRemoval
+  
+const removeRepoLabel = askForConfirmationOnRepositoryRemoval
     ? confirmRepositoryRemovalLabel
     : repositoryRemovalLabel
 
-  const pullRequestLabel = hasCurrentPullRequest
+  
+const pullRequestLabel = hasCurrentPullRequest
     ? showPullRequestLabel
     : createPullRequestLabel
 
-  const shellLabel =
+  
+const shellLabel =
     selectedShell === null ? defaultShellLabel : `Open in ${selectedShell}`
 
-  const editorLabel =
+  
+const editorLabel =
     selectedExternalEditor === null
       ? DefaultEditorLabel
       : `Open in ${selectedExternalEditor}`
 
-  const template = new Array<Electron.MenuItemConstructorOptions>()
-  const separator: Electron.MenuItemConstructorOptions = { type: 'separator' }
+  
+const template = new Array<Electron.MenuItemConstructorOptions>()
+  
+const separator: Electron.MenuItemConstructorOptions = { type: 'separator' }
 
-  template.push({
+  
+template.push({
     label: 'Kactus',
     submenu: [
       {
@@ -90,7 +122,8 @@ export function buildDefaultMenu({
     ],
   })
 
-  const fileMenu: Electron.MenuItemConstructorOptions = {
+  
+const fileMenu: Electron.MenuItemConstructorOptions = {
     label: 'File',
     submenu: [
       {
@@ -120,9 +153,11 @@ export function buildDefaultMenu({
     ],
   }
 
-  template.push(fileMenu)
+  
+template.push(fileMenu)
 
-  template.push({
+  
+template.push({
     label: 'Edit',
     submenu: [
       { role: 'undo', label: 'Undo' },
@@ -146,7 +181,8 @@ export function buildDefaultMenu({
     ],
   })
 
-  template.push({
+  
+template.push({
     label: 'View',
     submenu: [
       {
@@ -225,34 +261,47 @@ export function buildDefaultMenu({
         // chorded shortcuts, but this menu item is not a user-facing feature
         // so we are going to keep this one around.
         accelerator: 'CmdOrCtrl+Alt+R',
-        click(item: any, focusedWindow: Electron.BrowserWindow) {
-          if (focusedWindow) {
-            focusedWindow.reload()
+        click(item: any, focusedWindow: Electron.BrowserWindow) 
+{
+          
+if (focusedWindow) 
+{
+            
+focusedWindow.reload()
           }
         },
+
         visible: __RELEASE_CHANNEL__ === 'development',
       },
       {
         id: 'show-devtools',
         label: 'Toggle Developer Tools',
         accelerator: 'Alt+Command+I',
-        click(item: any, focusedWindow: Electron.BrowserWindow) {
-          if (focusedWindow) {
-            focusedWindow.webContents.toggleDevTools()
+        click(item: any, focusedWindow: Electron.BrowserWindow) 
+{
+          
+if (focusedWindow) 
+{
+            
+focusedWindow.webContents.toggleDevTools()
           }
         },
+
       },
     ],
   })
 
-  const pushLabel = getPushLabel(
+  
+const pushLabel = getPushLabel(
     isForcePushForCurrentRepository,
     askForConfirmationOnForcePush
   )
 
-  const pushEventType = isForcePushForCurrentRepository ? 'force-push' : 'push'
+  
+const pushEventType = isForcePushForCurrentRepository ? 'force-push' : 'push'
 
-  template.push({
+  
+template.push({
     label: 'Repository',
     id: 'repository',
     submenu: [
@@ -313,7 +362,8 @@ export function buildDefaultMenu({
     ],
   })
 
-  template.push({
+  
+template.push({
     label: 'Branch',
     id: 'branch',
     submenu: [
@@ -383,7 +433,8 @@ export function buildDefaultMenu({
       },
     ],
   })
-  template.push({
+  
+template.push({
     role: 'window',
     submenu: [
       { role: 'minimize' },
@@ -394,57 +445,90 @@ export function buildDefaultMenu({
     ],
   })
 
-  const submitIssueItem: Electron.MenuItemConstructorOptions = {
+  
+const submitIssueItem: Electron.MenuItemConstructorOptions = {
     label: 'Report Issue…',
-    click() {
-      shell.openExternal(
+    click() 
+{
+      
+shell.openExternal(
         'https://github.com/kactus-io/kactus/issues/new/choose'
       )
     },
+
   }
 
-  const contactSupportItem: Electron.MenuItemConstructorOptions = {
+  
+const contactSupportItem: Electron.MenuItemConstructorOptions = {
     label: 'Contact Kactus Support…',
-    click() {
-      shell.openExternal(
+    click() 
+{
+      
+shell.openExternal(
         `https://kactus.io/contact?from_kactus_app=1&app_version=${app.getVersion()}`
       )
     },
+
   }
 
-  const showUserGuides: Electron.MenuItemConstructorOptions = {
+  
+const showUserGuides: Electron.MenuItemConstructorOptions = {
     label: 'Show User Guides',
-    click() {
-      shell.openExternal('https://kactus.io/help/')
+    click() 
+{
+      
+shell.openExternal('https://kactus.io/help/')
     },
+
   }
 
-  const showKeyboardShortcuts: Electron.MenuItemConstructorOptions = {
+  
+const showKeyboardShortcuts: Electron.MenuItemConstructorOptions = {
     label: 'Show Keyboard Shortcuts',
-    click() {
-      shell.openExternal(
+    click() 
+{
+      
+shell.openExternal(
         'https://help.github.com/en/desktop/getting-started-with-github-desktop/keyboard-shortcuts-in-github-desktop'
       )
     },
+
   }
 
-  const showLogsLabel = 'Show Logs in Finder'
+  
+const showLogsLabel = 'Show Logs in Finder'
 
-  const showLogsItem: Electron.MenuItemConstructorOptions = {
+  
+const showLogsItem: Electron.MenuItemConstructorOptions = {
     label: showLogsLabel,
-    click() {
-      const logPath = getLogDirectoryPath()
-      ensureDir(logPath)
-        .then(() => {
-          openDirectorySafe(logPath)
+    click() 
+{
+      
+const logPath = getLogDirectoryPath()
+      
+ensureDir(logPath)
+        .then(() => 
+{
+          
+openDirectorySafe(logPath)
         })
-        .catch(err => {
-          log('error', err.message)
+
+        .catch(err => 
+{
+          
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_739_log__RANDOM = perf_hooks.performance.now();
+ 
+log('error', err.message)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/main-process/menu/build-default-menu.ts& [441, 10; 441, 35]& TEMP_VAR_AUTOGEN_CALLING_739_log__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_739_log__RANDOM));
+ 
         })
+
     },
+
   }
 
-  const helpItems = [
+  
+const helpItems = [
     submitIssueItem,
     contactSupportItem,
     showUserGuides,
@@ -452,14 +536,20 @@ export function buildDefaultMenu({
     showLogsItem,
   ]
 
-  if (__DEV__) {
-    helpItems.push(
+  
+if (__DEV__) 
+{
+    
+helpItems.push(
       separator,
       {
         label: 'Crash main process…',
-        click() {
-          throw new Error('Boomtown!')
+        click() 
+{
+          
+throw new Error('Boomtown!')
         },
+
       },
       {
         label: 'Crash renderer process…',
@@ -481,38 +571,57 @@ export function buildDefaultMenu({
     )
   }
 
-  template.push({
+  
+template.push({
     role: 'help',
     submenu: helpItems,
   })
 
-  ensureItemIds(template)
+  
+ensureItemIds(template)
 
-  return Menu.buildFromTemplate(template)
+  
+return Menu.buildFromTemplate(template)
 }
+
 
 function getPushLabel(
   isForcePushForCurrentRepository: boolean,
   askForConfirmationOnForcePush: boolean
-): string {
-  if (!isForcePushForCurrentRepository) {
-    return 'Push'
+): string 
+{
+  
+if (!isForcePushForCurrentRepository) 
+{
+    
+return 'Push'
   }
 
-  if (askForConfirmationOnForcePush) {
-    return 'Force Push…'
+  
+if (askForConfirmationOnForcePush) 
+{
+    
+return 'Force Push…'
   }
 
-  return 'Force Push'
+  
+return 'Force Push'
 }
 
-function getStashedChangesLabel(isStashedChangesVisible: boolean): string {
-  if (isStashedChangesVisible) {
-    return 'Hide Stashed Changes'
+
+function getStashedChangesLabel(isStashedChangesVisible: boolean): string 
+{
+  
+if (isStashedChangesVisible) 
+{
+    
+return 'Hide Stashed Changes'
   }
 
-  return 'Show Stashed Changes'
+  
+return 'Show Stashed Changes'
 }
+
 
 type ClickHandler = (
   menuItem: Electron.MenuItem,
@@ -524,69 +633,108 @@ type ClickHandler = (
  * Utility function returning a Click event handler which, when invoked, emits
  * the provided menu event over IPC.
  */
-function emit(name: MenuEvent): ClickHandler {
-  return (menuItem, window) => {
-    if (window) {
-      window.webContents.send('menu-event', { name })
-    } else {
-      ipcMain.emit('menu-event', { name })
+
+function emit(name: MenuEvent): ClickHandler 
+{
+  
+return (menuItem, window) => 
+{
+    
+if (window) 
+{
+      
+window.webContents.send('menu-event', { name })
+    } 
+else
+{
+      
+ipcMain.emit('menu-event', { name })
     }
   }
 }
 
 /** The zoom steps that we support, these factors must sorted */
+
 const ZoomInFactors = [1, 1.1, 1.25, 1.5, 1.75, 2]
+
 const ZoomOutFactors = ZoomInFactors.slice().reverse()
 
 /**
  * Returns the element in the array that's closest to the value parameter. Note
  * that this function will throw if passed an empty array.
  */
-function findClosestValue(arr: Array<number>, value: number) {
-  return arr.reduce((previous, current) => {
-    return Math.abs(current - value) < Math.abs(previous - value)
+
+function findClosestValue(arr: Array<number>, value: number) 
+{
+  
+return arr.reduce((previous, current) => 
+{
+    
+return Math.abs(current - value) < Math.abs(previous - value)
       ? current
       : previous
   })
+
 }
 
 /**
  * Figure out the next zoom level for the given direction and alert the renderer
  * about a change in zoom factor if necessary.
  */
-function zoom(direction: ZoomDirection): ClickHandler {
-  return (menuItem, window) => {
-    if (!window) {
-      return
+
+function zoom(direction: ZoomDirection): ClickHandler 
+{
+  
+return (menuItem, window) => 
+{
+    
+if (!window) 
+{
+      
+return
     }
 
-    const { webContents } = window
+    
+const { webContents } = window
 
-    if (direction === ZoomDirection.Reset) {
-      webContents.setZoomFactor(1)
-      webContents.send('zoom-factor-changed', 1)
-    } else {
-      const rawZoom = webContents.getZoomFactor()
-      const zoomFactors =
+    
+if (direction === ZoomDirection.Reset) 
+{
+      
+webContents.setZoomFactor(1)
+      
+webContents.send('zoom-factor-changed', 1)
+    } 
+else
+{
+      
+const rawZoom = webContents.getZoomFactor()
+      
+const zoomFactors =
         direction === ZoomDirection.In ? ZoomInFactors : ZoomOutFactors
 
       // So the values that we get from getZoomFactor are floating point
       // precision numbers from chromium that don't always round nicely so
       // we'll have to do a little trick to figure out which of our supported
       // zoom factors the value is referring to.
-      const currentZoom = findClosestValue(zoomFactors, rawZoom)
+      
+const currentZoom = findClosestValue(zoomFactors, rawZoom)
 
-      const nextZoomLevel = zoomFactors.find(f =>
+      
+const nextZoomLevel = zoomFactors.find(f =>
         direction === ZoomDirection.In ? f > currentZoom : f < currentZoom
       )
 
       // If we couldn't find a zoom level (likely due to manual manipulation
       // of the zoom factor in devtools) we'll just snap to the closest valid
       // factor we've got.
-      const newZoom = nextZoomLevel === undefined ? currentZoom : nextZoomLevel
+      
+const newZoom = nextZoomLevel === undefined ? currentZoom : nextZoomLevel
 
-      webContents.setZoomFactor(newZoom)
-      webContents.send('zoom-factor-changed', newZoom)
+      
+webContents.setZoomFactor(newZoom)
+      
+webContents.send('zoom-factor-changed', newZoom)
     }
   }
 }

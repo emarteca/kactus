@@ -1,17 +1,35 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import * as React from 'react'
+
 import * as prettyBytes from 'pretty-bytes'
+
 import { DialogContent } from '../dialog'
+
 import { Checkbox, CheckboxValue } from '../lib/checkbox'
+
 import { LinkButton } from '../lib/link-button'
+
 import { Row } from '../../ui/lib/row'
+
 import { Button } from '../lib/button'
+
 import { Select } from '../lib/select'
+
 import { ExternalEditor, parse as parseEditor } from '../../lib/editors'
+
 import { Shell, parse as parseShell } from '../../lib/shells'
+
 import { TextBox } from '../lib/text-box'
+
 import { enableMergeTool } from '../../lib/feature-flag'
+
 import { IMergeTool } from '../../lib/git/config'
+
 import { getKactusCacheSize, clearKactusCache } from '../../lib/kactus'
+
 
 interface IAdvancedPreferencesProps {
   readonly confirmRepositoryRemoval: boolean
@@ -34,6 +52,7 @@ interface IAdvancedPreferencesProps {
   readonly onMergeToolCommandChanged: (command: string) => void
 }
 
+
 interface IAdvancedPreferencesState {
   readonly selectedExternalEditor?: ExternalEditor
   readonly selectedShell: Shell
@@ -44,14 +63,19 @@ interface IAdvancedPreferencesState {
   readonly confirmForcePush: boolean
 }
 
-export class Advanced extends React.Component<
+
+export 
+class Advanced extends React.Component<
   IAdvancedPreferencesProps,
   IAdvancedPreferencesState
 > {
-  public constructor(props: IAdvancedPreferencesProps) {
-    super(props)
+  public constructor(props: IAdvancedPreferencesProps) 
+{
+    
+super(props)
 
-    this.state = {
+    
+this.state = {
       confirmRepositoryRemoval: this.props.confirmRepositoryRemoval,
       confirmDiscardChanges: this.props.confirmDiscardChanges,
       confirmForcePush: this.props.confirmForcePush,
@@ -61,39 +85,63 @@ export class Advanced extends React.Component<
       kactusClearCacheInterval: '' + this.props.kactusClearCacheInterval,
     }
 
-    getKactusCacheSize()
-      .then(kactusCacheSize => {
-        this.setState({
+    
+getKactusCacheSize()
+      .then(kactusCacheSize => 
+{
+        
+this.setState({
           kactusCacheSize,
         })
       })
+
       .catch(log.error)
   }
 
-  public async componentWillReceiveProps(nextProps: IAdvancedPreferencesProps) {
-    const editors = nextProps.availableEditors
-    let selectedExternalEditor = nextProps.selectedExternalEditor
-    if (editors.length) {
-      const indexOf = selectedExternalEditor
+  public async componentWillReceiveProps(nextProps: IAdvancedPreferencesProps) 
+{
+    
+const editors = nextProps.availableEditors
+    
+let selectedExternalEditor = nextProps.selectedExternalEditor
+    
+if (editors.length) 
+{
+      
+const indexOf = selectedExternalEditor
         ? editors.indexOf(selectedExternalEditor)
         : -1
-      if (indexOf === -1) {
-        selectedExternalEditor = editors[0]
-        nextProps.onSelectedEditorChanged(selectedExternalEditor)
+      
+if (indexOf === -1) 
+{
+        
+selectedExternalEditor = editors[0]
+        
+nextProps.onSelectedEditorChanged(selectedExternalEditor)
       }
     }
 
-    const shells = nextProps.availableShells
-    let selectedShell = nextProps.selectedShell
-    if (shells.length) {
-      const indexOf = shells.indexOf(selectedShell)
-      if (indexOf === -1) {
-        selectedShell = shells[0]
-        nextProps.onSelectedShellChanged(selectedShell)
+    
+const shells = nextProps.availableShells
+    
+let selectedShell = nextProps.selectedShell
+    
+if (shells.length) 
+{
+      
+const indexOf = shells.indexOf(selectedShell)
+      
+if (indexOf === -1) 
+{
+        
+selectedShell = shells[0]
+        
+nextProps.onSelectedShellChanged(selectedShell)
       }
     }
 
-    this.setState({
+    
+this.setState({
       selectedExternalEditor,
       selectedShell,
     })
@@ -101,74 +149,121 @@ export class Advanced extends React.Component<
 
   private onConfirmDiscardChangesChanged = (
     event: React.FormEvent<HTMLInputElement>
-  ) => {
-    const value = event.currentTarget.checked
+  ) => 
+{
+    
+const value = event.currentTarget.checked
 
-    this.setState({ confirmDiscardChanges: value })
-    this.props.onConfirmDiscardChangesChanged(value)
+    
+this.setState({ confirmDiscardChanges: value })
+    
+this.props.onConfirmDiscardChangesChanged(value)
   }
 
   private onConfirmForcePushChanged = (
     event: React.FormEvent<HTMLInputElement>
-  ) => {
-    const value = event.currentTarget.checked
+  ) => 
+{
+    
+const value = event.currentTarget.checked
 
-    this.setState({ confirmForcePush: value })
-    this.props.onConfirmForcePushChanged(value)
+    
+this.setState({ confirmForcePush: value })
+    
+this.props.onConfirmForcePushChanged(value)
   }
 
   private onConfirmRepositoryRemovalChanged = (
     event: React.FormEvent<HTMLInputElement>
-  ) => {
-    const value = event.currentTarget.checked
+  ) => 
+{
+    
+const value = event.currentTarget.checked
 
-    this.setState({ confirmRepositoryRemoval: value })
-    this.props.onConfirmRepositoryRemovalChanged(value)
+    
+this.setState({ confirmRepositoryRemoval: value })
+    
+this.props.onConfirmRepositoryRemovalChanged(value)
   }
 
   private onSelectedEditorChanged = (
     event: React.FormEvent<HTMLSelectElement>
-  ) => {
-    const value = parseEditor(event.currentTarget.value)
-    if (value) {
-      this.setState({ selectedExternalEditor: value })
-      this.props.onSelectedEditorChanged(value)
+  ) => 
+{
+    
+const value = parseEditor(event.currentTarget.value)
+    
+if (value) 
+{
+      
+this.setState({ selectedExternalEditor: value })
+      
+this.props.onSelectedEditorChanged(value)
     }
   }
 
   private onSelectedShellChanged = (
     event: React.FormEvent<HTMLSelectElement>
-  ) => {
-    const value = parseShell(event.currentTarget.value)
-    this.setState({ selectedShell: value })
-    this.props.onSelectedShellChanged(value)
+  ) => 
+{
+    
+const value = parseShell(event.currentTarget.value)
+    
+this.setState({ selectedShell: value })
+    
+this.props.onSelectedShellChanged(value)
   }
 
   private onKactusClearCacheIntervalChanged = (
     event: React.FormEvent<HTMLSelectElement>
-  ) => {
-    const value = parseInt(event.currentTarget.value, 10)
-    this.setState({ kactusClearCacheInterval: '' + value })
-    this.props.onKactusClearCacheInterval(value)
+  ) => 
+{
+    
+const value = parseInt(event.currentTarget.value, 10)
+    
+this.setState({ kactusClearCacheInterval: '' + value })
+    
+this.props.onKactusClearCacheInterval(value)
   }
 
-  private onClearKactusCache = () => {
-    this.setState({ kactusCacheSize: null })
-    clearKactusCache().then(() =>
+  private onClearKactusCache = () => 
+{
+    
+this.setState({ kactusCacheSize: null })
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_913_clearKactusCache__RANDOM = perf_hooks.performance.now();
+ 
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_889_clearKactusCache__RANDOM = perf_hooks.performance.now();
+ 
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_877_clearKactusCache__RANDOM = perf_hooks.performance.now();
+ 
+clearKactusCache().then(() =>
       getKactusCacheSize()
-        .then(kactusCacheSize => {
-          this.setState({
+        .then(kactusCacheSize => 
+{
+          
+this.setState({
             kactusCacheSize,
           })
         })
+
         .catch(log.error)
     )
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/preferences/advanced.tsx& [156, 4; 164, 5]& TEMP_VAR_AUTOGEN_CALLING_877_clearKactusCache__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_877_clearKactusCache__RANDOM));
+ 
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/preferences/advanced.tsx& [156, 4; 164, 5]& TEMP_VAR_AUTOGEN_CALLING_889_clearKactusCache__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_889_clearKactusCache__RANDOM));
+ 
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/ui/preferences/advanced.tsx& [156, 4; 164, 5]& TEMP_VAR_AUTOGEN_CALLING_913_clearKactusCache__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_913_clearKactusCache__RANDOM));
+ 
   }
 
-  private renderKactusCache() {
-    const options = [1, 3, 7, 16, 30, 360]
+  private renderKactusCache() 
+{
+    
+const options = [1, 3, 7, 16, 30, 360]
 
-    return (
+    
+return (
       <>
         <Row>
           <Select
@@ -196,17 +291,23 @@ export class Advanced extends React.Component<
     )
   }
 
-  private renderExternalEditor() {
-    const options = this.props.availableEditors
-    const label = 'External Editor'
+  private renderExternalEditor() 
+{
+    
+const options = this.props.availableEditors
+    
+const label = 'External Editor'
 
-    if (options.length === 0) {
+    
+if (options.length === 0) 
+{
       // this is emulating the <Select/> component's UI so the styles are
       // consistent for either case.
       //
       // TODO: see whether it makes sense to have a fallback UI
       // which we display when the select list is empty
-      return (
+      
+return (
         <div className="select-component no-options-found">
           <label>{label}</label>
           <span>
@@ -217,7 +318,8 @@ export class Advanced extends React.Component<
       )
     }
 
-    return (
+    
+return (
       <Select
         label={label}
         value={this.state.selectedExternalEditor}
@@ -232,10 +334,13 @@ export class Advanced extends React.Component<
     )
   }
 
-  private renderSelectedShell() {
-    const options = this.props.availableShells
+  private renderSelectedShell() 
+{
+    
+const options = this.props.availableShells
 
-    return (
+    
+return (
       <Select
         label="Shell"
         value={this.state.selectedShell}
@@ -250,18 +355,27 @@ export class Advanced extends React.Component<
     )
   }
 
-  private renderMergeTool() {
-    if (!enableMergeTool()) {
-      return null
+  private renderMergeTool() 
+{
+    
+if (!enableMergeTool()) 
+{
+      
+return null
     }
 
-    if (enableMergeTool()) {
-      return true
+    
+if (enableMergeTool()) 
+{
+      
+return true
     }
 
-    const mergeTool = this.props.mergeTool
+    
+const mergeTool = this.props.mergeTool
 
-    return (
+    
+return (
       <div className="brutalism">
         <strong>Merge Tool</strong>
 
@@ -284,8 +398,10 @@ export class Advanced extends React.Component<
     )
   }
 
-  public render() {
-    return (
+  public render() 
+{
+    
+return (
       <DialogContent>
         <Row>{this.renderExternalEditor()}</Row>
         <Row>{this.renderSelectedShell()}</Row>

@@ -1,9 +1,18 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import * as Path from 'path'
+
 import * as winston from 'winston'
 
+
 import { getLogDirectoryPath } from '../lib/logging/get-log-path'
+
 import { LogLevel } from '../lib/logging/log-level'
+
 import { ensureDir } from 'fs-extra'
+
 
 require('winston-daily-rotate-file')
 
@@ -11,13 +20,19 @@ require('winston-daily-rotate-file')
  * The maximum number of log files we should have on disk before pruning old
  * ones.
  */
+
 const MaxLogFiles = 14
 
 /** resolve the log file location based on the current channel */
-function getLogFilePath(directory: string): string {
-  const channel = __RELEASE_CHANNEL__
-  const fileName = `kactus.${channel}.log`
-  return Path.join(directory, fileName)
+
+function getLogFilePath(directory: string): string 
+{
+  
+const channel = __RELEASE_CHANNEL__
+  
+const fileName = `kactus.${channel}.log`
+  
+return Path.join(directory, fileName)
 }
 
 /**
@@ -30,8 +45,11 @@ function getLogFilePath(directory: string): string {
  *             path such that passing a path '/logs/foo' will end up
  *             writing to '/logs/2017-05-17.foo'
  */
-function initializeWinston(path: string): winston.LogMethod {
-  const fileLogger = new winston.transports.DailyRotateFile({
+
+function initializeWinston(path: string): winston.LogMethod 
+{
+  
+const fileLogger = new winston.transports.DailyRotateFile({
     filename: path,
     // We'll do this ourselves, thank you
     handleExceptions: false,
@@ -49,18 +67,25 @@ function initializeWinston(path: string): winston.LogMethod {
   // disk being full). If logging fails that's not a big deal
   // so we'll just suppress any error, besides, the console
   // logger will likely still work.
-  fileLogger.on('error', () => {})
+  
+fileLogger.on('error', () => 
+{}
+)
 
-  const consoleLogger = new winston.transports.Console({
+  
+const consoleLogger = new winston.transports.Console({
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'error',
   })
 
-  winston.configure({
+  
+winston.configure({
     transports: [consoleLogger, fileLogger],
   })
 
-  return winston.log
+  
+return winston.log
 }
+
 
 let loggerPromise: Promise<winston.LogMethod> | null = null
 
@@ -73,29 +98,53 @@ let loggerPromise: Promise<winston.LogMethod> | null = null
  *          it accepts a log level, a message and an optional callback
  *          for when the event has been written to all destinations.
  */
-function getLogger(): Promise<winston.LogMethod> {
-  if (loggerPromise) {
-    return loggerPromise
+
+function getLogger(): Promise<winston.LogMethod> 
+{
+  
+if (loggerPromise) 
+{
+    
+return loggerPromise
   }
 
-  loggerPromise = new Promise<winston.LogMethod>((resolve, reject) => {
-    const logDirectory = getLogDirectoryPath()
+  
+loggerPromise = new Promise<winston.LogMethod>((resolve, reject) => 
+{
+    
+const logDirectory = getLogDirectoryPath()
 
-    ensureDir(logDirectory)
-      .then(() => {
-        try {
-          const logger = initializeWinston(getLogFilePath(logDirectory))
-          resolve(logger)
-        } catch (err) {
-          reject(err)
+    
+ensureDir(logDirectory)
+      .then(() => 
+{
+        
+try 
+{
+          
+const logger = initializeWinston(getLogFilePath(logDirectory))
+          
+resolve(logger)
+        } 
+
+catch (err) 
+{
+          
+reject(err)
         }
       })
-      .catch(error => {
-        reject(error)
+
+      .catch(error => 
+{
+        
+reject(error)
       })
+
   })
 
-  return loggerPromise
+
+  
+return loggerPromise
 }
 
 /**
@@ -107,19 +156,44 @@ function getLogger(): Promise<winston.LogMethod> {
  * resolves when the log entry has been written to all transports
  * or if the entry could not be written due to an error.
  */
-export async function log(level: LogLevel, message: string) {
-  try {
-    const logger = await getLogger()
-    await new Promise<void>((resolve, reject) => {
-      logger(level, message, error => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve()
+
+export 
+async function log(level: LogLevel, message: string) 
+{
+  
+try 
+{
+    
+
+var TIMING_TEMP_VAR_AUTOGEN277__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN277__RANDOM = await  getLogger()
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/src/main-process/log.ts& [111, 4; 111, 36]& TEMP_VAR_AUTOGEN277__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN277__RANDOM));
+ const logger =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN277__RANDOM
+    
+await new Promise<void>((resolve, reject) => 
+{
+      
+logger(level, message, error => 
+{
+        
+if (error) 
+{
+          
+reject(error)
+        } 
+else
+{
+          
+resolve()
         }
       })
+
     })
-  } catch (error) {
+
+  } 
+
+catch (error) 
+{
     /**
      * Welp. I guess we have to ignore this for now, we
      * don't have any good mechanisms for reporting this.

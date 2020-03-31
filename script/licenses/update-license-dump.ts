@@ -1,41 +1,70 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import * as path from 'path'
+
 import * as fs from 'fs-extra'
+
 import { promisify } from 'util'
+
 
 import { licenseOverrides } from './license-overrides'
 
+
 import * as _legalEagle from 'legal-eagle'
+
 const legalEagle = promisify(_legalEagle)
+
 
 import { getVersion } from '../../app/package-info'
 
-export async function updateLicenseDump(
+
+export 
+async function updateLicenseDump(
   projectRoot: string,
   outRoot: string
-): Promise<void> {
-  const appRoot = path.join(projectRoot, 'app')
-  const outPath = path.join(outRoot, 'static', 'licenses.json')
+): Promise<void> 
+{
+  
+const appRoot = path.join(projectRoot, 'app')
+  
+const outPath = path.join(outRoot, 'static', 'licenses.json')
 
-  let summary = await legalEagle({
+  
+let summary = await legalEagle({
     path: appRoot,
     overrides: licenseOverrides,
     omitPermissive: true,
   })
 
-  if (Object.keys(summary).length > 0) {
-    let licensesMessage = ''
-    for (const key in summary) {
-      const license = summary[key]
-      licensesMessage += `${key} (${license.repository}): ${license.license}\n`
+  
+if (Object.keys(summary).length > 0) 
+{
+    
+let licensesMessage = ''
+    
+for (
+const key
+in summary)
+{
+      
+const license = summary[key]
+      
+licensesMessage += `${key} (${license.repository}): ${license.license}\n`
     }
 
-    const overridesPath = path.join(__dirname, 'license-overrides.ts')
+    
+const overridesPath = path.join(__dirname, 'license-overrides.ts')
 
-    const message = `The following dependencies have unknown or non-permissive licenses. Check it out and update ${overridesPath} if appropriate:\n${licensesMessage}`
-    throw new Error(message)
+    
+const message = `The following dependencies have unknown or non-permissive licenses. Check it out and update ${overridesPath} if appropriate:\n${licensesMessage}`
+    
+throw new Error(message)
   }
 
-  summary = await legalEagle({
+  
+summary = await legalEagle({
     path: appRoot,
     overrides: licenseOverrides,
   })
@@ -43,13 +72,21 @@ export async function updateLicenseDump(
   // legal-eagle still chooses to ignore the LICENSE at the root
   // this injects the current license and pins the source URL before we
   // dump the JSON file to disk
-  const licenseSource = path.join(projectRoot, 'LICENSE')
-  const licenseText = await fs.readFile(licenseSource, {
+  
+const licenseSource = path.join(projectRoot, 'LICENSE')
+  
+
+var TIMING_TEMP_VAR_AUTOGEN122__RANDOM = perf_hooks.performance.now();
+ var AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN122__RANDOM = await  fs.readFile(licenseSource, {
     encoding: 'utf-8',
   })
-  const appVersion = getVersion()
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/script/licenses/update-license-dump.ts& [46, 2; 48, 4]& TEMP_VAR_AUTOGEN122__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN122__RANDOM));
+ const licenseText =  AWAIT_VAR_TIMING_TEMP_VAR_AUTOGEN122__RANDOM
+  
+const appVersion = getVersion()
 
-  summary[`kactus@${appVersion}`] = {
+  
+summary[`kactus@${appVersion}`] = {
     repository: 'https://github.com/kactus-io/kactus',
     license: 'MIT',
     source: `https://github.com/kactus-io/kactus/blob/release-${appVersion}/LICENSE`,
@@ -57,7 +94,8 @@ export async function updateLicenseDump(
   }
 
   // inject the desktop/desktop LICENSE from which we forked
-  summary[`desktop@0.6.5`] = {
+  
+summary[`desktop@0.6.5`] = {
     repository: 'https://github.com/desktop/desktop',
     license: 'MIT',
     source: `https://github.com/desktop/desktop/blob/master/LICENSE`,
@@ -83,7 +121,12 @@ SOFTWARE.
 `,
   }
 
-  await fs.writeFile(outPath, JSON.stringify(summary), {
+  
+
+var TIMING_TEMP_VAR_AUTOGEN223__RANDOM = perf_hooks.performance.now();
+ await  fs.writeFile(outPath, JSON.stringify(summary), {
     encoding: 'utf8',
   })
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/script/licenses/update-license-dump.ts& [85, 2; 87, 4]& TEMP_VAR_AUTOGEN223__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN223__RANDOM));
+ 
 }

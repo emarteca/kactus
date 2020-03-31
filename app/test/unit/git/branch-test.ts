@@ -1,149 +1,305 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import { shell } from '../../helpers/test-app-shell'
+
 import {
   setupEmptyRepository,
   setupFixtureRepository,
 } from '../../helpers/repositories'
 
+
 import { Repository } from '../../../src/models/repository'
+
 import {
   TipState,
   IDetachedHead,
   IValidBranch,
   IUnbornRepository,
 } from '../../../src/models/tip'
+
 import { GitStore } from '../../../src/lib/stores'
+
 import { GitProcess } from 'dugite'
+
 import { getBranchesPointedAt, createBranch } from '../../../src/lib/git'
 
-describe('git/branch', () => {
-  describe('tip', () => {
-    it('returns unborn for new repository', async () => {
-      const repository = await setupEmptyRepository()
 
-      const store = new GitStore(repository, shell)
-      await store.loadStatus([])
-      const tip = store.tip
+describe('git/branch', () => 
+{
+  
+describe('tip', () => 
+{
+    
+it('returns unborn for new repository', async () => 
+{
+      
+const repository = await setupEmptyRepository()
 
-      expect(tip.kind).toEqual(TipState.Unborn)
-      const unborn = tip as IUnbornRepository
-      expect(unborn.ref).toEqual('master')
+      
+const store = new GitStore(repository, shell)
+      
+await store.loadStatus([])
+      
+const tip = store.tip
+
+      
+expect(tip.kind).toEqual(TipState.Unborn)
+      
+const unborn = tip as IUnbornRepository
+      
+expect(unborn.ref).toEqual('master')
     })
 
-    it('returns correct ref if checkout occurs', async () => {
-      const repository = await setupEmptyRepository()
 
-      await GitProcess.exec(['checkout', '-b', 'not-master'], repository.path)
+    
+it('returns correct ref if checkout occurs', async () => 
+{
+      
+const repository = await setupEmptyRepository()
 
-      const store = new GitStore(repository, shell)
-      await store.loadStatus([])
-      const tip = store.tip
+      
+await GitProcess.exec(['checkout', '-b', 'not-master'], repository.path)
 
-      expect(tip.kind).toEqual(TipState.Unborn)
-      const unborn = tip as IUnbornRepository
-      expect(unborn.ref).toEqual('not-master')
+      
+const store = new GitStore(repository, shell)
+      
+await store.loadStatus([])
+      
+const tip = store.tip
+
+      
+expect(tip.kind).toEqual(TipState.Unborn)
+      
+const unborn = tip as IUnbornRepository
+      
+expect(unborn.ref).toEqual('not-master')
     })
 
-    it('returns detached for arbitrary checkout', async () => {
-      const path = await setupFixtureRepository('detached-head')
-      const repository = new Repository(path, -1, null, false, [])
 
-      const store = new GitStore(repository, shell)
-      await store.loadStatus([])
-      const tip = store.tip
+    
+it('returns detached for arbitrary checkout', async () => 
+{
+      
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_269_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const path = await setupFixtureRepository('detached-head')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/branch-test.ts& [46, 6; 46, 64]& TEMP_VAR_AUTOGEN_CALLING_269_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_269_setupFixtureRepository__RANDOM));
+ 
+      
+const repository = new Repository(path, -1, null, false, [])
 
-      expect(tip.kind).toEqual(TipState.Detached)
-      const detached = tip as IDetachedHead
-      expect(detached.currentSha).toEqual(
+      
+const store = new GitStore(repository, shell)
+      
+await store.loadStatus([])
+      
+const tip = store.tip
+
+      
+expect(tip.kind).toEqual(TipState.Detached)
+      
+const detached = tip as IDetachedHead
+      
+expect(detached.currentSha).toEqual(
         '2acb028231d408aaa865f9538b1c89de5a2b9da8'
       )
     })
 
-    it('returns current branch when on a valid HEAD', async () => {
-      const path = await setupFixtureRepository('repo-with-many-refs')
-      const repository = new Repository(path, -1, null, false, [])
 
-      const store = new GitStore(repository, shell)
-      await store.loadStatus([])
-      const tip = store.tip
+    
+it('returns current branch when on a valid HEAD', async () => 
+{
+      
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_275_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const path = await setupFixtureRepository('repo-with-many-refs')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/branch-test.ts& [61, 6; 61, 70]& TEMP_VAR_AUTOGEN_CALLING_275_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_275_setupFixtureRepository__RANDOM));
+ 
+      
+const repository = new Repository(path, -1, null, false, [])
 
-      expect(tip.kind).toEqual(TipState.Valid)
-      const onBranch = tip as IValidBranch
-      expect(onBranch.branch.name).toEqual('commit-with-long-description')
-      expect(onBranch.branch.tip.sha).toEqual(
+      
+const store = new GitStore(repository, shell)
+      
+await store.loadStatus([])
+      
+const tip = store.tip
+
+      
+expect(tip.kind).toEqual(TipState.Valid)
+      
+const onBranch = tip as IValidBranch
+      
+expect(onBranch.branch.name).toEqual('commit-with-long-description')
+      
+expect(onBranch.branch.tip.sha).toEqual(
         'dfa96676b65e1c0ed43ca25492252a5e384c8efd'
       )
-      expect(onBranch.branch.tip.shortSha).toEqual('dfa9667')
+      
+expect(onBranch.branch.tip.shortSha).toEqual('dfa9667')
     })
 
-    it('returns non-origin remote', async () => {
-      const path = await setupFixtureRepository('repo-with-multiple-remotes')
-      const repository = new Repository(path, -1, null, false, [])
 
-      const store = new GitStore(repository, shell)
-      await store.loadStatus([])
-      const tip = store.tip
+    
+it('returns non-origin remote', async () => 
+{
+      
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_279_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const path = await setupFixtureRepository('repo-with-multiple-remotes')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/branch-test.ts& [78, 6; 78, 77]& TEMP_VAR_AUTOGEN_CALLING_279_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_279_setupFixtureRepository__RANDOM));
+ 
+      
+const repository = new Repository(path, -1, null, false, [])
 
-      expect(tip.kind).toEqual(TipState.Valid)
-      const valid = tip as IValidBranch
-      expect(valid.branch.remote).toEqual('bassoon')
+      
+const store = new GitStore(repository, shell)
+      
+await store.loadStatus([])
+      
+const tip = store.tip
+
+      
+expect(tip.kind).toEqual(TipState.Valid)
+      
+const valid = tip as IValidBranch
+      
+expect(valid.branch.remote).toEqual('bassoon')
     })
+
   })
 
-  describe('upstreamWithoutRemote', () => {
-    it('returns the upstream name without the remote prefix', async () => {
-      const path = await setupFixtureRepository('repo-with-multiple-remotes')
-      const repository = new Repository(path, -1, null, false, [])
 
-      const store = new GitStore(repository, shell)
-      await store.loadStatus([])
-      const tip = store.tip
+  
+describe('upstreamWithoutRemote', () => 
+{
+    
+it('returns the upstream name without the remote prefix', async () => 
+{
+      
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_283_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const path = await setupFixtureRepository('repo-with-multiple-remotes')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/branch-test.ts& [93, 6; 93, 77]& TEMP_VAR_AUTOGEN_CALLING_283_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_283_setupFixtureRepository__RANDOM));
+ 
+      
+const repository = new Repository(path, -1, null, false, [])
 
-      expect(tip.kind).toEqual(TipState.Valid)
+      
+const store = new GitStore(repository, shell)
+      
+await store.loadStatus([])
+      
+const tip = store.tip
 
-      const valid = tip as IValidBranch
-      expect(valid.branch.remote).toEqual('bassoon')
-      expect(valid.branch.upstream).toEqual('bassoon/master')
-      expect(valid.branch.upstreamWithoutRemote).toEqual('master')
+      
+expect(tip.kind).toEqual(TipState.Valid)
+
+      
+const valid = tip as IValidBranch
+      
+expect(valid.branch.remote).toEqual('bassoon')
+      
+expect(valid.branch.upstream).toEqual('bassoon/master')
+      
+expect(valid.branch.upstreamWithoutRemote).toEqual('master')
     })
+
   })
 
-  describe('getBranchesPointedAt', () => {
-    let repository: Repository
-    describe('in a local repo', () => {
-      beforeEach(async () => {
-        const path = await setupFixtureRepository('test-repo')
-        repository = new Repository(path, -1, null, false, [])
+
+  
+describe('getBranchesPointedAt', () => 
+{
+    
+let repository: Repository
+    
+describe('in a local repo', () => 
+{
+      
+beforeEach(async () => 
+{
+        
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_285_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const path = await setupFixtureRepository('test-repo')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/branch-test.ts& [113, 8; 113, 62]& TEMP_VAR_AUTOGEN_CALLING_285_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_285_setupFixtureRepository__RANDOM));
+ 
+        
+repository = new Repository(path, -1, null, false, [])
       })
 
-      it('finds one branch name', async () => {
-        const branches = await getBranchesPointedAt(repository, 'HEAD')
-        expect(branches).toHaveLength(1)
-        expect(branches![0]).toEqual('master')
+
+      
+it('finds one branch name', async () => 
+{
+        
+const branches = await getBranchesPointedAt(repository, 'HEAD')
+        
+expect(branches).toHaveLength(1)
+        
+expect(branches![0]).toEqual('master')
       })
 
-      it('finds no branch names', async () => {
-        const branches = await getBranchesPointedAt(repository, 'HEAD^')
-        expect(branches).toHaveLength(0)
+
+      
+it('finds no branch names', async () => 
+{
+        
+const branches = await getBranchesPointedAt(repository, 'HEAD^')
+        
+expect(branches).toHaveLength(0)
       })
 
-      it('returns null on a malformed committish', async () => {
-        const branches = await getBranchesPointedAt(repository, 'MERGE_HEAD')
-        expect(branches).toBeNull()
+
+      
+it('returns null on a malformed committish', async () => 
+{
+        
+const branches = await getBranchesPointedAt(repository, 'MERGE_HEAD')
+        
+expect(branches).toBeNull()
       })
+
     })
 
-    describe('in a repo with identical branches', () => {
-      beforeEach(async () => {
-        const path = await setupFixtureRepository('repo-with-multiple-remotes')
-        repository = new Repository(path, -1, null, false, [])
-        await createBranch(repository, 'other-branch', null)
+
+    
+describe('in a repo with identical branches', () => 
+{
+      
+beforeEach(async () => 
+{
+        
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_288_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const path = await setupFixtureRepository('repo-with-multiple-remotes')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/branch-test.ts& [136, 8; 136, 79]& TEMP_VAR_AUTOGEN_CALLING_288_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_288_setupFixtureRepository__RANDOM));
+ 
+        
+repository = new Repository(path, -1, null, false, [])
+        
+await createBranch(repository, 'other-branch', null)
       })
-      it('finds multiple branch names', async () => {
-        const branches = await getBranchesPointedAt(repository, 'HEAD')
-        expect(branches).toHaveLength(2)
-        expect(branches).toContain('other-branch')
-        expect(branches).toContain('master')
+
+      
+it('finds multiple branch names', async () => 
+{
+        
+const branches = await getBranchesPointedAt(repository, 'HEAD')
+        
+expect(branches).toHaveLength(2)
+        
+expect(branches).toContain('other-branch')
+        
+expect(branches).toContain('master')
       })
+
     })
+
   })
+
 })
+

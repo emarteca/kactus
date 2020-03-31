@@ -1,121 +1,237 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import * as path from 'path'
+
 import * as FSE from 'fs-extra'
+
 import * as os from 'os'
 
+
 import { Repository } from '../../../src/models/repository'
+
 import {
   isGitRepository,
   getTopLevelWorkingDirectory,
   isBareRepository,
 } from '../../../src/lib/git/rev-parse'
+
 import { git } from '../../../src/lib/git/core'
+
 import {
   setupFixtureRepository,
   setupEmptyRepository,
 } from '../../helpers/repositories'
+
 import { GitProcess } from 'dugite'
+
 import { mkdirSync } from '../../helpers/temp'
 
-describe('git/rev-parse', () => {
-  let repository: Repository
 
-  beforeEach(async () => {
-    const testRepoPath = await setupFixtureRepository('test-repo')
-    repository = new Repository(testRepoPath, -1, null, false, [])
+describe('git/rev-parse', () => 
+{
+  
+let repository: Repository
+
+  
+beforeEach(async () => 
+{
+    
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_258_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const testRepoPath = await setupFixtureRepository('test-repo')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/rev-parse-test.ts& [22, 4; 22, 66]& TEMP_VAR_AUTOGEN_CALLING_258_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_258_setupFixtureRepository__RANDOM));
+ 
+    
+repository = new Repository(testRepoPath, -1, null, false, [])
   })
 
-  describe('isGitRepository', () => {
-    it('should return true for a repository', async () => {
-      const result = await isGitRepository(repository.path)
-      expect(result.isRepository).toBe(true)
+
+  
+describe('isGitRepository', () => 
+{
+    
+it('should return true for a repository', async () => 
+{
+      
+const result = await isGitRepository(repository.path)
+      
+expect(result.isRepository).toBe(true)
     })
 
-    it('should return false for a directory', async () => {
-      const result = await isGitRepository(path.dirname(repository.path))
-      expect(result.isRepository).toBe(false)
+
+    
+it('should return false for a directory', async () => 
+{
+      
+const result = await isGitRepository(path.dirname(repository.path))
+      
+expect(result.isRepository).toBe(false)
     })
+
   })
 
-  describe('isBareRepository', () => {
-    it('returns false for default initialized repository', async () => {
-      const repository = await setupEmptyRepository()
-      const result = await isBareRepository(repository.path)
-      expect(result).toBe(false)
+
+  
+describe('isBareRepository', () => 
+{
+    
+it('returns false for default initialized repository', async () => 
+{
+      
+const repository = await setupEmptyRepository()
+      
+const result = await isBareRepository(repository.path)
+      
+expect(result).toBe(false)
     })
 
-    it('returns true for initialized bare repository', async () => {
-      const path = await mkdirSync('no-repository-here')
-      await GitProcess.exec(['init', '--bare'], path)
-      const result = await isBareRepository(path)
-      expect(result).toBe(true)
+
+    
+it('returns true for initialized bare repository', async () => 
+{
+      
+const path = await mkdirSync('no-repository-here')
+      
+await GitProcess.exec(['init', '--bare'], path)
+      
+const result = await isBareRepository(path)
+      
+expect(result).toBe(true)
     })
 
-    it('returns false for empty directory', async () => {
-      const path = await mkdirSync('no-actual-repository-here')
-      const result = await isBareRepository(path)
-      expect(result).toBe(false)
+
+    
+it('returns false for empty directory', async () => 
+{
+      
+const path = await mkdirSync('no-actual-repository-here')
+      
+const result = await isBareRepository(path)
+      
+expect(result).toBe(false)
     })
 
-    it('throws error for missing directory', async () => {
-      const rootPath = await mkdirSync('no-actual-repository-here')
-      const missingPath = path.join(rootPath, 'missing-folder')
-      let errorThrown = false
-      try {
-        await isBareRepository(missingPath)
-      } catch {
-        errorThrown = true
+
+    
+it('throws error for missing directory', async () => 
+{
+      
+const rootPath = await mkdirSync('no-actual-repository-here')
+      
+const missingPath = path.join(rootPath, 'missing-folder')
+      
+let errorThrown = false
+      
+try 
+{
+        
+await isBareRepository(missingPath)
+      } 
+
+catch 
+{
+        
+errorThrown = true
       }
 
-      expect(errorThrown).toBe(true)
+      
+expect(errorThrown).toBe(true)
     })
+
   })
 
-  describe('getTopLevelWorkingDirectory', () => {
-    it('should return an absolute path when run inside a working directory', async () => {
-      const result = await getTopLevelWorkingDirectory(repository.path)
-      expect(result).toBe(repository.path)
 
-      const subdirPath = path.join(repository.path, 'subdir')
-      await FSE.mkdir(subdirPath)
+  
+describe('getTopLevelWorkingDirectory', () => 
+{
+    
+it('should return an absolute path when run inside a working directory', async () => 
+{
+      
+const result = await getTopLevelWorkingDirectory(repository.path)
+      
+expect(result).toBe(repository.path)
 
-      const subDirResult = await getTopLevelWorkingDirectory(repository.path)
-      expect(subDirResult).toBe(repository.path)
+      
+const subdirPath = path.join(repository.path, 'subdir')
+      
+
+var TIMING_TEMP_VAR_AUTOGEN211__RANDOM = perf_hooks.performance.now();
+ await  FSE.mkdir(subdirPath)
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/git/rev-parse-test.ts& [78, 6; 78, 33]& TEMP_VAR_AUTOGEN211__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN211__RANDOM));
+ 
+
+      
+const subDirResult = await getTopLevelWorkingDirectory(repository.path)
+      
+expect(subDirResult).toBe(repository.path)
     })
 
-    it('should return null when not run inside a working directory', async () => {
-      const result = await getTopLevelWorkingDirectory(os.tmpdir())
-      expect(result).toBeNull()
+
+    
+it('should return null when not run inside a working directory', async () => 
+{
+      
+const result = await getTopLevelWorkingDirectory(os.tmpdir())
+      
+expect(result).toBeNull()
     })
 
-    it('should resolve top level directory run inside the .git folder', async () => {
-      const p = path.join(repository.path, '.git')
-      const result = await getTopLevelWorkingDirectory(p)
-      expect(result).toBe(p)
+
+    
+it('should resolve top level directory run inside the .git folder', async () => 
+{
+      
+const p = path.join(repository.path, '.git')
+      
+const result = await getTopLevelWorkingDirectory(p)
+      
+expect(result).toBe(p)
     })
 
-    it('should return correct path for submodules', async () => {
-      const fixturePath = mkdirSync('get-top-level-working-directory-test-')
 
-      const firstRepoPath = path.join(fixturePath, 'repo1')
-      const secondRepoPath = path.join(fixturePath, 'repo2')
+    
+it('should return correct path for submodules', async () => 
+{
+      
+const fixturePath = mkdirSync('get-top-level-working-directory-test-')
 
-      await git(['init', 'repo1'], fixturePath, '')
+      
+const firstRepoPath = path.join(fixturePath, 'repo1')
+      
+const secondRepoPath = path.join(fixturePath, 'repo2')
 
-      await git(['init', 'repo2'], fixturePath, '')
+      
+await git(['init', 'repo1'], fixturePath, '')
 
-      await git(
+      
+await git(['init', 'repo2'], fixturePath, '')
+
+      
+await git(
         ['commit', '--allow-empty', '-m', 'Initial commit'],
         secondRepoPath,
         ''
       )
-      await git(['submodule', 'add', '../repo2'], firstRepoPath, '')
+      
+await git(['submodule', 'add', '../repo2'], firstRepoPath, '')
 
-      let result = await getTopLevelWorkingDirectory(firstRepoPath)
-      expect(result).toBe(firstRepoPath)
+      
+let result = await getTopLevelWorkingDirectory(firstRepoPath)
+      
+expect(result).toBe(firstRepoPath)
 
-      const subModulePath = path.join(firstRepoPath, 'repo2')
-      result = await getTopLevelWorkingDirectory(subModulePath)
-      expect(result).toBe(subModulePath)
+      
+const subModulePath = path.join(firstRepoPath, 'repo2')
+      
+result = await getTopLevelWorkingDirectory(subModulePath)
+      
+expect(result).toBe(subModulePath)
     })
+
   })
+
 })
+

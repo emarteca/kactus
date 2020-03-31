@@ -1,33 +1,55 @@
+
+
+const perf_hooks = require('perf_hooks'); 
+
 import * as Path from 'path'
+
 import * as FSE from 'fs-extra'
 
+
 import { Repository } from '../../src/models/repository'
+
 import {
   WorkingDirectoryFileChange,
   FileChange,
   AppFileStatusKind,
 } from '../../src/models/status'
+
 import {
   DiffSelection,
   DiffSelectionType,
   ITextDiff,
   DiffType,
 } from '../../src/models/diff'
+
 import { DiffParser } from '../../src/lib/diff-parser'
+
 import { formatPatch } from '../../src/lib/patch-formatter'
+
 import { getWorkingDirectoryDiff, convertDiff } from '../../src/lib/git'
+
 import { setupFixtureRepository } from '../helpers/repositories'
+
 
 const dummySketchPath = ''
 
-async function parseDiff(diff: string): Promise<ITextDiff> {
-  const parser = new DiffParser()
-  const rawDiff = parser.parse(diff)
-  const repository = new Repository('', -1, null, false, [])
-  const fileChange = new FileChange('file.txt', {
+
+async function parseDiff(diff: string): Promise<ITextDiff> 
+{
+  
+const parser = new DiffParser()
+  
+const rawDiff = parser.parse(diff)
+  
+const repository = new Repository('', -1, null, false, [])
+  
+const fileChange = new FileChange('file.txt', {
     kind: AppFileStatusKind.Modified,
   })
-  const output = await convertDiff(
+  
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_942_convertDiff__RANDOM = perf_hooks.performance.now();
+ 
+const output = await convertDiff(
     dummySketchPath,
     repository,
     [],
@@ -35,44 +57,72 @@ async function parseDiff(diff: string): Promise<ITextDiff> {
     rawDiff,
     'HEAD'
   )
-  expect(output.kind === DiffType.Text)
-  return output as ITextDiff
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/patch-formatter-test.ts& [29, 2; 36, 3]& TEMP_VAR_AUTOGEN_CALLING_942_convertDiff__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_942_convertDiff__RANDOM));
+ 
+  
+expect(output.kind === DiffType.Text)
+  
+return output as ITextDiff
 }
 
-describe('patch formatting', () => {
-  let repository: Repository
 
-  describe('formatPatchesForModifiedFile', () => {
-    beforeEach(async () => {
-      const testRepoPath = await setupFixtureRepository('repo-with-changes')
-      repository = new Repository(testRepoPath, -1, null, false, [])
+describe('patch formatting', () => 
+{
+  
+let repository: Repository
+
+  
+describe('formatPatchesForModifiedFile', () => 
+{
+    
+beforeEach(async () => 
+{
+      
+var TIMING_TEMP_VAR_AUTOGEN_CALLING_270_setupFixtureRepository__RANDOM = perf_hooks.performance.now();
+ 
+const testRepoPath = await setupFixtureRepository('repo-with-changes')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/patch-formatter-test.ts& [46, 6; 46, 76]& TEMP_VAR_AUTOGEN_CALLING_270_setupFixtureRepository__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN_CALLING_270_setupFixtureRepository__RANDOM));
+ 
+      
+repository = new Repository(testRepoPath, -1, null, false, [])
     })
 
-    it('creates right patch when first hunk is selected', async () => {
-      const modifiedFile = 'modified-file.md'
 
-      const unselectedFile = DiffSelection.fromInitialSelection(
+    
+it('creates right patch when first hunk is selected', async () => 
+{
+      
+const modifiedFile = 'modified-file.md'
+
+      
+const unselectedFile = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       )
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         unselectedFile
       )
 
-      const diff = await getWorkingDirectoryDiff(
+      
+const diff = await getWorkingDirectoryDiff(
         dummySketchPath,
         repository,
         [],
         file
       )
 
-      expect(diff.kind === DiffType.Text)
+      
+expect(diff.kind === DiffType.Text)
 
-      const textDiff = diff as ITextDiff
-      const second = textDiff.hunks[1]
+      
+const textDiff = diff as ITextDiff
+      
+const second = textDiff.hunks[1]
 
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.All
       ).withRangeSelection(
         second.unifiedDiffStart,
@@ -80,43 +130,59 @@ describe('patch formatting', () => {
         false
       )
 
-      const updatedFile = new WorkingDirectoryFileChange(
+      
+const updatedFile = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         selection
       )
 
-      const patch = formatPatch(updatedFile, textDiff)
+      
+const patch = formatPatch(updatedFile, textDiff)
 
-      expect(patch).toContain('--- a/modified-file.md\n')
-      expect(patch).toContain('+++ b/modified-file.md\n')
-      expect(patch).toContain('@@ -4,10 +4,6 @@')
+      
+expect(patch).toContain('--- a/modified-file.md\n')
+      
+expect(patch).toContain('+++ b/modified-file.md\n')
+      
+expect(patch).toContain('@@ -4,10 +4,6 @@')
     })
 
-    it('creates right patch when second hunk is selected', async () => {
-      const modifiedFile = 'modified-file.md'
-      const unselectedFile = DiffSelection.fromInitialSelection(
+
+    
+it('creates right patch when second hunk is selected', async () => 
+{
+      
+const modifiedFile = 'modified-file.md'
+      
+const unselectedFile = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       )
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         unselectedFile
       )
 
-      const diff = await getWorkingDirectoryDiff(
+      
+const diff = await getWorkingDirectoryDiff(
         dummySketchPath,
         repository,
         [],
         file
       )
 
-      expect(diff.kind === DiffType.Text)
+      
+expect(diff.kind === DiffType.Text)
 
-      const textDiff = diff as ITextDiff
-      const first = textDiff.hunks[0]
+      
+const textDiff = diff as ITextDiff
+      
+const first = textDiff.hunks[0]
 
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.All
       ).withRangeSelection(
         first.unifiedDiffStart,
@@ -124,106 +190,156 @@ describe('patch formatting', () => {
         false
       )
 
-      const updatedFile = new WorkingDirectoryFileChange(
+      
+const updatedFile = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         selection
       )
 
-      const patch = formatPatch(updatedFile, textDiff)
+      
+const patch = formatPatch(updatedFile, textDiff)
 
-      expect(patch).toContain('--- a/modified-file.md\n')
-      expect(patch).toContain('+++ b/modified-file.md\n')
-      expect(patch).toContain('@@ -21,6 +17,10 @@')
+      
+expect(patch).toContain('--- a/modified-file.md\n')
+      
+expect(patch).toContain('+++ b/modified-file.md\n')
+      
+expect(patch).toContain('@@ -21,6 +17,10 @@')
     })
 
-    it('creates right patch when first and third hunk is selected', async () => {
-      const modifiedFile = 'modified-file.md'
 
-      const unselectedFile = DiffSelection.fromInitialSelection(
+    
+it('creates right patch when first and third hunk is selected', async () => 
+{
+      
+const modifiedFile = 'modified-file.md'
+
+      
+const unselectedFile = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       )
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         unselectedFile
       )
 
-      const diff = await getWorkingDirectoryDiff(
+      
+const diff = await getWorkingDirectoryDiff(
         dummySketchPath,
         repository,
         [],
         file
       )
 
-      expect(diff.kind === DiffType.Text)
+      
+expect(diff.kind === DiffType.Text)
 
-      const textDiff = diff as ITextDiff
-      const second = textDiff.hunks[1]
+      
+const textDiff = diff as ITextDiff
+      
+const second = textDiff.hunks[1]
 
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.All
       ).withRangeSelection(
         second.unifiedDiffStart,
         second.unifiedDiffEnd - second.unifiedDiffStart,
         false
       )
-      const updatedFile = new WorkingDirectoryFileChange(
+      
+const updatedFile = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         selection
       )
 
-      const patch = formatPatch(updatedFile, textDiff)
+      
+const patch = formatPatch(updatedFile, textDiff)
 
-      expect(patch).toContain('--- a/modified-file.md\n')
-      expect(patch).toContain('+++ b/modified-file.md\n')
-      expect(patch).toContain('@@ -31,3 +31,8 @@')
+      
+expect(patch).toContain('--- a/modified-file.md\n')
+      
+expect(patch).toContain('+++ b/modified-file.md\n')
+      
+expect(patch).toContain('@@ -31,3 +31,8 @@')
     })
 
-    it(`creates the right patch when an addition is selected but preceding deletions aren't`, async () => {
-      const modifiedFile = 'modified-file.md'
-      await FSE.writeFile(Path.join(repository.path, modifiedFile), 'line 1\n')
 
-      const unselectedFile = DiffSelection.fromInitialSelection(
+    
+it(`creates the right patch when an addition is selected but preceding deletions aren't`, async () => 
+{
+      
+const modifiedFile = 'modified-file.md'
+      
+
+var TIMING_TEMP_VAR_AUTOGEN377__RANDOM = perf_hooks.performance.now();
+ await  FSE.writeFile(Path.join(repository.path, modifiedFile), 'line 1\n')
+console.log("/home/ellen/Documents/ASJProj/TESTING_reordering/kactus/app/test/unit/patch-formatter-test.ts& [185, 6; 185, 79]& TEMP_VAR_AUTOGEN377__RANDOM& " + (perf_hooks.performance.now() - TIMING_TEMP_VAR_AUTOGEN377__RANDOM));
+ 
+
+      
+const unselectedFile = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       )
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         unselectedFile
       )
 
-      const diff = await getWorkingDirectoryDiff(
+      
+const diff = await getWorkingDirectoryDiff(
         dummySketchPath,
         repository,
         [],
         file
       )
 
-      expect(diff.kind === DiffType.Text)
+      
+expect(diff.kind === DiffType.Text)
 
-      const textDiff = diff as ITextDiff
+      
+const textDiff = diff as ITextDiff
 
-      let selection = DiffSelection.fromInitialSelection(DiffSelectionType.All)
-      const hunk = textDiff.hunks[0]
-      hunk.lines.forEach((line, index) => {
-        const absoluteIndex = hunk.unifiedDiffStart + index
-        if (line.text === '+line 1') {
-          selection = selection.withLineSelection(absoluteIndex, true)
-        } else {
-          selection = selection.withLineSelection(absoluteIndex, false)
+      
+let selection = DiffSelection.fromInitialSelection(DiffSelectionType.All)
+      
+const hunk = textDiff.hunks[0]
+      
+hunk.lines.forEach((line, index) => 
+{
+        
+const absoluteIndex = hunk.unifiedDiffStart + index
+        
+if (line.text === '+line 1') 
+{
+          
+selection = selection.withLineSelection(absoluteIndex, true)
+        } 
+else
+{
+          
+selection = selection.withLineSelection(absoluteIndex, false)
         }
       })
 
-      const updatedFile = new WorkingDirectoryFileChange(
+
+      
+const updatedFile = new WorkingDirectoryFileChange(
         modifiedFile,
         { kind: AppFileStatusKind.Modified },
         selection
       )
 
-      const patch = formatPatch(updatedFile, textDiff)
-      const expectedPatch = `--- a/modified-file.md
+      
+const patch = formatPatch(updatedFile, textDiff)
+      
+const expectedPatch = `--- a/modified-file.md
 +++ b/modified-file.md
 @@ -1,33 +1,34 @@
  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mi urna,
@@ -261,11 +377,16 @@ describe('patch formatting', () => {
   urna, ac porta justo leo sed magna.
 +line 1
 `
-      expect(patch).toBe(expectedPatch)
+      
+expect(patch).toBe(expectedPatch)
     })
 
-    it("doesn't include unselected added lines as context", async () => {
-      const rawDiff = [
+
+    
+it("doesn't include unselected added lines as context", async () => 
+{
+      
+const rawDiff = [
         '--- a/file.md',
         '+++ b/file.md',
         '@@ -10,2 +10,4 @@',
@@ -275,21 +396,26 @@ describe('patch formatting', () => {
         ' context',
       ].join('\n')
 
-      const diff = await parseDiff(rawDiff)
+      
+const diff = await parseDiff(rawDiff)
 
       // Select the second added line
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       ).withLineSelection(3, true)
 
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         'file.md',
         { kind: AppFileStatusKind.Modified },
         selection
       )
-      const patch = formatPatch(file, diff)
+      
+const patch = formatPatch(file, diff)
 
-      expect(patch).toBe(`--- a/file.md
+      
+expect(patch).toBe(`--- a/file.md
 +++ b/file.md
 @@ -10,2 +10,3 @@
  context
@@ -298,61 +424,86 @@ describe('patch formatting', () => {
 `)
     })
 
-    it('rewrites hunk header when necessary', async () => {
-      const rawDiff = [
+
+    
+it('rewrites hunk header when necessary', async () => 
+{
+      
+const rawDiff = [
         '--- /dev/null',
         '+++ b/file.md',
         '@@ -0,2 +1,2 @@',
         '+added line 1',
         '+added line 2',
       ].join('\n')
-      const diff = await parseDiff(rawDiff)
+      
+const diff = await parseDiff(rawDiff)
 
       // Select the second added line
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       ).withLineSelection(2, true)
 
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         'file.md',
         { kind: AppFileStatusKind.New },
         selection
       )
-      const patch = formatPatch(file, diff)
+      
+const patch = formatPatch(file, diff)
 
-      expect(patch).toContain('@@ -0,0 +1 @@')
-      expect(patch).toContain('+added line 2')
+      
+expect(patch).toContain('@@ -0,0 +1 @@')
+      
+expect(patch).toContain('+added line 2')
     })
 
-    it('includes empty context lines', async () => {
-      const rawDiff = [
+
+    
+it('includes empty context lines', async () => 
+{
+      
+const rawDiff = [
         '--- a/file.md',
         '+++ b/file.md',
         '@@ -1 +1,2 @@',
         ' ',
         '+added line 2',
       ].join('\n')
-      const diff = await parseDiff(rawDiff)
+      
+const diff = await parseDiff(rawDiff)
 
       // Select the second added line
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       ).withLineSelection(2, true)
 
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         'file.md',
         { kind: AppFileStatusKind.Modified },
         selection
       )
-      const patch = formatPatch(file, diff)
+      
+const patch = formatPatch(file, diff)
 
-      expect(patch).toContain('@@ -1 +1,2 @@')
-      expect(patch).toContain(' ')
-      expect(patch).toContain('+added line 2')
+      
+expect(patch).toContain('@@ -1 +1,2 @@')
+      
+expect(patch).toContain(' ')
+      
+expect(patch).toContain('+added line 2')
     })
 
-    it('creates the right patch when a `No newline` marker is involved', async () => {
-      const rawDiff = [
+
+    
+it('creates the right patch when a `No newline` marker is involved', async () => 
+{
+      
+const rawDiff = [
         '--- a/file.md',
         '+++ b/file.md',
         '@@ -23,5 +24,5 @@ and more stuff',
@@ -365,23 +516,32 @@ describe('patch formatting', () => {
         '+and fun stuff? I dnno',
         '+it could be,',
       ].join('\n')
-      const diff = await parseDiff(rawDiff)
+      
+const diff = await parseDiff(rawDiff)
 
       // Select the second added line
-      const selection = DiffSelection.fromInitialSelection(
+      
+const selection = DiffSelection.fromInitialSelection(
         DiffSelectionType.None
       ).withLineSelection(7, true)
 
-      const file = new WorkingDirectoryFileChange(
+      
+const file = new WorkingDirectoryFileChange(
         'file.md',
         { kind: AppFileStatusKind.Modified },
         selection
       )
 
-      const patch = formatPatch(file, diff)
+      
+const patch = formatPatch(file, diff)
 
-      expect(patch).toContain('\\ No newline at end of file')
-      expect(patch).toContain('+it could be')
+      
+expect(patch).toContain('\\ No newline at end of file')
+      
+expect(patch).toContain('+it could be')
     })
+
   })
+
 })
+
